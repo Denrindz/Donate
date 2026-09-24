@@ -237,9 +237,14 @@
   }
 
   .cta{
-    width:100%;
-    justify-content:space-between;
-  }
+  width:calc(100% - 24px) !important;
+  margin-left:12px;
+  margin-right:12px;
+  box-sizing:border-box;
+  padding-left:50px;
+  padding-right:28px;
+  justify-content:space-between;
+}
 
   .cta-note{
     width:100%;
