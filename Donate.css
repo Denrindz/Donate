@@ -235,7 +235,7 @@
     .cta-note{font-size:10px;letter-spacing:.1em}
   }
   @media (max-width:520px){
-    .overlay{padding:0;align-items:end}
+    .overlay{padding:12px;align-items:end}
     .popup{
       width:100%;
       max-height:calc(100vh - 24px);
