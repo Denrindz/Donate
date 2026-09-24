@@ -230,7 +230,10 @@
      ============================================ */
   @media (max-width:640px){
     .capbox{width:92px;top:0;right:2px}
-    .hero-cta{width:100%}
+    .hero-cta{
+    width:calc(100% - 24px);
+    margin-left:12px;
+    margin-right:12px;
     .cta{width:100%;justify-content:space-between}
     .cta-note{font-size:10px;letter-spacing:.1em}
   }
