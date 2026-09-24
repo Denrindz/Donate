@@ -233,16 +233,15 @@
 
   .hero-cta{
     width:100%;
+    align-items:stretch;
   }
 
   .cta{
     width:calc(100% - 24px) !important;
     margin-left:12px;
     margin-right:12px;
-    box-sizing:border-box;
-
     padding:18px 26px !important;
-
+    box-sizing:border-box;
     justify-content:space-between;
   }
 
