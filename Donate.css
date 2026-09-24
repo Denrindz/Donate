@@ -276,3 +276,16 @@
     .p-row b{margin-left:auto;max-width:100%}
     .p-chips{gap:8px}
   }
+  @media (max-width:400px){
+  .p-row{flex-wrap:wrap;row-gap:1px}
+  .p-row b{margin-left:auto;max-width:100%}
+  .p-chips{gap:8px}
+}
+
+@media (max-width:640px){
+  .hero-title,
+  .hero-sub{
+    margin-left:22px !important;
+    margin-right:22px !important;
+  }
+}
