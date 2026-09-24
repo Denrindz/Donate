@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Denrindz và MilanVu — Trạm Quyên Góp</title>
+</head>
+<body>
+<div class="noise"></div>
+<canvas id="fx"></canvas>
+
+<!-- Thanh đầu trang -->
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">Denrindz <span>×</span> MilanVu</div>
+  </div>
+</header>
+
+<!-- Băng chữ chạy -->
+<div class="marquee"><div class="mq-track" data-text="ỦNG HỘ DENRINDZ × MILANVU ◆ MỖI ĐÓNG GÓP LÀ MỘT LY TRÀ SỮA ◆ 20K — 50K — 200K — 500K ◆ HOẶC BAO NHIÊU TÙY BẠN ◆ CẢM ƠN NGƯỜI NHÂN SĨ ◆"></div></div>
+
+<main>
+  <!-- Hero -->
+  <section class="hero wrap">
+    <div class="capbox rise" style="--d:.25s" aria-hidden="true">
+      <svg class="capy" viewBox="0 -12 140 124">
+        <ellipse class="pond" cx="70" cy="104" rx="52" ry="6" fill="#8FBFB0" opacity=".45"/>
+        <ellipse class="pond p2" cx="70" cy="104" rx="34" ry="4" fill="#8FBFB0" opacity=".35"/>
+        <rect x="36" y="86" width="14" height="18" rx="7" fill="#7E5233"/>
+        <rect x="88" y="86" width="14" height="18" rx="7" fill="#7E5233"/>
+        <rect x="22" y="42" width="96" height="54" rx="26" fill="#A9744F"/>
+        <circle cx="62" cy="18" r="6.5" fill="#7E5233"/>
+        <circle cx="102" cy="18" r="6.5" fill="#7E5233"/>
+        <rect x="56" y="14" width="52" height="44" rx="16" fill="#A9744F"/>
+        <rect x="63" y="34" width="38" height="22" rx="11" fill="#C79A6B"/>
+        <ellipse cx="76" cy="42" rx="2.4" ry="3.2" fill="#3E2A18"/>
+        <ellipse cx="90" cy="42" rx="2.4" ry="3.2" fill="#3E2A18"/>
+        <path d="M78 50 q5 4 10 0" stroke="#3E2A18" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        <circle class="eye" cx="64" cy="27" r="3.1" fill="#2B1B0E"/>
+        <circle class="eye" cx="101" cy="27" r="3.1" fill="#2B1B0E"/>
+        <g class="yuzu">
+          <circle cx="81" cy="7" r="9" fill="#F79420"/>
+          <circle cx="78" cy="4.5" r="2.6" fill="#FFC46B" opacity=".85"/>
+          <path d="M81 -2 q5 -4 9 -1 q-4 4 -9 1z" fill="#4C7A3F"/>
+        </g>
+      </svg>
+    </div>
+    <p class="overline rise" style="--d:0s">Trạm quyên góp công cộng</p>
+    <h1 class="hero-title">
+      <span class="line rise" style="--d:.05s">Denrindz</span>
+      <span class="line rise" style="--d:.15s"><em class="amp">và</em>MilanVu</span>
+    </h1>
+    <p class="hero-sub rise" style="--d:.3s">
+      Hai đứa, một căn phòng nhỏ và một đống ước mơ chưa kịp sạc pin.
+      Mọi đồng ủng hộ — to hay bé — đều được cảm ơn hai lần:
+      một lần bằng lời, một lần bằng hành động.
+    </p>
+
+    <div class="hero-cta rise" style="--d:.42s">
+      <button type="button" class="cta" id="openPopup">
+        <span>Ủng hộ ngay</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15"/><path d="M13 5l7 7-7 7"/></svg>
+      </button>
+      <p class="cta-note">Chuyển khoản ngân hàng · Không cần đăng nhập</p>
+    </div>
+  </section>
+</main>
+
+<!-- Băng chân -->
+<div class="marquee foot"><div class="mq-track" data-text="CẢM ƠN VÌ ĐÃ GHÉ QUA ◆ DENRINDZ × MILANVU ◆ MỘT ĐỒNG NHỎ LÀ MỘT TẤM LÒNG LỚN ◆ HẸN GẶP Ở BUỔI LIVE SỚM NHẤT ◆"></div></div>
+<footer class="credit">
+  <div class="wrap">
+    <span>© 2025 Denrindz × MilanVu</span>
+  </div>
+</footer>
+
+<!-- ===== POPUP ỦNG HỘ ===== -->
+<div class="overlay" id="popupOverlay" hidden>
+  <div class="popup" role="dialog" aria-modal="true" aria-label="Ủng hộ dự án">
+    <button type="button" class="p-close" id="pClose" aria-label="Đóng">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+
+    <!-- Trạng thái 1: nhập thông tin -->
+    <div id="pForm">
+      <p class="p-over">Ủng hộ dự án</p>
+      <h2 class="p-title">Tiếp sức cho Denrindz &amp; MilanVu</h2>
+      <p class="p-desc">Chỉ cần tên và số tiền, hệ thống sẽ tạo mã chuyển khoản ngân hàng cho bạn.</p>
+
+      <p class="p-notice" id="pNotice" hidden></p>
+
+      <label class="p-label" for="pName">Tên hiển thị</label>
+      <input class="p-input" id="pName" maxlength="40" autocomplete="off" placeholder="Tên của bạn">
+
+      <label class="p-label" for="pAmount">Số tiền ủng hộ</label>
+      <div class="p-amount" id="pAmountWrap">
+        <input class="p-input" id="pAmount" inputmode="numeric" autocomplete="off" placeholder="10.000" aria-label="Số tiền ủng hộ">
+        <span class="p-vnd">VND</span>
+      </div>
+
+      <div class="p-chips">
+        <button type="button" data-amount="20000">20K</button>
+        <button type="button" data-amount="50000">50K</button>
+        <button type="button" data-amount="200000">200K</button>
+        <button type="button" data-amount="500000">500K</button>
+      </div>
+
+      <label class="p-label" for="pMsg">Lời nhắn <small>(không bắt buộc)</small></label>
+      <input class="p-input" id="pMsg" maxlength="80" autocomplete="off" placeholder="Vài lời động viên cho hai đứa">
+
+      <p class="p-err" id="pErr" hidden></p>
+      <button type="button" class="p-submit" id="pSubmit">Tạo mã ủng hộ</button>
+      <p class="p-note">Thanh toán qua ngân hàng không cần đăng nhập</p>
+    </div>
+
+    <!-- Trạng thái 2: chờ thanh toán / đã nhận tiền -->
+    <div id="pSuccess" hidden>
+      <p class="p-over">Mã ủng hộ của bạn</p>
+      <h2 class="p-title">Quét mã để chuyển khoản</h2>
+      <p class="p-desc">Mở app ngân hàng → quét mã → xác nhận. Hệ thống tự kiểm tra khi tiền về.</p>
+
+      <div class="p-qr" id="qrBox"><canvas id="qrCanvas" width="174" height="174"></canvas></div>
+      <p class="p-qr-note" id="psNote">Mã hết hạn sau <b id="psCount">10:00</b></p>
+
+      <!-- Trạng thái kiểm tra giao dịch -->
+      <div class="p-status" id="payStatus">
+        <span class="spin" aria-hidden="true"></span>
+        <span id="payStatusText">Đang chờ chuyển khoản…</span>
+      </div>
+
+      <div class="p-rows">
+        <div class="p-row"><span>Số tiền</span><b id="psAmount">0₫</b></div>
+        <div class="p-row"><span>Người ủng hộ</span><b id="psName"></b></div>
+        <div class="p-row" id="psMsgRow" hidden><span>Lời nhắn</span><b id="psMsg"></b></div>
+        <div class="p-row"><span>Số tài khoản</span><b><span class="stk-num" id="psStk"></span><button type="button" class="copy" id="copyStk">Copy</button></b></div>
+        <div class="p-row" id="psBankRow" hidden><span>Ngân hàng</span><b id="psBank"></b></div>
+        <div class="p-row"><span>Thời gian chuyển khoản</span><b id="psTime"></b></div>
+        <div class="p-row"><span>Nội dung chuyển khoản</span><b id="psCode"></b></div>
+      </div>
+
+      <!-- Chỉ bật "Hoàn tất" khi đã xác nhận nhận được tiền -->
+      <button type="button" class="p-submit" id="pDone" disabled>Chưa nhận được tiền</button>
+      <button type="button" class="p-submit" id="pRetry" hidden>Tạo mã mới</button>
+      <button type="button" class="p-cancel" id="pCancel">Huỷ giao dịch</button>
+    </div>
+  </div>
+</div>
+</body>
+</html>
