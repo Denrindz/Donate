@@ -252,10 +252,13 @@
     .cta-note{
     font-size:10px;
     letter-spacing:.1em;
-    width:100%;
+    position:relative;
+    left:50%;
+    transform:translateX(-50%);
+    width:max-content;
+    margin:0;
     text-align:center;
-    margin:0 auto;
-    display:block;
+    white-space:nowrap;
   }
   @media (max-width:520px){
     .overlay{padding:12px;align-items:end}
