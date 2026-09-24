@@ -237,7 +237,7 @@
   @media (max-width:520px){
     .overlay{padding:12px;align-items:end}
     .popup{
-      width:100%;
+      width:calc(100% - 24px);
       max-height:calc(100vh - 24px);
       max-height:calc(100dvh - 24px);
       border-radius:20px 20px 0 0;
