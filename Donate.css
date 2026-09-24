@@ -242,7 +242,9 @@
   }
   
   .cta{
-    width:100%;
+    width:calc(100% - 24px) !important;
+    margin-left:12px;
+    margin-right:12px;
     box-sizing:border-box;
     justify-content:space-between;
   }
