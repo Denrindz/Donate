@@ -229,36 +229,24 @@
      THÍCH NGHI MÀN HÌNH ĐIỆN THOẠI
      ============================================ */
   @media (max-width:640px){
-  .capbox{
-    width:92px;
-    top:0;
-    right:2px;
-    }
-    
+  .capbox{width:92px;top:0;right:2px}
+
   .hero-cta{
-    width:auto !important;
-    margin-left:12px !important;
-    margin-right:12px !important;
+    width:100%;
+    align-items:center;
   }
-  
+
   .cta{
-    width:calc(100% - 24px) !important;
-    margin-left:12px;
-    margin-right:12px;
-    box-sizing:border-box;
+    width:100%;
     justify-content:space-between;
   }
-  
-    .cta-note{
-    font-size:10px;
-    letter-spacing:.1em;
-    position:relative;
-    left:50%;
-    transform:translateX(-50%);
-    width:max-content;
+
+  .cta-note{
+    width:100%;
     margin:0;
     text-align:center;
-    white-space:nowrap;
+    font-size:10px;
+    letter-spacing:.1em;
   }
   @media (max-width:520px){
     .overlay{padding:12px;align-items:end}
