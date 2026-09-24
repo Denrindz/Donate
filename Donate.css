@@ -250,9 +250,11 @@
   }
   
   .cta-note{
-    font-size:10px;
-    letter-spacing:.1em;
-  }
+  font-size:10px;
+  letter-spacing:.1em;
+  text-align:justify;
+  width:100%;
+}
   @media (max-width:520px){
     .overlay{padding:12px;align-items:end}
     .popup{
