@@ -249,12 +249,14 @@
     justify-content:space-between;
   }
   
-  .cta-note{
-  font-size:10px;
-  letter-spacing:.1em;
-  text-align:justify;
-  width:100%;
-}
+    .cta-note{
+    font-size:10px;
+    letter-spacing:.1em;
+    width:100%;
+    text-align:center;
+    margin:0 auto;
+    display:block;
+  }
   @media (max-width:520px){
     .overlay{padding:12px;align-items:end}
     .popup{
