@@ -11,7 +11,10 @@
   };
 
   /* ===== Thông tin tài khoản nhận ủng hộ ===== */
-  const BANK = { stk: '0963716410', name: '' };
+  const BANK = {
+  stk: '19077192565018',
+  name: 'Techcombank'
+};
 
   /* ===== Băng chữ chạy ===== */
   document.querySelectorAll('.mq-track').forEach(tr => {
