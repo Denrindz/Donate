@@ -718,10 +718,15 @@
     pNotice.hidden = true;
     pSuccess.hidden = false;
 
-    drawQR(
-      $('#qrCanvas'),
-      [name, amt, code, msg].join('|')
-    );
+    const qrUrl =
+  'https://vietqr.app/img?' +
+  'acc=' + encodeURIComponent(BANK.stk) +
+  '&bank=Techcombank' +
+  '&amount=' + encodeURIComponent(amt) +
+  '&des=' + encodeURIComponent(code) +
+  '&template=compact';
+
+  $('#qrImage').src = qrUrl;
 
     countUp(
       $('#psAmount'),
