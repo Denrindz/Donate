@@ -361,6 +361,13 @@
   }
 
   function startPayWatch(payment){
+  stopPayWatch();
+
+  setPayStatus(
+    'wait',
+    'Đang chờ chuyển khoản…'
+  );
+}
 
     stopPayWatch();
 
