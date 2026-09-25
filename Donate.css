@@ -288,4 +288,11 @@
     margin-left:22px !important;
     margin-right:22px !important;
   }
+  .p-qr img {
+  display: block;
+  width: 174px;
+  height: 174px;
+  object-fit: contain;
+  border-radius: 12px;
+}
 }
