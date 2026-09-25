@@ -372,37 +372,6 @@
   );
 }
 
-    stopPayWatch();
-
-    /* Demo giả lập tiền về */
-    paidAt =
-      Date.now() +
-      8000 +
-      Math.random() * 14000;
-
-    let checks = 0;
-
-    payTimer = setInterval(() => {
-
-      checks++;
-
-      if(Date.now() >= paidAt){
-
-        stopPayWatch();
-
-        markPaid(payment);
-
-        return;
-      }
-
-      setPayStatus(
-        'wait',
-        `Đang chờ chuyển khoản… (đã quét ${checks} lần)`
-      );
-
-    }, POLL_MS);
-  }
-
   function markPaid(payment){
 
     paid = true;
@@ -729,14 +698,13 @@
     pSuccess.hidden = false;
 
     const qrUrl =
-  'https://vietqr.app/img?' +
-  'acc=' + encodeURIComponent(BANK.stk) +
-  '&bank=Techcombank' +
-  '&amount=' + encodeURIComponent(amt) +
-  '&des=' + encodeURIComponent(code) +
-  '&template=compact';
+  'https://img.vietqr.io/image/970407-' +
+  encodeURIComponent(BANK.stk) +
+  '-compact2.png' +
+  '?amount=' + encodeURIComponent(amt) +
+  '&addInfo=' + encodeURIComponent(code);
 
-  $('#qrImage').src = qrUrl;
+$('#qrImage').src = qrUrl;
 
     countUp(
       $('#psAmount'),
