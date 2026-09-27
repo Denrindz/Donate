@@ -1017,6 +1017,10 @@ button{
    ĐIỆN THOẠI RẤT NHỎ
    ============================================ */
 
+/* ============================================
+   ĐIỆN THOẠI RẤT NHỎ
+   ============================================ */
+
 @media (max-width:400px){
 
   .p-row{
@@ -1032,105 +1036,219 @@ button{
   .p-chips{
     gap:8px;
   }
-.thanks-section {
-  width: min(760px, calc(100% - 48px));
-  margin: 70px auto 80px;
-}
-
-.thanks-head {
-  margin-bottom: 30px;
-}
-
-.thanks-label {
-  display: block;
-  margin-bottom: 9px;
-
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: .16em;
-
-  color: var(--muted);
-}
-
-.thanks-head h2 {
-  margin: 0;
-
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: clamp(25px, 4vw, 36px);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -.04em;
-
-  color: var(--ink);
-}
-
-.thanks-head p {
-  margin: 11px 0 0;
-
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 13px;
-  line-height: 1.5;
-
-  color: var(--muted);
 }
 
 
-/* ===============================
+/* ============================================
+   LỜI CẢM ƠN
+   ============================================ */
+
+.thanks-section{
+  width:min(760px,calc(100% - 48px));
+  margin:70px auto 80px;
+}
+
+.thanks-head{
+  margin-bottom:30px;
+}
+
+.thanks-label{
+  display:block;
+  margin-bottom:9px;
+
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+
+  color:var(--muted);
+}
+
+.thanks-head h2{
+  margin:0;
+
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:clamp(25px,4vw,36px);
+  font-weight:700;
+  line-height:1.05;
+  letter-spacing:-.04em;
+
+  color:var(--ink);
+}
+
+.thanks-head p{
+  margin:11px 0 0;
+
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:13px;
+  line-height:1.5;
+
+  color:var(--muted);
+}
+
+
+/* ============================================
    5 NGƯỜI ỦNG HỘ GẦN NHẤT
-================================ */
+   ============================================ */
 
-.supporters {
-  border-top: 1px solid rgba(23, 20, 14, .15);
+.supporters{
+  border-top:1px solid rgba(23,20,14,.15);
 }
 
-.supporters-title {
-  padding: 13px 4px;
+.supporters-title{
+  padding:13px 4px;
 
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: .13em;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:.13em;
 
-  color: var(--muted);
+  color:var(--muted);
 
-  border-bottom: 1px solid rgba(23, 20, 14, .15);
+  border-bottom:1px solid rgba(23,20,14,.15);
 }
 
-.supporters-list {
-  min-height: 80px;
+.supporters-list{
+  min-height:80px;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display:flex;
+  flex-direction:column;
+  align-items:stretch;
+  justify-content:flex-start;
 }
 
-.supporters-list:empty::before {
-  content: 'Chưa có giao dịch nào';
+.supporters-list:empty{
+  align-items:center;
+  justify-content:center;
+}
 
-  font-family: 'Bricolage Grotesque', sans-serif;
-  font-size: 11px;
+.supporters-list:empty::before{
+  content:'Chưa có giao dịch nào';
 
-  color: var(--muted);
-  opacity: .65;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:11px;
+
+  color:var(--muted);
+  opacity:.65;
 }
 
 
-/* ===============================
-   MOBILE
-================================ */
+/* ============================================
+   TỪNG NGƯỜI ỦNG HỘ
+   ============================================ */
 
-@media (max-width: 640px) {
-  .thanks-section {
-    width: calc(100% - 32px);
-    margin: 50px auto 60px;
+.supporter-row{
+  width:100%;
+
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  gap:18px;
+  padding:15px 4px;
+
+  border-bottom:1px solid rgba(23,20,14,.10);
+}
+
+.supporter-row:last-child{
+  border-bottom:none;
+}
+
+.supporter-left{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+}
+
+.supporter-name{
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  color:var(--ink);
+}
+
+.supporter-meta{
+  font-family:'Space Mono',monospace;
+  font-size:9px;
+  line-height:1.4;
+  color:var(--muted);
+  letter-spacing:.02em;
+}
+
+.supporter-amount{
+  flex:none;
+
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:14px;
+  font-weight:800;
+
+  color:var(--accent);
+  white-space:nowrap;
+}
+
+
+/* ============================================
+   MOBILE - LỜI CẢM ƠN
+   ============================================ */
+
+@media (max-width:640px){
+
+  .thanks-section{
+    width:calc(100% - 32px);
+    margin:50px auto 60px;
   }
 
-  .thanks-head h2 {
-    font-size: 27px;
+  .thanks-head{
+    margin-bottom:24px;
   }
 
-  .supporters-list {
-    min-height: 72px;
+  .thanks-head h2{
+    font-size:27px;
+  }
+
+  .supporters-list{
+    min-height:72px;
+  }
+
+  .supporter-row{
+    padding:14px 2px;
+    gap:12px;
+  }
+
+  .supporter-name{
+    font-size:12.5px;
+  }
+
+  .supporter-meta{
+    font-size:8px;
+  }
+
+  .supporter-amount{
+    font-size:13px;
+  }
+}
+
+
+/* ============================================
+   MOBILE RẤT NHỎ
+   ============================================ */
+
+@media (max-width:400px){
+
+  .thanks-section{
+    width:calc(100% - 28px);
+  }
+
+  .thanks-head h2{
+    font-size:25px;
+  }
+
+  .supporter-row{
+    gap:8px;
+  }
+
+  .supporter-amount{
+    font-size:12px;
   }
 }
