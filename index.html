@@ -1,20 +1,43 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
 
 <title>Denrindz và MilanVu — Trạm Quyên Góp</title>
 
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Space+Mono:wght@400;700&family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link
+  rel="preconnect"
+  href="https://fonts.gstatic.com"
+  crossorigin
+>
 
-<link rel="stylesheet" href="./Donate.css">
+
+<link
+  href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300..800&family=Space+Mono:wght@400;700&family=Be+Vietnam+Pro:wght@400;600;700;800&display=swap"
+  rel="stylesheet"
+>
+
+
+<link
+  rel="stylesheet"
+  href="./Donate.css"
+>
+
 </head>
 
+
 <body>
+
 
 <div class="noise"></div>
 
@@ -26,11 +49,15 @@
      ============================================ -->
 
 <header class="topbar">
+
   <div class="wrap">
+
     <div class="brand">
       Denrindz <span>×</span> MilanVu
     </div>
+
   </div>
+
 </header>
 
 
@@ -39,29 +66,41 @@
      ============================================ -->
 
 <div class="marquee">
+
   <div
     class="mq-track"
-    data-text="ỦNG HỘ DENRINDZ × MILANVU ◆ MỖI ĐÓNG GÓP LÀ MỘT LY TRÀ SỮA ◆ 20K — 50K — 200K — 500K ◆ HOẶC BAO NHIÊU TÙY BẠN ◆ CẢM ƠN NGƯỜI NHÂN SĨ ◆">
-  </div>
+    data-text="ỦNG HỘ DENRINDZ × MILANVU ◆ MỖI ĐÓNG GÓP LÀ MỘT LY TRÀ SỮA ◆ 20K — 50K — 200K — 500K ◆ HOẶC BAO NHIÊU TÙY BẠN ◆ CẢM ƠN NGƯỜI NHÂN SĨ ◆"
+  ></div>
+
 </div>
 
 
 <!-- ============================================
-     HERO
+     NỘI DUNG CHÍNH
      ============================================ -->
 
 <main>
 
+
+  <!-- ==========================================
+       HERO
+       ========================================== -->
+
   <section class="hero wrap">
 
+
     <!-- Capybara -->
+
     <div
       class="capbox rise"
       style="--d:.25s"
       aria-hidden="true"
     >
 
-      <svg class="capy" viewBox="0 -12 140 124">
+      <svg
+        class="capy"
+        viewBox="0 -12 140 124"
+      >
 
         <ellipse
           class="pond"
@@ -182,6 +221,7 @@
           fill="#2B1B0E"
         />
 
+
         <g class="yuzu">
 
           <circle
@@ -211,7 +251,8 @@
     </div>
 
 
-    <!-- Nội dung -->
+    <!-- Nội dung hero -->
+
     <p
       class="overline rise"
       style="--d:0s"
@@ -229,11 +270,18 @@
         Denrindz
       </span>
 
+
       <span
         class="line rise"
         style="--d:.15s"
       >
-        <em class="amp">và</em>MilanVu
+
+        <em class="amp">
+          và
+        </em>
+
+        MilanVu
+
       </span>
 
     </h1>
@@ -250,6 +298,7 @@
 
 
     <!-- Nút mở popup -->
+
     <div
       class="hero-cta rise"
       style="--d:.42s"
@@ -262,7 +311,10 @@
         onclick="window.openDonationPopup && window.openDonationPopup()"
       >
 
-        <span>Ủng hộ ngay</span>
+        <span>
+          Ủng hộ ngay
+        </span>
+
 
         <svg
           viewBox="0 0 24 24"
@@ -272,11 +324,15 @@
           stroke-linecap="round"
           stroke-linejoin="round"
         >
+
           <path d="M4 12h15"/>
+
           <path d="M13 5l7 7-7 7"/>
+
         </svg>
 
       </button>
+
 
       <p class="cta-note">
         Chuyển khoản ngân hàng · Không cần đăng nhập
@@ -285,28 +341,53 @@
     </div>
 
   </section>
-<section class="thanks-section">
-  <div class="thanks-head">
-    <span class="thanks-label">LỜI CẢM ƠN</span>
 
-    <h2>Cảm ơn những người đã ủng hộ</h2>
 
-    <p>
-      Cảm ơn bạn đã đồng hành và tiếp sức cho Denrindz.
-    </p>
-  </div>
 
-  <div class="supporters">
-    <div class="supporters-title">
-      <span>5 NGƯỜI ỦNG HỘ GẦN NHẤT</span>
+  <!-- ==========================================
+       LỜI CẢM ƠN / LỊCH SỬ ỦNG HỘ
+       ========================================== -->
+
+  <section class="thanks-section">
+
+    <div class="thanks-card">
+
+
+      <div class="thanks-head">
+
+        <span class="thanks-label">
+          LỜI CẢM ƠN
+        </span>
+
+
+        <h2>
+          5 người ủng hộ gần nhất
+        </h2>
+
+      </div>
+
+
+      <div class="supporters">
+
+        <div
+          id="supportersList"
+          class="supporters-list"
+        >
+
+          <!-- Donate.js tự render 5 giao dịch gần nhất -->
+
+        </div>
+
+      </div>
+
+
     </div>
 
-    <div id="supportersList" class="supporters-list">
-      <!-- Lịch sử giao dịch sẽ hiển thị ở đây sau -->
-    </div>
-  </div>
-</section>
+  </section>
+
+
 </main>
+
 
 
 <!-- ============================================
@@ -317,20 +398,33 @@
 
   <div
     class="mq-track"
-    data-text="CẢM ƠN VÌ ĐÃ GHÉ QUA ◆ DENRINDZ × MILANVU ◆ MỘT ĐỒNG NHỎ LÀ MỘT TẤM LÒNG LỚN ◆ HẸN GẶP Ở BUỔI LIVE SỚM NHẤT ◆">
-  </div>
+    data-text="CẢM ƠN VÌ ĐÃ GHÉ QUA ◆ DENRINDZ × MILANVU ◆ MỘT ĐỒNG NHỎ LÀ MỘT TẤM LÒNG LỚN ◆ HẸN GẶP Ở BUỔI LIVE SỚM NHẤT ◆"
+  ></div>
 
 </div>
 
 
+
+<!-- ============================================
+     FOOTER
+     ============================================ -->
+
 <footer class="credit">
 
   <div class="wrap">
-    © 2026 Denrindz × MilanVu
-    <span>Cảm ơn bạn đã ghé qua.</span>
+
+    <span>
+      © 2026 Denrindz × MilanVu
+    </span>
+
+    <span>
+      Cảm ơn bạn đã ghé qua.
+    </span>
+
   </div>
 
 </footer>
+
 
 
 <!-- ============================================
@@ -342,6 +436,7 @@
   id="popupOverlay"
   hidden
 >
+
 
   <div
     class="popup"
@@ -367,26 +462,33 @@
         stroke-width="2.5"
         stroke-linecap="round"
       >
+
         <path d="M6 6l12 12"/>
+
         <path d="M18 6L6 18"/>
+
       </svg>
 
     </button>
 
 
+
     <!-- ========================================
-         TRẠNG THÁI 1: NHẬP THÔNG TIN
+         FORM
          ======================================== -->
 
     <div id="pForm">
+
 
       <p class="p-over">
         Ủng hộ dự án
       </p>
 
+
       <h2 class="p-title">
         Tiếp sức cho Denrindz &amp; MilanVu
       </h2>
+
 
       <p class="p-desc">
         Chỉ cần tên và số tiền, hệ thống sẽ tạo mã chuyển khoản ngân hàng cho bạn.
@@ -400,6 +502,7 @@
       ></p>
 
 
+
       <!-- Tên -->
 
       <label
@@ -408,6 +511,7 @@
       >
         Tên hiển thị
       </label>
+
 
       <input
         class="p-input"
@@ -418,6 +522,7 @@
       >
 
 
+
       <!-- Số tiền -->
 
       <label
@@ -426,6 +531,7 @@
       >
         Số tiền ủng hộ
       </label>
+
 
       <div
         class="p-amount"
@@ -441,11 +547,13 @@
           aria-label="Số tiền ủng hộ"
         >
 
+
         <span class="p-vnd">
           VND
         </span>
 
       </div>
+
 
 
       <!-- Mức tiền nhanh -->
@@ -459,6 +567,7 @@
           20K
         </button>
 
+
         <button
           type="button"
           data-amount="50000"
@@ -466,12 +575,14 @@
           50K
         </button>
 
+
         <button
           type="button"
           data-amount="200000"
         >
           200K
         </button>
+
 
         <button
           type="button"
@@ -483,15 +594,22 @@
       </div>
 
 
+
       <!-- Lời nhắn -->
 
       <label
         class="p-label"
         for="pMsg"
       >
+
         Lời nhắn
-        <small>(không bắt buộc)</small>
+
+        <small>
+          (không bắt buộc)
+        </small>
+
       </label>
+
 
       <input
         class="p-input"
@@ -517,6 +635,7 @@
         Tạo mã ủng hộ
       </button>
 
+
       <p class="p-note">
         Thanh toán qua ngân hàng không cần đăng nhập
       </p>
@@ -524,19 +643,23 @@
     </div>
 
 
+
     <!-- ========================================
-         TRẠNG THÁI 2: QR / CHỜ THANH TOÁN
+         QR / CHỜ THANH TOÁN
          ======================================== -->
 
     <div id="pSuccess" hidden>
+
 
       <p class="p-over">
         Mã ủng hộ của bạn
       </p>
 
+
       <h2 class="p-title">
         Quét mã để chuyển khoản
       </h2>
+
 
       <p class="p-desc">
         Mở app ngân hàng → quét mã → xác nhận.
@@ -544,9 +667,8 @@
       </p>
 
 
-      <!-- ======================================
-           QR MB BANK
-           ====================================== -->
+
+      <!-- QR MB BANK -->
 
       <div
         class="p-qr"
@@ -568,14 +690,18 @@
         class="p-qr-note"
         id="psNote"
       >
+
         Mã hết hạn sau
-        <b id="psCount">10:00</b>
+
+        <b id="psCount">
+          10:00
+        </b>
+
       </p>
 
 
-      <!-- ======================================
-           TRẠNG THÁI GIAO DỊCH
-           ====================================== -->
+
+      <!-- Trạng thái -->
 
       <div
         class="p-status"
@@ -587,6 +713,7 @@
           aria-hidden="true"
         ></span>
 
+
         <span id="payStatusText">
           Đang chờ chuyển khoản…
         </span>
@@ -594,11 +721,11 @@
       </div>
 
 
-      <!-- ======================================
-           THÔNG TIN CHUYỂN KHOẢN
-           ====================================== -->
+
+      <!-- Thông tin chuyển khoản -->
 
       <div class="p-rows">
+
 
         <div class="p-row">
 
@@ -645,12 +772,14 @@
             Số tài khoản
           </span>
 
+
           <b>
 
             <span
               class="stk-num"
               id="psStk"
             ></span>
+
 
             <button
               type="button"
@@ -705,9 +834,8 @@
       </div>
 
 
-      <!-- ======================================
-           NÚT TRẠNG THÁI
-           ====================================== -->
+
+      <!-- Nút trạng thái -->
 
       <button
         type="button"
@@ -744,6 +872,7 @@
 </div>
 
 
+
 <!-- ============================================
      JAVASCRIPT
      ============================================ -->
@@ -753,5 +882,7 @@
   defer
 ></script>
 
+
 </body>
+
 </html>
