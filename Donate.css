@@ -3,10 +3,10 @@
   --paper2:#FBF7EE;
   --ink:#17140E;
   --muted:#6F6753;
-  --accent:#E4572E;
-  --accent-d:#C23F1C;
-  --gold:#FFC53D;
-  --gold-d:#8A5B00;
+  --accent:#008080;
+  --accent-d:#006666;
+  --gold:#008080;
+  --gold-d:#006666;
   --green:#3E8E5A;
   --border:2px solid var(--ink);
 }
@@ -598,9 +598,9 @@ button{
 }
 
 .p-submit:hover:not(:disabled){
-  background:#FFD05A;
+  background:#008080;
   transform:translateY(-1px);
-  box-shadow:0 6px 16px rgba(255,197,61,.45);
+  box-shadow:0 6px 16px rgba(0,128,128,.45);
 }
 
 .p-submit:active:not(:disabled){
@@ -740,7 +740,6 @@ button{
   border-radius:14px;
 }
 
-/* QR dùng IMG VietQR */
 #qrImage{
   display:block;
   width:174px;
