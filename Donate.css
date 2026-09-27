@@ -360,13 +360,18 @@ button{
 }
 
 .credit .wrap{
-  padding-top:12px;
-  padding-bottom:12px;
-  font-family:'Space Mono';
-  font-size:10px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  padding-top:28px;
+  padding-bottom:32px;
+  font-family:'Bricolage Grotesque',sans-serif;
+  font-size:18px;
+  font-weight:500;
+  letter-spacing:.04em;
+  text-transform:none;
   color:var(--muted);
+}
+
+.credit span{
+  margin-left:10px;
 }
 
 /* ============================================
