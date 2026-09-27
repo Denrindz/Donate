@@ -987,7 +987,7 @@ button{
     width:calc(100% - 24px);
     max-height:calc(100vh - 24px);
     max-height:calc(100dvh - 24px);
-    border-radius:20px 20px 0 0;
+    border-radius:20px;
     padding:26px 20px calc(18px + env(safe-area-inset-bottom,0px));
     transform:translateY(60px);
     opacity:.5;
