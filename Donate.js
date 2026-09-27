@@ -711,12 +711,23 @@
                   'application/json'
               },
 
+              /*
+               * Gửi tên + lời nhắn lên Worker.
+               * Worker sẽ lưu vào D1 khi giao dịch được xác nhận.
+               */
+
               body: JSON.stringify({
                 code:
                   payment.code,
 
                 amount:
-                  payment.amount
+                  payment.amount,
+
+                name:
+                  payment.name,
+
+                message:
+                  payment.message
               })
             }
           );
@@ -1360,9 +1371,21 @@
         startExpiry();
 
 
+        /*
+         * Quan trọng:
+         * Gửi cả tên + lời nhắn vào quá trình kiểm tra.
+         * Khi Casso xác nhận giao dịch, Worker sẽ lưu
+         * các thông tin này vào D1.
+         */
+
         startPayWatch({
           amount: amt,
-          code: code
+
+          code: code,
+
+          name: name,
+
+          message: msg
         });
       }
     );
@@ -1459,8 +1482,10 @@
       return '';
     }
 
+
     const date =
       new Date(value);
+
 
     if (
       Number.isNaN(
@@ -1469,6 +1494,7 @@
     ) {
       return '';
     }
+
 
     return (
       date.toLocaleDateString(
@@ -1479,7 +1505,7 @@
           year: 'numeric'
         }
       ) +
-      ' · ' +
+      ' • ' +
       date.toLocaleTimeString(
         'vi-VN',
         {
@@ -1501,11 +1527,14 @@
         'supportersList'
       );
 
+
     if (!list) {
       return;
     }
 
+
     try {
+
       const response =
         await fetch(
           HISTORY_API,
@@ -1541,19 +1570,26 @@
 
 
       /*
-       * Chỉ lấy giao dịch có mã DXM.
+       * Worker mới đã lọc sẵn những người
+       * đã thanh toán và trả về code.
+       *
+       * Chỉ giữ những bản ghi có mã DXM.
        */
 
       const history =
         data.history
           .filter((item) => {
-            const description =
-              String(
-                item.description || ''
-              );
 
-            return /DXM[-A-Z0-9]*/i.test(
-              description
+            const code =
+              String(
+                item.code || ''
+              )
+                .trim()
+                .toUpperCase();
+
+
+            return code.startsWith(
+              'DXM'
             );
           })
           .slice(0, 5);
@@ -1579,16 +1615,15 @@
 
       history.forEach((item) => {
 
-        /*
-         * API hiện tại chưa có tên người gửi.
-         * Khi có tên thì tự dùng tên đó.
-         */
+        /* -----------------------------
+           TÊN
+        ----------------------------- */
 
         const donorName =
-          item.name ||
-          item.corresponsiveAccountName ||
-          item.senderName ||
-          'Người ủng hộ';
+          String(
+            item.name || 'Người ẩn danh'
+          ).trim() ||
+          'Người ẩn danh';
 
 
         const initial =
@@ -1597,11 +1632,19 @@
           );
 
 
+        /* -----------------------------
+           THỜI GIAN
+        ----------------------------- */
+
         const timeText =
           formatHistoryTime(
             item.when
           );
 
+
+        /* -----------------------------
+           SỐ TIỀN
+        ----------------------------- */
 
         const amount =
           Number(
