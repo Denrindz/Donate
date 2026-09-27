@@ -360,18 +360,29 @@ button{
 }
 
 .credit .wrap{
-  padding-top:28px;
-  padding-bottom:32px;
+  padding-top:18px;
+  padding-bottom:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:20px;
   font-family:'Bricolage Grotesque',sans-serif;
-  font-size:18px;
-  font-weight:500;
-  letter-spacing:.04em;
+  font-size:13px;
+  font-weight:400;
+  letter-spacing:0;
   text-transform:none;
   color:var(--muted);
 }
 
-.credit span{
-  margin-left:10px;
+.credit .wrap span + span{
+  margin-left:0;
+}
+
+@media (max-width:600px){
+  .credit .wrap{
+    padding:18px 24px 22px;
+    font-size:13px;
+  }
 }
 
 /* ============================================
