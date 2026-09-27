@@ -360,29 +360,19 @@ button{
 }
 
 .credit .wrap{
-  padding-top:16px;
-  padding-bottom:18px;
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:12px;
+  padding:16px 24px;
   font-family:'Bricolage Grotesque',sans-serif;
-  font-size:11px;
+  font-size:10px;
   font-weight:400;
-  letter-spacing:0;
-  text-transform:none;
   color:var(--muted);
 }
 
-.credit .wrap span + span{
-  margin-left:0;
+.credit .wrap span{
+  margin:0;
 }
-
-@media (max-width:600px){
-  .credit .wrap{
-    padding:16px 24px 18px;
-    font-size:11px;
-  }
 
 /* ============================================
    POPUP ỦNG HỘ
