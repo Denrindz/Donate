@@ -782,6 +782,102 @@
 
   function startPayWatch(payment){
 
+  stopPayWatch();
+
+  setPayStatus(
+    'wait',
+    'Đang chờ chuyển khoản…'
+  );
+
+  const API_URL =
+    'https://doante-api.tnt300709.workers.dev/check';
+
+  let checking = false;
+
+  async function checkPayment(){
+
+    if(checking || paid){
+      return;
+    }
+
+    checking = true;
+
+    try{
+
+      const response =
+        await fetch(
+          API_URL,
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body: JSON.stringify({
+              code: payment.code,
+              amount: payment.amount
+            })
+          }
+        );
+
+      if(!response.ok){
+        throw new Error(
+          `HTTP ${response.status}`
+        );
+      }
+
+      const data =
+        await response.json();
+
+      if(
+        data.ok &&
+        data.paid
+      ){
+
+        stopPayWatch();
+
+        markPaid({
+          amount:
+            Number(
+              data.transaction?.amount ||
+              payment.amount
+            ),
+
+          code:
+            payment.code
+        });
+
+      }
+
+    }catch(error){
+
+      console.warn(
+        'Casso check error:',
+        error
+      );
+
+    }finally{
+
+      checking = false;
+
+    }
+
+  }
+
+  // Kiểm tra ngay lần đầu
+  checkPayment();
+
+  // Sau đó kiểm tra mỗi 3 giây
+  payTimer =
+    setInterval(
+      checkPayment,
+      POLL_MS
+    );
+
+}
+
     stopPayWatch();
 
 
