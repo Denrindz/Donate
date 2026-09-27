@@ -49,6 +49,12 @@
   const API_BASE =
     'https://doante-api.tnt300709.workers.dev';
 
+  const CHECK_API =
+    `${API_BASE}/check`;
+
+  const HISTORY_API =
+    `${API_BASE}/history`;
+
 
   /* =========================================================
      BĂNG CHỮ CHẠY
@@ -69,7 +75,7 @@
 
 
   /* =========================================================
-     POPUP
+     CẤU HÌNH
   ========================================================= */
 
   const MIN = 10000;
@@ -284,6 +290,10 @@
 
     if (msgInput) {
       msgInput.value = '';
+    }
+
+    if (nameInput) {
+      nameInput.value = '';
     }
 
     chips.forEach((chip) => {
@@ -674,10 +684,6 @@
     );
 
 
-    const API_URL =
-      `${API_BASE}/check`;
-
-
     let checking = false;
 
 
@@ -696,7 +702,7 @@
       try {
         const response =
           await fetch(
-            API_URL,
+            CHECK_API,
             {
               method: 'POST',
 
@@ -828,14 +834,10 @@
     capyRain();
 
 
-    /*
-     * Cập nhật lịch sử ngay sau khi
-     * giao dịch được xác nhận.
-     */
-    setTimeout(
-      loadSupporters,
-      1000
-    );
+    /* Cập nhật lịch sử */
+    setTimeout(() => {
+      loadSupporters();
+    }, 1000);
   }
 
 
@@ -1130,14 +1132,10 @@
         const now = Date.now();
 
 
-        /* Kiểm tra cooldown */
-
         if (now < coolUntil) {
           return;
         }
 
-
-        /* Kiểm tra số tiền */
 
         if (amt < MIN) {
           hideErr();
@@ -1159,8 +1157,6 @@
         }
 
 
-        /* Lọc lịch sử */
-
         genTimes =
           genTimes.filter(
             (time) =>
@@ -1168,8 +1164,6 @@
               SPAM_WINDOW
           );
 
-
-        /* Chống spam */
 
         if (
           genTimes.length >=
@@ -1221,13 +1215,6 @@
             : '';
 
 
-        /*
-         * Mã giao dịch
-         *
-         * Ví dụ:
-         * DXM-123456
-         */
-
         const code =
           'DXM-' +
           String(now).slice(-6);
@@ -1239,8 +1226,6 @@
 
         paid = false;
 
-
-        /* Thông tin người ủng hộ */
 
         const psName = $('#psName');
         const psCode = $('#psCode');
@@ -1283,8 +1268,6 @@
         }
 
 
-        /* Ngân hàng */
-
         const bankRow =
           $('#psBankRow');
 
@@ -1305,8 +1288,6 @@
           }
         }
 
-
-        /* Nội dung */
 
         const msgRow =
           $('#psMsgRow');
@@ -1329,8 +1310,6 @@
         }
 
 
-        /* Chuyển sang màn hình QR */
-
         if (pForm) {
           pForm.hidden = true;
         }
@@ -1345,25 +1324,23 @@
 
 
         /* =====================================================
-           VIETQR MB BANK - CHỈ QR
+           VIETQR MB BANK - QR ONLY
         ===================================================== */
 
         const qrUrl =
-  'https://img.vietqr.io/image/970422-' +
-  encodeURIComponent(BANK.stk) +
-  '-compact2.png' +
-  '?amount=' +
-  encodeURIComponent(amt) +
-  '&addInfo=' +
-  encodeURIComponent(code);
+          'https://img.vietqr.io/image/970422-' +
+          encodeURIComponent(BANK.stk) +
+          '-qr_only.png' +
+          '?amount=' +
+          encodeURIComponent(amt) +
+          '&addInfo=' +
+          encodeURIComponent(code);
 
 
         if (qrImage) {
           qrImage.src = qrUrl;
         }
 
-
-        /* Hiển thị số tiền */
 
         countUp(
           $('#psAmount'),
@@ -1380,14 +1357,8 @@
         );
 
 
-        /* Bắt đầu đếm ngược */
-
         startExpiry();
 
-
-        /*
-         * Bắt đầu kiểm tra giao dịch thật.
-         */
 
         startPayWatch({
           amount: amt,
@@ -1461,35 +1432,85 @@
 
 
   /* =========================================================
+     HÀM LẤY CHỮ CÁI AVATAR
+  ========================================================= */
+
+  function getInitial(name) {
+    const value =
+      String(name || '')
+        .trim();
+
+    if (!value) {
+      return 'Đ';
+    }
+
+    return value
+      .charAt(0)
+      .toUpperCase();
+  }
+
+
+  /* =========================================================
+     FORMAT THỜI GIAN LỊCH SỬ
+  ========================================================= */
+
+  function formatHistoryTime(value) {
+    if (!value) {
+      return '';
+    }
+
+    const date =
+      new Date(value);
+
+    if (
+      Number.isNaN(
+        date.getTime()
+      )
+    ) {
+      return '';
+    }
+
+    return (
+      date.toLocaleDateString(
+        'vi-VN',
+        {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric'
+        }
+      ) +
+      ' · ' +
+      date.toLocaleTimeString(
+        'vi-VN',
+        {
+          hour: '2-digit',
+          minute: '2-digit'
+        }
+      )
+    );
+  }
+
+
+  /* =========================================================
      LỊCH SỬ 5 NGƯỜI ỦNG HỘ GẦN NHẤT
   ========================================================= */
 
   async function loadSupporters() {
-
     const list =
       document.getElementById(
         'supportersList'
       );
 
-
-    /*
-     * Nếu HTML chưa có khu vực lịch sử
-     * thì bỏ qua.
-     */
-
     if (!list) {
       return;
     }
 
-
     try {
-
       const response =
         await fetch(
-          `${API_BASE}/history`,
+          HISTORY_API,
           {
             method: 'GET',
-
             cache: 'no-store'
           }
         );
@@ -1520,100 +1541,177 @@
 
 
       /*
-       * Không có giao dịch
-       *
-       * Để CSS :empty hiển thị:
-       * "Chưa có giao dịch nào"
+       * Chỉ lấy giao dịch có mã DXM.
        */
 
-      if (
-        data.history.length === 0
-      ) {
+      const history =
+        data.history
+          .filter((item) => {
+            const description =
+              String(
+                item.description || ''
+              );
 
-        list.innerHTML = '';
+            return /DXM[-A-Z0-9]*/i.test(
+              description
+            );
+          })
+          .slice(0, 5);
 
+
+      /*
+       * Xoá danh sách cũ.
+       */
+
+      list.replaceChildren();
+
+
+      /*
+       * Không có giao dịch:
+       * CSS :empty sẽ tự hiện
+       * "Chưa có giao dịch nào".
+       */
+
+      if (!history.length) {
         return;
       }
 
 
-      /*
-       * Hiển thị tối đa 5 giao dịch.
-       */
+      history.forEach((item) => {
 
-      list.innerHTML =
-        data.history
-          .slice(0, 5)
-          .map((item) => {
+        /*
+         * API hiện tại chưa có tên người gửi.
+         * Khi có tên thì tự dùng tên đó.
+         */
 
-            const amount =
-              Number(
-                item.amount || 0
-              );
-
-
-            let timeText =
-              '';
+        const donorName =
+          item.name ||
+          item.corresponsiveAccountName ||
+          item.senderName ||
+          'Người ủng hộ';
 
 
-            if (item.when) {
-
-              const date =
-                new Date(
-                  item.when
-                );
+        const initial =
+          getInitial(
+            donorName
+          );
 
 
-              if (
-                !Number.isNaN(
-                  date.getTime()
-                )
-              ) {
-
-                timeText =
-                  date.toLocaleDateString(
-                    'vi-VN'
-                  ) +
-                  ' · ' +
-                  date.toLocaleTimeString(
-                    'vi-VN',
-                    {
-                      hour: '2-digit',
-                      minute: '2-digit'
-                    }
-                  );
-              }
-            }
+        const timeText =
+          formatHistoryTime(
+            item.when
+          );
 
 
-            /*
-             * Không lấy description
-             * hiển thị ra ngoài vì nó có thể
-             * chứa mã giao dịch.
-             */
+        const amount =
+          Number(
+            item.amount || 0
+          );
 
-            return `
-              <div class="supporter-row">
 
-                <div class="supporter-info">
+        /* -----------------------------
+           ROW
+        ----------------------------- */
 
-                  <strong>
-                    Người ủng hộ
-                  </strong>
+        const row =
+          document.createElement(
+            'div'
+          );
 
-                  <span>
-                    ${timeText}
-                  </span>
+        row.className =
+          'supporter-row';
 
-                </div>
 
-                <b>
-                  +${fmt(amount)}₫
-                </b>
+        /* -----------------------------
+           AVATAR
+        ----------------------------- */
 
-              </div>
-            `;
-          })
-          .join('');
+        const avatar =
+          document.createElement(
+            'div'
+          );
+
+        avatar.className =
+          'supporter-avatar';
+
+        avatar.textContent =
+          initial;
+
+
+        /* -----------------------------
+           INFO
+        ----------------------------- */
+
+        const info =
+          document.createElement(
+            'div'
+          );
+
+        info.className =
+          'supporter-info';
+
+
+        const name =
+          document.createElement(
+            'strong'
+          );
+
+        name.className =
+          'supporter-name';
+
+        name.textContent =
+          donorName;
+
+
+        const time =
+          document.createElement(
+            'span'
+          );
+
+        time.className =
+          'supporter-time';
+
+        time.textContent =
+          timeText;
+
+
+        info.append(
+          name,
+          time
+        );
+
+
+        /* -----------------------------
+           AMOUNT
+        ----------------------------- */
+
+        const money =
+          document.createElement(
+            'b'
+          );
+
+        money.className =
+          'supporter-amount';
+
+        money.textContent =
+          `+${fmt(amount)}₫`;
+
+
+        /* -----------------------------
+           GHÉP ROW
+        ----------------------------- */
+
+        row.append(
+          avatar,
+          info,
+          money
+        );
+
+
+        list.appendChild(
+          row
+        );
+      });
 
 
     } catch (error) {
@@ -1623,25 +1721,20 @@
         error
       );
 
-      /*
-       * Không làm hỏng toàn bộ website
-       * nếu API lịch sử tạm thời lỗi.
-       */
-
     }
   }
 
 
-  /*
-   * Load ngay khi trang mở.
-   */
+  /* =========================================================
+     LOAD LỊCH SỬ
+  ========================================================= */
 
   loadSupporters();
 
 
-  /*
-   * Tự cập nhật lịch sử mỗi 30 giây.
-   */
+  /* =========================================================
+     TỰ CẬP NHẬT MỖI 30 GIÂY
+  ========================================================= */
 
   setInterval(
     loadSupporters,
@@ -1977,8 +2070,6 @@
           r * 1.9;
 
 
-        /* Tai */
-
         cx.fillStyle =
           cap.dark;
 
@@ -2013,8 +2104,6 @@
         cx.fill();
 
 
-        /* Thân */
-
         cx.fillStyle =
           cap.tint;
 
@@ -2032,8 +2121,6 @@
         cx.fill();
 
 
-        /* Mõm */
-
         cx.fillStyle =
           '#C79A6B';
 
@@ -2050,8 +2137,6 @@
 
         cx.fill();
 
-
-        /* Mắt */
 
         cx.fillStyle =
           '#2B1B0E';
@@ -2086,8 +2171,6 @@
 
         cx.fill();
 
-
-        /* Mũi */
 
         cx.beginPath();
 
@@ -2155,8 +2238,6 @@
         cx.stroke();
 
 
-        /* Lá */
-
         cx.save();
 
 
@@ -2186,8 +2267,6 @@
 
         cx.restore();
 
-
-        /* Highlight */
 
         cx.fillStyle =
           'rgba(255,255,255,.55)';
