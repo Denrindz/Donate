@@ -1,34 +1,40 @@
-(function(){
+(function () {
   'use strict';
 
-  /* ===== Tiện ích chung ===== */
-  const $ = s => document.querySelector(s);
+  /* =========================================================
+     TIỆN ÍCH CHUNG
+  ========================================================= */
 
-  const fmt = n =>
-    Math.round(n).toLocaleString('vi-VN');
+  const $ = (s) => document.querySelector(s);
+
+  const fmt = (n) =>
+    Math.round(Number(n) || 0).toLocaleString('vi-VN');
 
   const reduceMotion =
-    matchMedia('(prefers-reduced-motion: reduce)').matches;
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 
   const store = {
-    get(k, d){
-      try{
-        const v = localStorage.getItem(k);
-        return v == null ? d : JSON.parse(v);
-      }catch(e){
-        return d;
+    get(key, fallback) {
+      try {
+        const value = localStorage.getItem(key);
+        return value == null ? fallback : JSON.parse(value);
+      } catch (e) {
+        return fallback;
       }
     },
 
-    set(k, v){
-      try{
-        localStorage.setItem(k, JSON.stringify(v));
-      }catch(e){}
+    set(key, value) {
+      try {
+        localStorage.setItem(key, JSON.stringify(value));
+      } catch (e) {}
     }
   };
 
 
-  /* ===== Thông tin tài khoản nhận ủng hộ ===== */
+  /* =========================================================
+     THÔNG TIN TÀI KHOẢN
+  ========================================================= */
 
   const BANK = {
     stk: '09637164106868',
@@ -36,24 +42,27 @@
   };
 
 
-  /* ===== Băng chữ chạy ===== */
+  /* =========================================================
+     BĂNG CHỮ CHẠY
+  ========================================================= */
 
-  document.querySelectorAll('.mq-track').forEach(tr => {
+  document.querySelectorAll('.mq-track').forEach((track) => {
+    const text = track.dataset.text || '';
 
-    const html =
-      tr.dataset.text.replaceAll(
-        '◆',
-        '<b>◆</b>'
-      );
+    const html = text.replaceAll(
+      '◆',
+      '<b>◆</b>'
+    );
 
-    tr.innerHTML =
+    track.innerHTML =
       `<span>${html.repeat(4)}</span>` +
       `<span aria-hidden="true">${html.repeat(4)}</span>`;
-
   });
 
 
-  /* ===== Popup ủng hộ ===== */
+  /* =========================================================
+     POPUP
+  ========================================================= */
 
   const MIN = 10000;
 
@@ -73,128 +82,91 @@
     3000;
 
 
-  const ov =
-    $('#popupOverlay');
+  /* =========================================================
+     DOM
+  ========================================================= */
 
-  const openBtn =
-    $('#openPopup');
+  const ov = $('#popupOverlay');
+  const openBtn = $('#openPopup');
+  const closeBtn = $('#pClose');
 
-  const closeBtn =
-    $('#pClose');
+  const pForm = $('#pForm');
+  const pSuccess = $('#pSuccess');
+  const pNotice = $('#pNotice');
 
+  const nameInput = $('#pName');
+  const amtInput = $('#pAmount');
+  const amtWrap = $('#pAmountWrap');
+  const msgInput = $('#pMsg');
+  const submitBtn = $('#pSubmit');
 
-  const pForm =
-    $('#pForm');
+  const chips = [
+    ...document.querySelectorAll('.p-chips button')
+  ];
 
-  const pSuccess =
-    $('#pSuccess');
+  const pErr = $('#pErr');
+  const qrBox = $('#qrBox');
+  const psNote = $('#psNote');
 
-  const pNotice =
-    $('#pNotice');
+  const payStatus = $('#payStatus');
+  const payStatusText = $('#payStatusText');
 
+  const doneBtn = $('#pDone');
+  const retryBtn = $('#pRetry');
+  const cancelBtn = $('#pCancel');
 
-  const nameInput =
-    $('#pName');
+  const copyBtn = $('#copyStk');
 
-  const amtInput =
-    $('#pAmount');
-
-  const amtWrap =
-    $('#pAmountWrap');
-
-  const msgInput =
-    $('#pMsg');
-
-  const submitBtn =
-    $('#pSubmit');
-
-
-  const chips =
-    [...document.querySelectorAll(
-      '.p-chips button'
-    )];
-
-  const pErr =
-    $('#pErr');
-
-  const qrBox =
-    $('#qrBox');
-
-  const psNote =
-    $('#psNote');
+  const qrImage = $('#qrImage');
 
 
-  const payStatus =
-    $('#payStatus');
-
-  const payStatusText =
-    $('#payStatusText');
-
-
-  const doneBtn =
-    $('#pDone');
-
-  const retryBtn =
-    $('#pRetry');
-
-  const cancelBtn =
-    $('#pCancel');
-
+  /* =========================================================
+     TRẠNG THÁI
+  ========================================================= */
 
   let amt = 0;
 
   let expTimer = null;
-
   let coolTimer = null;
-
   let payTimer = null;
 
   let paid = false;
 
   let cancelArmed = false;
-
   let cancelArmTimer = null;
 
 
-  /* ===== Chống spam tạo QR ===== */
+  /* =========================================================
+     CHỐNG SPAM
+  ========================================================= */
 
-  let genTimes =
-    store.get(
-      'dxm_qrgen',
-      []
-    ).filter(
-      t =>
-        Date.now() - t <
-        SPAM_WINDOW
+  let genTimes = store
+    .get('dxm_qrgen', [])
+    .filter(
+      (time) =>
+        Date.now() - Number(time) < SPAM_WINDOW
     );
 
 
   let coolUntil =
-    +store.get(
-      'dxm_cool',
-      0
+    Number(
+      store.get('dxm_cool', 0)
     ) || 0;
 
 
-  if(
-    coolUntil <= Date.now()
-  ){
+  if (coolUntil <= Date.now()) {
     coolUntil = 0;
   }
 
 
-  function startCooldown(ms){
-
-    clearInterval(
-      coolTimer
-    );
+  function startCooldown(ms) {
+    clearInterval(coolTimer);
 
     const end =
       Date.now() + ms;
 
 
-    const tickFn = () => {
-
+    const tick = () => {
       const left =
         Math.max(
           0,
@@ -204,416 +176,356 @@
         );
 
 
-      submitBtn.disabled =
-        left > 0;
+      if (submitBtn) {
+        submitBtn.disabled = left > 0;
+
+        submitBtn.textContent =
+          left > 0
+            ? `Chờ ${left}s…`
+            : 'Tạo mã ủng hộ';
+      }
 
 
-      submitBtn.textContent =
-        left > 0
-          ? `Chờ ${left}s…`
-          : 'Tạo mã ủng hộ';
-
-
-      if(left <= 0){
-
-        clearInterval(
-          coolTimer
-        );
-
+      if (left <= 0) {
+        clearInterval(coolTimer);
         coolTimer = null;
 
         hideErr();
-
       }
-
     };
 
 
-    tickFn();
+    tick();
 
     coolTimer =
       setInterval(
-        tickFn,
+        tick,
         250
       );
-
   }
 
 
-  function syncCooldownUI(){
-
-    if(
+  function syncCooldownUI() {
+    if (
       coolUntil > Date.now() &&
       !coolTimer
-    ){
-
+    ) {
       startCooldown(
         coolUntil - Date.now()
       );
-
     }
-
   }
 
 
-  function openPopup(){
+  /* =========================================================
+     MỞ / ĐÓNG POPUP
+  ========================================================= */
+
+  function openPopup() {
+    if (!ov) return;
 
     ov.hidden = false;
 
-
     requestAnimationFrame(() => {
-
-      ov.classList.add(
-        'show'
-      );
-
+      ov.classList.add('show');
     });
 
-
-    document.body.style.overflow =
-      'hidden';
-
+    document.body.style.overflow = 'hidden';
 
     syncCooldownUI();
 
-
     setTimeout(() => {
-
-      nameInput.focus();
-
+      if (nameInput) {
+        nameInput.focus();
+      }
     }, 320);
-
   }
 
 
-  function closePopup(){
+  function closePopup() {
+    if (!ov) return;
 
-    ov.classList.remove(
-      'show'
-    );
-
+    ov.classList.remove('show');
 
     stopExpiry();
-
     stopPayWatch();
-
     disarmCancel();
 
-
     setTimeout(() => {
-
       ov.hidden = true;
-
       resetForm();
-
     }, 300);
 
-
-    document.body.style.overflow =
-      '';
-
+    document.body.style.overflow = '';
   }
 
 
-  function resetForm(){
+  /*
+   * Cho phép HTML gọi:
+   *
+   * window.openDonationPopup()
+   *
+   * nên onclick trong index.html cũng hoạt động.
+   */
+  window.openDonationPopup = openPopup;
 
-    pSuccess.hidden =
-      true;
 
-    pForm.hidden =
-      false;
-
-
-    pNotice.hidden =
-      true;
-
+  function resetForm() {
+    if (pSuccess) pSuccess.hidden = true;
+    if (pForm) pForm.hidden = false;
+    if (pNotice) pNotice.hidden = true;
 
     amt = 0;
 
+    if (amtInput) {
+      amtInput.value = '';
+    }
 
-    amtInput.value =
-      '';
+    if (msgInput) {
+      msgInput.value = '';
+    }
 
-    msgInput.value =
-      '';
-
-
-    chips.forEach(c => {
-
-      c.classList.remove(
-        'on'
-      );
-
+    chips.forEach((chip) => {
+      chip.classList.remove('on');
     });
 
+    if (qrBox) {
+      qrBox.classList.remove(
+        'expired',
+        'paid'
+      );
+    }
 
-    qrBox.classList.remove(
-      'expired',
-      'paid'
-    );
+    if (qrImage) {
+      qrImage.removeAttribute('src');
+    }
 
-
-    psNote.innerHTML =
-      'Mã hết hạn sau <b id="psCount">10:00</b>';
-
+    if (psNote) {
+      psNote.innerHTML =
+        'Mã hết hạn sau <b id="psCount">10:00</b>';
+    }
 
     setPayStatus(
       'wait',
       'Đang chờ chuyển khoản…'
     );
 
-
     hideErr();
 
+    if (doneBtn) {
+      doneBtn.hidden = false;
+      doneBtn.disabled = true;
+      doneBtn.textContent =
+        'Chưa nhận được tiền';
+    }
 
-    doneBtn.hidden =
-      false;
+    if (retryBtn) {
+      retryBtn.hidden = true;
+    }
 
-    doneBtn.disabled =
-      true;
-
-    doneBtn.textContent =
-      'Chưa nhận được tiền';
-
-
-    retryBtn.hidden =
-      true;
-
-
-    cancelBtn.hidden =
-      false;
-
+    if (cancelBtn) {
+      cancelBtn.hidden = false;
+    }
 
     disarmCancel();
 
-
-    submitBtn.disabled =
-      false;
-
-    submitBtn.textContent =
-      'Tạo mã ủng hộ';
-
+    if (submitBtn) {
+      submitBtn.disabled = false;
+      submitBtn.textContent =
+        'Tạo mã ủng hộ';
+    }
 
     syncCooldownUI();
-
   }
 
 
-  /* ===== NÚT ỦNG HỘ NGAY ===== */
+  /* =========================================================
+     EVENT POPUP
+  ========================================================= */
 
-  if(openBtn){
-
+  if (openBtn) {
     openBtn.addEventListener(
       'click',
       openPopup
     );
-
   }
 
 
-  if(closeBtn){
-
+  if (closeBtn) {
     closeBtn.addEventListener(
       'click',
       closePopup
     );
-
   }
 
 
-  if(ov){
-
+  if (ov) {
     ov.addEventListener(
       'click',
-      e => {
-
-        if(
-          e.target === ov
-        ){
-
+      (event) => {
+        if (event.target === ov) {
           closePopup();
-
         }
-
       }
     );
-
   }
 
 
-  addEventListener(
+  window.addEventListener(
     'keydown',
-    e => {
-
-      if(
-        e.key === 'Escape' &&
+    (event) => {
+      if (
+        event.key === 'Escape' &&
+        ov &&
         !ov.hidden
-      ){
-
+      ) {
         closePopup();
-
       }
-
     }
   );
 
 
-  /* ===== Mobile keyboard ===== */
+  /* =========================================================
+     MOBILE KEYBOARD
+  ========================================================= */
 
-  if(ov){
-
+  if (ov) {
     ov.addEventListener(
       'focusin',
-      e => {
-
-        if(
-          e.target.classList &&
-          e.target.classList.contains(
-            'p-input'
-          )
-        ){
-
+      (event) => {
+        if (
+          event.target.classList &&
+          event.target.classList.contains('p-input')
+        ) {
           setTimeout(() => {
-
-            e.target.scrollIntoView({
+            event.target.scrollIntoView({
               block: 'center',
               behavior: 'smooth'
             });
-
           }, 280);
-
         }
-
       }
     );
-
   }
 
 
-  /* ===== Số tiền ===== */
+  /* =========================================================
+     SỐ TIỀN
+  ========================================================= */
 
-  function showErr(msg){
+  function showErr(message) {
+    if (pErr) {
+      pErr.textContent = message;
+      pErr.hidden = false;
+    }
 
-    pErr.textContent =
-      msg;
-
-    pErr.hidden =
-      false;
-
-    amtWrap.classList.add(
-      'err'
-    );
-
+    if (amtWrap) {
+      amtWrap.classList.add('err');
+    }
   }
 
 
-  function hideErr(){
+  function hideErr() {
+    if (pErr) {
+      pErr.hidden = true;
+    }
 
-    pErr.hidden =
-      true;
-
-    amtWrap.classList.remove(
-      'err'
-    );
-
+    if (amtWrap) {
+      amtWrap.classList.remove('err');
+    }
   }
 
 
   function setAmount(
-    v,
-    fromChip
-  ){
-
-    amt = v;
-
-
-    amtInput.value =
-      v ? fmt(v) : '';
+    value,
+    fromChip = false
+  ) {
+    amt =
+      Number(value) || 0;
 
 
-    chips.forEach(c => {
+    if (amtInput) {
+      amtInput.value =
+        amt ? fmt(amt) : '';
+    }
 
-      c.classList.toggle(
+
+    chips.forEach((chip) => {
+      chip.classList.toggle(
         'on',
-        +c.dataset.amount === v
+        Number(chip.dataset.amount) === amt
       );
-
     });
 
 
-    if(!fromChip){
-
+    if (!fromChip) {
       hideErr();
-
     }
-
   }
 
 
-  chips.forEach(c => {
-
-    c.addEventListener(
+  chips.forEach((chip) => {
+    chip.addEventListener(
       'click',
       () => {
-
         setAmount(
-          +c.dataset.amount,
+          Number(chip.dataset.amount),
           true
         );
 
         hideErr();
 
-        amtInput.focus();
-
+        if (amtInput) {
+          amtInput.focus();
+        }
       }
     );
-
   });
 
 
-  amtInput.addEventListener(
-    'input',
-    () => {
+  if (amtInput) {
+    amtInput.addEventListener(
+      'input',
+      () => {
+        const digits =
+          amtInput.value
+            .replace(/\D/g, '')
+            .slice(0, 9);
 
-      const digits =
-        amtInput.value
-          .replace(/\D/g, '')
-          .slice(0, 9);
-
-
-      setAmount(
-        digits ? +digits : 0
-      );
-
-    }
-  );
-
-
-  amtInput.addEventListener(
-    'blur',
-    () => {
-
-      if(
-        amtInput.value &&
-        amt < MIN
-      ){
-
-        showErr(
-          `Số tiền tối thiểu là ${fmt(MIN)}₫ nhé.`
+        setAmount(
+          digits ? Number(digits) : 0
         );
-
       }
-
-    }
-  );
+    );
 
 
-  /* ===== Trạng thái thanh toán ===== */
+    amtInput.addEventListener(
+      'blur',
+      () => {
+        if (
+          amtInput.value &&
+          amt < MIN
+        ) {
+          showErr(
+            `Số tiền tối thiểu là ${fmt(MIN)}₫ nhé.`
+          );
+        }
+      }
+    );
+  }
+
+
+  /* =========================================================
+     TRẠNG THÁI THANH TOÁN
+  ========================================================= */
 
   function setPayStatus(
     kind,
     text
-  ){
+  ) {
+    if (!payStatus || !payStatusText) {
+      return;
+    }
 
     payStatus.classList.remove(
       'ok',
@@ -621,82 +533,70 @@
     );
 
 
-    if(
-      kind !== 'wait'
-    ){
-
-      payStatus.classList.add(
-        kind
-      );
-
+    if (kind !== 'wait') {
+      payStatus.classList.add(kind);
     }
 
 
-    payStatusText.textContent =
-      text;
-
+    payStatusText.textContent = text;
   }
 
 
-  /* ===== QR hết hạn ===== */
+  /* =========================================================
+     TIMER HẾT HẠN
+  ========================================================= */
 
-  function stopExpiry(){
-
-    if(expTimer){
-
-      clearInterval(
-        expTimer
-      );
-
+  function stopExpiry() {
+    if (expTimer) {
+      clearInterval(expTimer);
       expTimer = null;
-
     }
-
   }
 
 
-  function startExpiry(){
-
+  function startExpiry() {
     stopExpiry();
 
+    if (qrBox) {
+      qrBox.classList.remove(
+        'expired',
+        'paid'
+      );
+    }
 
-    qrBox.classList.remove(
-      'expired',
-      'paid'
-    );
-
-
-    psNote.innerHTML =
-      'Mã hết hạn sau <b id="psCount">10:00</b>';
+    if (psNote) {
+      psNote.innerHTML =
+        'Mã hết hạn sau <b id="psCount">10:00</b>';
+    }
 
 
     const end =
-      Date.now() +
-      EXPIRY_MS;
+      Date.now() + EXPIRY_MS;
 
 
     expTimer =
       setInterval(
         () => {
-
           const left =
             end - Date.now();
 
 
-          if(left <= 0){
-
+          if (left <= 0) {
             stopExpiry();
-
             stopPayWatch();
 
 
-            qrBox.classList.add(
-              'expired'
-            );
+            if (qrBox) {
+              qrBox.classList.add(
+                'expired'
+              );
+            }
 
 
-            psNote.textContent =
-              'Mã đã hết hạn — tạo mã mới để ủng hộ tiếp nhé.';
+            if (psNote) {
+              psNote.textContent =
+                'Mã đã hết hạn — tạo mã mới để ủng hộ tiếp nhé.';
+            }
 
 
             setPayStatus(
@@ -705,181 +605,90 @@
             );
 
 
-            doneBtn.hidden =
-              true;
+            if (doneBtn) {
+              doneBtn.hidden = true;
+            }
 
-            retryBtn.hidden =
-              false;
 
-            cancelBtn.hidden =
-              true;
+            if (retryBtn) {
+              retryBtn.hidden = false;
+            }
+
+
+            if (cancelBtn) {
+              cancelBtn.hidden = true;
+            }
 
 
             disarmCancel();
 
-
             return;
-
           }
 
 
-          const s =
+          const seconds =
             Math.ceil(
               left / 1000
             );
 
 
-          const cnt =
+          const count =
             $('#psCount');
 
 
-          if(cnt){
-
-            cnt.textContent =
+          if (count) {
+            count.textContent =
               String(
-                Math.floor(s / 60)
+                Math.floor(seconds / 60)
               ).padStart(2, '0') +
               ':' +
               String(
-                s % 60
+                seconds % 60
               ).padStart(2, '0');
-
           }
-
         },
         250
       );
-
   }
 
 
-  /* ===== Kiểm tra thanh toán ===== */
+  /* =========================================================
+     KIỂM TRA THANH TOÁN
+  ========================================================= */
 
-  function stopPayWatch(){
-
-    if(payTimer){
-
-      clearInterval(
-        payTimer
-      );
-
+  function stopPayWatch() {
+    if (payTimer) {
+      clearInterval(payTimer);
       payTimer = null;
-
     }
-
   }
 
 
   /*
-   * KHÔNG GIẢ LẬP THANH TOÁN.
+   * Backend của Worker:
    *
-   * Hiện tại hàm này chỉ giữ trạng thái
-   * "Đang chờ chuyển khoản".
+   * POST
+   * https://doante-api.tnt300709.workers.dev/check
    *
-   * Khi backend + SePay được kết nối,
-   * phần này sẽ gọi API kiểm tra đơn hàng.
+   * Body:
+   * {
+   *   code: "DXM-123456",
+   *   amount: 10000
+   * }
+   *
+   * Backend cần trả:
+   *
+   * {
+   *   "ok": true,
+   *   "paid": true
+   * }
+   *
+   * CHỈ khi paid === true mới báo
+   * giao dịch thành công.
    */
 
-  function startPayWatch(payment){
-
-  stopPayWatch();
-
-  setPayStatus(
-    'wait',
-    'Đang chờ chuyển khoản…'
-  );
-
-  const API_URL =
-    'https://doante-api.tnt300709.workers.dev/check';
-
-  let checking = false;
-
-  async function checkPayment(){
-
-    if(checking || paid){
-      return;
-    }
-
-    checking = true;
-
-    try{
-
-      const response =
-        await fetch(
-          API_URL,
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type':
-                'application/json'
-            },
-
-            body: JSON.stringify({
-              code: payment.code,
-              amount: payment.amount
-            })
-          }
-        );
-
-      if(!response.ok){
-        throw new Error(
-          `HTTP ${response.status}`
-        );
-      }
-
-      const data =
-        await response.json();
-
-      if(
-        data.ok &&
-        data.paid
-      ){
-
-        stopPayWatch();
-
-        markPaid({
-          amount:
-            Number(
-              data.transaction?.amount ||
-              payment.amount
-            ),
-
-          code:
-            payment.code
-        });
-
-      }
-
-    }catch(error){
-
-      console.warn(
-        'Casso check error:',
-        error
-      );
-
-    }finally{
-
-      checking = false;
-
-    }
-
-  }
-
-  // Kiểm tra ngay lần đầu
-  checkPayment();
-
-  // Sau đó kiểm tra mỗi 3 giây
-  payTimer =
-    setInterval(
-      checkPayment,
-      POLL_MS
-    );
-
-}
-
+  function startPayWatch(payment) {
     stopPayWatch();
-
 
     setPayStatus(
       'wait',
@@ -887,49 +696,150 @@
     );
 
 
-    /*
-     * TODO:
-     *
-     * Backend sẽ trả:
-     *
-     * { status: "pending" }
-     *
-     * hoặc:
-     *
-     * { status: "paid" }
-     *
-     * Khi status === "paid":
-     *
-     * stopPayWatch();
-     * markPaid(payment);
-     *
-     *
-     * KHÔNG tự gọi markPaid()
-     * ở đây.
-     */
+    const API_URL =
+      'https://doante-api.tnt300709.workers.dev/check';
 
+
+    let checking = false;
+
+
+    async function checkPayment() {
+      if (
+        checking ||
+        paid
+      ) {
+        return;
+      }
+
+
+      checking = true;
+
+
+      try {
+        const response =
+          await fetch(
+            API_URL,
+            {
+              method: 'POST',
+
+              headers: {
+                'Content-Type':
+                  'application/json'
+              },
+
+              body: JSON.stringify({
+                code:
+                  payment.code,
+
+                amount:
+                  payment.amount
+              })
+            }
+          );
+
+
+        if (!response.ok) {
+          throw new Error(
+            `HTTP ${response.status}`
+          );
+        }
+
+
+        const data =
+          await response.json();
+
+
+        /*
+         * KHÔNG bao giờ tự xác nhận
+         * thanh toán ở frontend.
+         *
+         * Chỉ backend mới quyết định
+         * paid = true.
+         */
+
+        if (
+          data &&
+          data.ok === true &&
+          data.paid === true
+        ) {
+          stopPayWatch();
+
+
+          const transactionAmount =
+            Number(
+              data.transaction &&
+              data.transaction.amount
+            ) || payment.amount;
+
+
+          markPaid({
+            amount:
+              transactionAmount,
+
+            code:
+              payment.code
+          });
+        }
+
+      } catch (error) {
+        /*
+         * API lỗi:
+         * giữ nguyên trạng thái chờ.
+         *
+         * Tuyệt đối không markPaid().
+         */
+
+        console.warn(
+          'Payment check error:',
+          error
+        );
+
+      } finally {
+        checking = false;
+      }
+    }
+
+
+    /* Kiểm tra ngay */
+    checkPayment();
+
+
+    /* Sau đó kiểm tra mỗi 3 giây */
+    payTimer =
+      setInterval(
+        checkPayment,
+        POLL_MS
+      );
   }
 
 
-  function markPaid(payment){
+  /* =========================================================
+     ĐÁNH DẤU ĐÃ THANH TOÁN
+  ========================================================= */
 
+  function markPaid(payment) {
     paid = true;
 
-
-    qrBox.classList.add(
-      'paid'
-    );
+    stopPayWatch();
+    stopExpiry();
 
 
-    psNote.textContent =
-      'Giao dịch hoàn tất · ' +
-      new Date().toLocaleTimeString(
-        'vi-VN',
-        {
-          hour: '2-digit',
-          minute: '2-digit'
-        }
-      );
+    if (qrBox) {
+      qrBox.classList.add('paid');
+    }
+
+
+    if (psNote) {
+      psNote.textContent =
+        'Giao dịch hoàn tất · ' +
+        new Date().toLocaleTimeString(
+          'vi-VN',
+          {
+            hour: '2-digit',
+            minute: '2-digit'
+          }
+        );
+    }
 
 
     setPayStatus(
@@ -938,709 +848,719 @@
     );
 
 
-    doneBtn.disabled =
-      false;
+    if (doneBtn) {
+      doneBtn.disabled = false;
+      doneBtn.textContent =
+        'Hoàn tất';
+    }
 
 
-    doneBtn.textContent =
-      'Hoàn tất';
-
-
-    cancelBtn.hidden =
-      true;
+    if (cancelBtn) {
+      cancelBtn.hidden = true;
+    }
 
 
     disarmCancel();
 
 
     capyRain();
-
   }
 
 
-  /* ===== Hoàn tất ===== */
+  /* =========================================================
+     HOÀN TẤT
+  ========================================================= */
 
-  doneBtn.addEventListener(
-    'click',
-    () => {
-
-      if(paid){
-
-        closePopup();
-
+  if (doneBtn) {
+    doneBtn.addEventListener(
+      'click',
+      () => {
+        if (paid) {
+          closePopup();
+        }
       }
-
-    }
-  );
-
-
-  /* ===== Tạo mã mới ===== */
-
-  retryBtn.addEventListener(
-    'click',
-    () => {
-
-      pSuccess.hidden =
-        true;
-
-      pForm.hidden =
-        false;
-
-
-      pNotice.hidden =
-        true;
-
-
-      qrBox.classList.remove(
-        'expired',
-        'paid'
-      );
-
-
-      setPayStatus(
-        'wait',
-        'Đang chờ chuyển khoản…'
-      );
-
-
-      doneBtn.hidden =
-        false;
-
-      doneBtn.disabled =
-        true;
-
-      doneBtn.textContent =
-        'Chưa nhận được tiền';
-
-
-      retryBtn.hidden =
-        true;
-
-
-      cancelBtn.hidden =
-        false;
-
-
-      syncCooldownUI();
-
-    }
-  );
-
-
-  /* ===== Huỷ giao dịch ===== */
-
-  function disarmCancel(){
-
-    cancelArmed =
-      false;
-
-
-    cancelBtn.classList.remove(
-      'armed'
     );
-
-
-    cancelBtn.textContent =
-      'Huỷ giao dịch';
-
-
-    if(cancelArmTimer){
-
-      clearTimeout(
-        cancelArmTimer
-      );
-
-      cancelArmTimer =
-        null;
-
-    }
-
   }
 
 
-  cancelBtn.addEventListener(
-    'click',
-    () => {
+  /* =========================================================
+     TẠO MÃ MỚI
+  ========================================================= */
 
-      if(!cancelArmed){
+  if (retryBtn) {
+    retryBtn.addEventListener(
+      'click',
+      () => {
+        stopPayWatch();
+        stopExpiry();
 
-        cancelArmed =
-          true;
+        paid = false;
 
 
-        cancelBtn.classList.add(
-          'armed'
+        if (pSuccess) {
+          pSuccess.hidden = true;
+        }
+
+        if (pForm) {
+          pForm.hidden = false;
+        }
+
+        if (pNotice) {
+          pNotice.hidden = true;
+        }
+
+
+        if (qrBox) {
+          qrBox.classList.remove(
+            'expired',
+            'paid'
+          );
+        }
+
+
+        if (qrImage) {
+          qrImage.removeAttribute('src');
+        }
+
+
+        setPayStatus(
+          'wait',
+          'Đang chờ chuyển khoản…'
         );
 
 
-        cancelBtn.textContent =
-          'Bấm lần nữa để xác nhận huỷ';
+        if (doneBtn) {
+          doneBtn.hidden = false;
+          doneBtn.disabled = true;
+          doneBtn.textContent =
+            'Chưa nhận được tiền';
+        }
 
 
-        cancelArmTimer =
-          setTimeout(
-            disarmCancel,
-            3500
-          );
+        retryBtn.hidden = true;
 
 
-        return;
+        if (cancelBtn) {
+          cancelBtn.hidden = false;
+        }
 
+
+        syncCooldownUI();
       }
-
-
-      stopPayWatch();
-
-      stopExpiry();
-
-      disarmCancel();
-
-
-      pSuccess.hidden =
-        true;
-
-      pForm.hidden =
-        false;
-
-
-      pNotice.textContent =
-        'Đã huỷ giao dịch — chưa có khoản nào được ghi nhận. Bạn có thể tạo mã mới bất cứ lúc nào.';
-
-
-      pNotice.hidden =
-        false;
-
-
-      qrBox.classList.remove(
-        'expired',
-        'paid'
-      );
-
-
-      setPayStatus(
-        'wait',
-        'Đang chờ chuyển khoản…'
-      );
-
-
-      doneBtn.hidden =
-        false;
-
-      doneBtn.disabled =
-        true;
-
-      doneBtn.textContent =
-        'Chưa nhận được tiền';
-
-
-      retryBtn.hidden =
-        true;
-
-
-      cancelBtn.hidden =
-        false;
-
-
-      submitBtn.disabled =
-        false;
-
-      submitBtn.textContent =
-        'Tạo mã ủng hộ';
-
-
-      syncCooldownUI();
-
-    }
-  );
-
-
-  /* ===== Copy STK ===== */
-
-  function copyText(t){
-
-    if(
-      navigator.clipboard &&
-      window.isSecureContext
-    ){
-
-      return navigator.clipboard.writeText(
-        t
-      );
-
-    }
-
-
-    const ta =
-      document.createElement(
-        'textarea'
-      );
-
-
-    ta.value =
-      t;
-
-
-    ta.style.position =
-      'fixed';
-
-    ta.style.opacity =
-      '0';
-
-
-    document.body.appendChild(
-      ta
     );
-
-
-    ta.select();
-
-
-    try{
-
-      document.execCommand(
-        'copy'
-      );
-
-    }catch(e){}
-
-
-    ta.remove();
-
-
-    return Promise.resolve();
-
   }
 
 
-  const copyBtn =
-    $('#copyStk');
+  /* =========================================================
+     HUỶ GIAO DỊCH
+  ========================================================= */
+
+  function disarmCancel() {
+    cancelArmed = false;
 
 
-  copyBtn.addEventListener(
-    'click',
-    () => {
+    if (cancelBtn) {
+      cancelBtn.classList.remove('armed');
 
-      copyText(
-        BANK.stk
-      ).then(
-        () => {
-
-          copyBtn.textContent =
-            'Đã copy';
+      cancelBtn.textContent =
+        'Huỷ giao dịch';
+    }
 
 
-          copyBtn.classList.add(
-            'ok'
+    if (cancelArmTimer) {
+      clearTimeout(cancelArmTimer);
+      cancelArmTimer = null;
+    }
+  }
+
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener(
+      'click',
+      () => {
+        if (!cancelArmed) {
+          cancelArmed = true;
+
+
+          cancelBtn.classList.add(
+            'armed'
           );
 
 
-          setTimeout(
-            () => {
+          cancelBtn.textContent =
+            'Bấm lần nữa để xác nhận huỷ';
 
+
+          cancelArmTimer =
+            setTimeout(
+              disarmCancel,
+              3500
+            );
+
+
+          return;
+        }
+
+
+        stopPayWatch();
+        stopExpiry();
+
+        paid = false;
+
+        disarmCancel();
+
+
+        if (pSuccess) {
+          pSuccess.hidden = true;
+        }
+
+        if (pForm) {
+          pForm.hidden = false;
+        }
+
+
+        if (pNotice) {
+          pNotice.textContent =
+            'Đã huỷ giao dịch — chưa có khoản nào được ghi nhận. Bạn có thể tạo mã mới bất cứ lúc nào.';
+
+          pNotice.hidden = false;
+        }
+
+
+        if (qrBox) {
+          qrBox.classList.remove(
+            'expired',
+            'paid'
+          );
+        }
+
+
+        if (qrImage) {
+          qrImage.removeAttribute('src');
+        }
+
+
+        setPayStatus(
+          'wait',
+          'Đang chờ chuyển khoản…'
+        );
+
+
+        if (doneBtn) {
+          doneBtn.hidden = false;
+          doneBtn.disabled = true;
+          doneBtn.textContent =
+            'Chưa nhận được tiền';
+        }
+
+
+        if (retryBtn) {
+          retryBtn.hidden = true;
+        }
+
+
+        cancelBtn.hidden = false;
+
+
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent =
+            'Tạo mã ủng hộ';
+        }
+
+
+        syncCooldownUI();
+      }
+    );
+  }
+
+
+  /* =========================================================
+     COPY SỐ TÀI KHOẢN
+  ========================================================= */
+
+  function copyText(text) {
+    if (
+      navigator.clipboard &&
+      window.isSecureContext
+    ) {
+      return navigator.clipboard.writeText(
+        text
+      );
+    }
+
+
+    const textarea =
+      document.createElement('textarea');
+
+
+    textarea.value = text;
+
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+
+
+    document.body.appendChild(
+      textarea
+    );
+
+
+    textarea.select();
+
+
+    try {
+      document.execCommand('copy');
+    } catch (e) {}
+
+
+    textarea.remove();
+
+
+    return Promise.resolve();
+  }
+
+
+  if (copyBtn) {
+    copyBtn.addEventListener(
+      'click',
+      () => {
+        copyText(BANK.stk)
+          .then(() => {
+            copyBtn.textContent =
+              'Đã copy';
+
+            copyBtn.classList.add('ok');
+
+
+            setTimeout(() => {
               copyBtn.textContent =
                 'Copy';
-
 
               copyBtn.classList.remove(
                 'ok'
               );
+            }, 1600);
+          })
+          .catch(() => {});
+      }
+    );
+  }
 
-            },
-            1600
+
+  /* =========================================================
+     TẠO MÃ ỦNG HỘ
+  ========================================================= */
+
+  if (submitBtn) {
+    submitBtn.addEventListener(
+      'click',
+      () => {
+        const now = Date.now();
+
+
+        /* Kiểm tra cooldown */
+        if (now < coolUntil) {
+          return;
+        }
+
+
+        /* Kiểm tra số tiền */
+        if (amt < MIN) {
+          hideErr();
+
+          if (amtWrap) {
+            void amtWrap.offsetWidth;
+          }
+
+          showErr(
+            `Số tiền tối thiểu là ${fmt(MIN)}₫ nhé.`
           );
 
+
+          if (amtInput) {
+            amtInput.focus();
+          }
+
+          return;
         }
-      );
-
-    }
-  );
 
 
-  /* ===== Tạo mã ủng hộ ===== */
-
-  submitBtn.addEventListener(
-    'click',
-    () => {
-
-      const now =
-        Date.now();
-
-
-      if(
-        now < coolUntil
-      ){
-
-        return;
-
-      }
+        /* Lọc lịch sử */
+        genTimes =
+          genTimes.filter(
+            (time) =>
+              now - Number(time) <
+              SPAM_WINDOW
+          );
 
 
-      if(
-        amt < MIN
-      ){
-
-        hideErr();
-
-
-        void amtWrap.offsetWidth;
-
-
-        showErr(
-          `Số tiền tối thiểu là ${fmt(MIN)}₫ nhé.`
-        );
+        /* Chống spam */
+        if (
+          genTimes.length >=
+          SPAM_MAX
+        ) {
+          coolUntil =
+            now + COOL_MS;
 
 
-        amtInput.focus();
+          store.set(
+            'dxm_cool',
+            coolUntil
+          );
 
 
-        return;
-
-      }
-
-
-      genTimes =
-        genTimes.filter(
-          t =>
-            now - t <
-            SPAM_WINDOW
-        );
+          showErr(
+            'Phát hiện spam — bạn tạo mã quá nhanh, vui lòng chờ 30 giây.'
+          );
 
 
-      if(
-        genTimes.length >=
-        SPAM_MAX
-      ){
+          startCooldown(
+            COOL_MS
+          );
 
-        coolUntil =
-          now + COOL_MS;
+
+          return;
+        }
+
+
+        genTimes.push(now);
 
 
         store.set(
-          'dxm_cool',
-          coolUntil
+          'dxm_qrgen',
+          genTimes
         );
 
 
-        showErr(
-          'Phát hiện spam — bạn tạo mã quá nhanh, vui lòng chờ 30 giây.'
-        );
+        const name =
+          nameInput &&
+          nameInput.value.trim()
+            ? nameInput.value.trim()
+            : 'Người ẩn danh';
 
 
-        startCooldown(
-          COOL_MS
-        );
+        const msg =
+          msgInput
+            ? msgInput.value.trim()
+            : '';
 
 
-        return;
-
-      }
-
-
-      genTimes.push(
-        now
-      );
-
-
-      store.set(
-        'dxm_qrgen',
-        genTimes
-      );
+        /*
+         * Mã giao dịch.
+         *
+         * Ví dụ:
+         * DXM-123456
+         */
+        const code =
+          'DXM-' +
+          String(now).slice(-6);
 
 
-      const name =
-        nameInput.value.trim() ||
-        'Người ẩn danh';
+        const date =
+          new Date();
 
 
-      const msg =
-        msgInput.value.trim();
+        paid = false;
 
 
-      const code =
-        'DXM-' +
-        String(now).slice(-6);
+        /* Thông tin người ủng hộ */
+        const psName = $('#psName');
+        const psCode = $('#psCode');
+        const psStk = $('#psStk');
+        const psTime = $('#psTime');
 
 
-      const d =
-        new Date();
+        if (psName) {
+          psName.textContent =
+            name;
+        }
 
 
-      paid =
-        false;
+        if (psCode) {
+          psCode.textContent =
+            code;
+        }
 
 
-      $('#psName').textContent =
-        name;
+        if (psStk) {
+          psStk.textContent =
+            BANK.stk;
+        }
 
 
-      $('#psCode').textContent =
-        code;
+        if (psTime) {
+          psTime.textContent =
+            date.toLocaleTimeString(
+              'vi-VN',
+              {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+              }
+            ) +
+            ' · ' +
+            date.toLocaleDateString(
+              'vi-VN'
+            );
+        }
 
 
-      $('#psStk').textContent =
-        BANK.stk;
+        /* Ngân hàng */
+        const bankRow =
+          $('#psBankRow');
 
 
-      $('#psTime').textContent =
-        d.toLocaleTimeString(
-          'vi-VN',
-          {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit'
+        if (bankRow) {
+          if (BANK.name) {
+            bankRow.hidden = false;
+
+            const psBank =
+              $('#psBank');
+
+            if (psBank) {
+              psBank.textContent =
+                BANK.name;
+            }
+          } else {
+            bankRow.hidden = true;
           }
-        ) +
-        ' · ' +
-        d.toLocaleDateString(
-          'vi-VN'
+        }
+
+
+        /* Nội dung */
+        const msgRow =
+          $('#psMsgRow');
+
+
+        if (msgRow) {
+          if (msg) {
+            msgRow.hidden = false;
+
+            const psMsg =
+              $('#psMsg');
+
+            if (psMsg) {
+              psMsg.textContent =
+                msg;
+            }
+          } else {
+            msgRow.hidden = true;
+          }
+        }
+
+
+        /* Chuyển sang màn hình QR */
+        if (pForm) {
+          pForm.hidden = true;
+        }
+
+        if (pNotice) {
+          pNotice.hidden = true;
+        }
+
+        if (pSuccess) {
+          pSuccess.hidden = false;
+        }
+
+
+        /* =====================================================
+           VIETQR MB BANK
+        ===================================================== */
+
+        const qrUrl =
+          'https://img.vietqr.io/image/970422-' +
+          encodeURIComponent(BANK.stk) +
+          '-compact2.png' +
+          '?amount=' +
+          encodeURIComponent(amt) +
+          '&addInfo=' +
+          encodeURIComponent(code);
+
+
+        if (qrImage) {
+          qrImage.src = qrUrl;
+        }
+
+
+        /* Hiển thị số tiền */
+        countUp(
+          $('#psAmount'),
+          0,
+          amt,
+          1000,
+          '₫'
         );
 
 
-      const bankRow =
-        $('#psBankRow');
-
-
-      if(BANK.name){
-
-        bankRow.hidden =
-          false;
-
-
-        $('#psBank').textContent =
-          BANK.name;
-
-      }else{
-
-        bankRow.hidden =
-          true;
-
-      }
-
-
-      const msgRow =
-        $('#psMsgRow');
-
-
-      if(msg){
-
-        msgRow.hidden =
-          false;
-
-
-        $('#psMsg').textContent =
-          msg;
-
-      }else{
-
-        msgRow.hidden =
-          true;
-
-      }
-
-
-      pForm.hidden =
-        true;
-
-
-      pNotice.hidden =
-        true;
-
-
-      pSuccess.hidden =
-        false;
-
-
-      /* ===== QR MB BANK ===== */
-
-      const qrUrl =
-        'https://img.vietqr.io/image/970422-' +
-        encodeURIComponent(
-          BANK.stk
-        ) +
-        '-compact2.png' +
-        '?amount=' +
-        encodeURIComponent(
-          amt
-        ) +
-        '&addInfo=' +
-        encodeURIComponent(
-          code
+        setPayStatus(
+          'wait',
+          'Đang chờ chuyển khoản…'
         );
 
 
-      const qrImage =
-        $('#qrImage');
+        /* Bắt đầu đếm ngược */
+        startExpiry();
 
 
-      if(qrImage){
-
-        qrImage.src =
-          qrUrl;
-
+        /*
+         * Bắt đầu kiểm tra giao dịch thật.
+         *
+         * Không mô phỏng.
+         */
+        startPayWatch({
+          amount: amt,
+          code: code
+        });
       }
+    );
+  }
 
 
-      countUp(
-        $('#psAmount'),
-        0,
-        amt,
-        1000,
-        '₫'
-      );
-
-
-      setPayStatus(
-        'wait',
-        'Đang chờ chuyển khoản…'
-      );
-
-
-      startExpiry();
-
-
-      startPayWatch({
-        amount: amt,
-        code: code
-      });
-
-    }
-  );
-
-
-  /* ===== Count up ===== */
+  /* =========================================================
+     COUNT UP
+  ========================================================= */
 
   function countUp(
-    el,
+    element,
     from,
     to,
-    dur,
+    duration,
     suffix
-  ){
+  ) {
+    if (!element) {
+      return;
+    }
 
-    const t0 =
+
+    const start =
       performance.now();
 
 
-    (function f(t){
-
-      const p =
+    function animate(time) {
+      const progress =
         Math.min(
           1,
-          (t - t0) / dur
+          (time - start) /
+          duration
         );
 
 
-      const e =
+      const easing =
         1 -
         Math.pow(
-          1 - p,
+          1 - progress,
           3
         );
 
 
-      el.textContent =
-        fmt(
-          from +
-          (to - from) * e
-        ) +
+      const value =
+        from +
+        (to - from) *
+        easing;
+
+
+      element.textContent =
+        fmt(value) +
         (suffix || '');
 
 
-      if(
-        p < 1
-      ){
-
+      if (progress < 1) {
         requestAnimationFrame(
-          f
+          animate
         );
-
       }
+    }
 
-    })(t0);
 
+    requestAnimationFrame(
+      animate
+    );
   }
 
 
-  /* ===== Hiệu ứng capybara ===== */
+  /* =========================================================
+     HIỆU ỨNG CAPYBARA
+  ========================================================= */
 
-  const cv =
-    $('#fx');
+  const cv = $('#fx');
+
+  if (!cv) {
+    return;
+  }
 
 
   const cx =
-    cv.getContext(
-      '2d'
-    );
+    cv.getContext('2d');
+
+
+  if (!cx) {
+    return;
+  }
 
 
   let caps = [];
 
-  let rafId =
-    null;
+  let rafId = null;
 
 
-  function fit(){
-
+  function fit() {
     cv.width =
-      innerWidth;
+      window.innerWidth;
 
     cv.height =
-      innerHeight;
-
+      window.innerHeight;
   }
 
 
   fit();
 
 
-  addEventListener(
+  window.addEventListener(
     'resize',
     fit
   );
 
 
-  addEventListener(
+  window.addEventListener(
     'orientationchange',
-    () =>
+    () => {
       setTimeout(
         fit,
         250
-      )
+      );
+    }
   );
 
 
   const CAPY_PAIRS = [
-    ['#A9744F','#7E5233'],
-    ['#96633F','#6E4426'],
-    ['#B98357','#8A5A38']
+    ['#A9744F', '#7E5233'],
+    ['#96633F', '#6E4426'],
+    ['#B98357', '#8A5A38']
   ];
 
 
-  const pick =
-    a =>
-      a[
-        Math.floor(
-          Math.random() *
-          a.length
-        )
-      ];
+  const pick = (array) =>
+    array[
+      Math.floor(
+        Math.random() *
+        array.length
+      )
+    ];
 
 
   function rr(
-    g,
+    context,
     x,
     y,
     w,
     h,
     r
-  ){
+  ) {
+    context.beginPath();
 
-    g.beginPath();
 
-
-    if(g.roundRect){
-
-      g.roundRect(
+    if (context.roundRect) {
+      context.roundRect(
         x,
         y,
         w,
@@ -1648,19 +1568,17 @@
         r
       );
 
-
       return;
-
     }
 
 
-    g.moveTo(
+    context.moveTo(
       x + r,
       y
     );
 
 
-    g.arcTo(
+    context.arcTo(
       x + w,
       y,
       x + w,
@@ -1669,7 +1587,7 @@
     );
 
 
-    g.arcTo(
+    context.arcTo(
       x + w,
       y + h,
       x,
@@ -1678,7 +1596,7 @@
     );
 
 
-    g.arcTo(
+    context.arcTo(
       x,
       y + h,
       x,
@@ -1687,7 +1605,7 @@
     );
 
 
-    g.arcTo(
+    context.arcTo(
       x,
       y,
       x + w,
@@ -1696,13 +1614,11 @@
     );
 
 
-    g.closePath();
-
+    context.closePath();
   }
 
 
-  function capyRain(){
-
+  function capyRain() {
     const small =
       Math.min(
         cv.width,
@@ -1710,110 +1626,90 @@
       ) < 700;
 
 
-    const n =
+    const count =
       reduceMotion
         ? 30
-        : (small ? 70 : 120);
+        : small
+          ? 70
+          : 120;
 
 
-    for(
+    for (
       let i = 0;
-      i < n;
+      i < count;
       i++
-    ){
-
+    ) {
       const pair =
-        pick(
-          CAPY_PAIRS
-        );
+        pick(CAPY_PAIRS);
 
 
       caps.push({
-
         x:
           Math.random() *
           cv.width,
-
 
         y:
           -30 -
           Math.random() *
           cv.height *
-          .6,
-
+          0.6,
 
         vy:
           2.2 +
           Math.random() *
           3.4,
 
-
         vx:
           -1 +
           Math.random() *
           2,
-
 
         r:
           4.5 +
           Math.random() *
           7,
 
-
         ph:
           Math.random() *
           Math.PI *
           2,
 
-
         phv:
-          .12 +
+          0.12 +
           Math.random() *
-          .22,
-
+          0.22,
 
         tilt:
           Math.random() *
           Math.PI *
           2,
 
-
         tv:
-          (-.5 +
+          (-0.5 +
           Math.random()) *
-          .12,
-
+          0.12,
 
         kind:
-          Math.random() <
-          .72
+          Math.random() < 0.72
             ? 'capy'
             : 'orange',
-
 
         tint:
           pair[0],
 
-
         dark:
           pair[1]
-
       });
-
     }
 
 
-    if(!rafId){
-
+    if (!rafId) {
       tick();
-
     }
-
   }
 
 
-  function tick(){
-
+  function tick() {
     rafId =
       requestAnimationFrame(
         tick
@@ -1830,95 +1726,81 @@
 
     caps =
       caps.filter(
-        c =>
-          c.y <
+        (cap) =>
+          cap.y <
           cv.height + 40
       );
 
 
-    if(!caps.length){
-
+    if (!caps.length) {
       cancelAnimationFrame(
         rafId
       );
 
-
-      rafId =
-        null;
-
+      rafId = null;
 
       return;
-
     }
 
 
-    for(
-      const c of caps
-    ){
-
-      c.x +=
-        c.vx;
-
-      c.y +=
-        c.vy;
+    for (const cap of caps) {
+      cap.x += cap.vx;
+      cap.y += cap.vy;
 
 
-      c.vy =
+      cap.vy =
         Math.min(
-          c.vy + .045,
+          cap.vy + 0.045,
           7
         );
 
 
-      c.ph +=
-        c.phv;
-
-
-      c.tilt +=
-        c.tv;
+      cap.ph += cap.phv;
+      cap.tilt += cap.tv;
 
 
       const r =
-        c.r;
+        cap.r;
 
 
       cx.save();
 
 
       cx.translate(
-        c.x,
-        c.y
+        cap.x,
+        cap.y
       );
 
 
       cx.rotate(
-        c.tilt * .25
+        cap.tilt * 0.25
       );
 
 
-      if(
-        c.kind === 'capy'
-      ){
+      /* =====================================================
+         CAPYBARA
+      ===================================================== */
 
+      if (cap.kind === 'capy') {
         const bw =
           r * 2.4;
-
 
         const bh =
           r * 1.9;
 
 
+        /* Tai */
         cx.fillStyle =
-          c.dark;
+          cap.dark;
 
 
         cx.beginPath();
 
 
         cx.arc(
-          -bw * .32,
-          -bh * .42,
-          r * .3,
+          -bw * 0.32,
+          -bh * 0.42,
+          r * 0.3,
           0,
           Math.PI * 2
         );
@@ -1931,9 +1813,9 @@
 
 
         cx.arc(
-          bw * .32,
-          -bh * .42,
-          r * .3,
+          bw * 0.32,
+          -bh * 0.42,
+          r * 0.3,
           0,
           Math.PI * 2
         );
@@ -1942,8 +1824,9 @@
         cx.fill();
 
 
+        /* Thân */
         cx.fillStyle =
-          c.tint;
+          cap.tint;
 
 
         rr(
@@ -1952,30 +1835,32 @@
           -bh / 2,
           bw,
           bh,
-          bh * .45
+          bh * 0.45
         );
 
 
         cx.fill();
 
 
+        /* Mõm */
         cx.fillStyle =
           '#C79A6B';
 
 
         rr(
           cx,
-          -bw * .28,
-          bh * .08,
-          bw * .56,
-          bh * .5,
-          bh * .25
+          -bw * 0.28,
+          bh * 0.08,
+          bw * 0.56,
+          bh * 0.5,
+          bh * 0.25
         );
 
 
         cx.fill();
 
 
+        /* Mắt */
         cx.fillStyle =
           '#2B1B0E';
 
@@ -1984,9 +1869,9 @@
 
 
         cx.arc(
-          -bw * .18,
-          -bh * .12,
-          r * .11,
+          -bw * 0.18,
+          -bh * 0.12,
+          r * 0.11,
           0,
           Math.PI * 2
         );
@@ -1999,9 +1884,25 @@
 
 
         cx.arc(
-          bw * .18,
-          -bh * .12,
-          r * .11,
+          bw * 0.18,
+          -bh * 0.12,
+          r * 0.11,
+          0,
+          Math.PI * 2
+        );
+
+
+        cx.fill();
+
+
+        /* Mũi */
+        cx.beginPath();
+
+
+        cx.arc(
+          -bw * 0.1,
+          bh * 0.26,
+          r * 0.08,
           0,
           Math.PI * 2
         );
@@ -2014,9 +1915,9 @@
 
 
         cx.arc(
-          -bw * .1,
-          bh * .26,
-          r * .08,
+          bw * 0.1,
+          bh * 0.26,
+          r * 0.08,
           0,
           Math.PI * 2
         );
@@ -2024,24 +1925,14 @@
 
         cx.fill();
 
-
-        cx.beginPath();
-
-
-        cx.arc(
-          bw * .1,
-          bh * .26,
-          r * .08,
-          0,
-          Math.PI * 2
-        );
+      }
 
 
-        cx.fill();
+      /* =====================================================
+         CAM
+      ===================================================== */
 
-
-      }else{
-
+      else {
         cx.fillStyle =
           '#F79420';
 
@@ -2052,7 +1943,7 @@
         cx.arc(
           0,
           0,
-          r * .95,
+          r * 0.95,
           0,
           Math.PI * 2
         );
@@ -2061,9 +1952,7 @@
         cx.fill();
 
 
-        cx.lineWidth =
-          1.2;
-
+        cx.lineWidth = 1.2;
 
         cx.strokeStyle =
           '#C96F0A';
@@ -2072,12 +1961,11 @@
         cx.stroke();
 
 
+        /* Lá */
         cx.save();
 
 
-        cx.rotate(
-          -.5
-        );
+        cx.rotate(-0.5);
 
 
         cx.fillStyle =
@@ -2088,10 +1976,10 @@
 
 
         cx.ellipse(
-          r * .45,
-          -r * .75,
-          r * .42,
-          r * .18,
+          r * 0.45,
+          -r * 0.75,
+          r * 0.42,
+          r * 0.18,
           0,
           0,
           Math.PI * 2
@@ -2104,6 +1992,7 @@
         cx.restore();
 
 
+        /* Highlight */
         cx.fillStyle =
           'rgba(255,255,255,.55)';
 
@@ -2112,27 +2001,34 @@
 
 
         cx.arc(
-          -r * .3,
-          -r * .3,
-          r * .22,
+          -r * 0.3,
+          -r * 0.3,
+          r * 0.22,
           0,
           Math.PI * 2
         );
 
 
         cx.fill();
-
       }
 
 
       cx.restore();
-
     }
-
   }
 
 
-  $('#psStk').textContent =
-    BANK.stk;
+  /* =========================================================
+     HIỂN THỊ STK BAN ĐẦU
+  ========================================================= */
+
+  const initialStk =
+    $('#psStk');
+
+
+  if (initialStk) {
+    initialStk.textContent =
+      BANK.stk;
+  }
 
 })();
