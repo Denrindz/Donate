@@ -1349,13 +1349,13 @@
         ===================================================== */
 
         const qrUrl =
-          'https://img.vietqr.io/image/970422-' +
-          encodeURIComponent(BANK.stk) +
-          '-qr_only.png' +
-          '?amount=' +
-          encodeURIComponent(amt) +
-          '&addInfo=' +
-          encodeURIComponent(code);
+  'https://img.vietqr.io/image/970422-' +
+  encodeURIComponent(BANK.stk) +
+  '-compact2.png' +
+  '?amount=' +
+  encodeURIComponent(amt) +
+  '&addInfo=' +
+  encodeURIComponent(code);
 
 
         if (qrImage) {
