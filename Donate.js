@@ -54,6 +54,76 @@
 
   const HISTORY_API =
     `${API_BASE}/history`;
+      /* =========================================================
+     STYLE LỊCH SỬ ỦNG HỘ
+  ========================================================= */
+
+  const supporterStyle =
+    document.createElement('style');
+
+  supporterStyle.textContent = `
+    .supporter-row {
+      display: flex !important;
+      align-items: center !important;
+      width: 100% !important;
+      gap: 14px !important;
+    }
+
+    .supporter-avatar {
+      flex: 0 0 56px !important;
+      width: 56px !important;
+      height: 56px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
+
+    .supporter-info {
+      flex: 1 1 auto !important;
+      min-width: 0 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: flex-start !important;
+      justify-content: center !important;
+      gap: 3px !important;
+    }
+
+    .supporter-name {
+      display: block !important;
+      width: 100% !important;
+      margin: 0 !important;
+      font-size: 17px !important;
+      line-height: 1.15 !important;
+      font-weight: 700 !important;
+      color: #111 !important;
+      white-space: nowrap !important;
+      overflow: hidden !important;
+      text-overflow: ellipsis !important;
+    }
+
+    .supporter-time {
+      display: block !important;
+      margin: 0 !important;
+      font-size: 12px !important;
+      line-height: 1.2 !important;
+      font-weight: 500 !important;
+      color: #999 !important;
+      white-space: nowrap !important;
+    }
+
+    .supporter-amount {
+      flex: 0 0 auto !important;
+      margin-left: auto !important;
+      white-space: nowrap !important;
+      font-size: 14px !important;
+      line-height: 1.2 !important;
+      font-weight: 700 !important;
+    }
+  `;
+
+  document.head.appendChild(
+    supporterStyle
+  );
 
 
   /* =========================================================
@@ -1685,7 +1755,7 @@
            INFO
         ----------------------------- */
 
-        const info =
+                const info =
           document.createElement(
             'div'
           );
@@ -1718,10 +1788,8 @@
           timeText;
 
 
-        info.append(
-          name,
-          time
-        );
+        info.appendChild(name);
+        info.appendChild(time);
 
 
         /* -----------------------------
