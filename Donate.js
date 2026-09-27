@@ -54,6 +54,56 @@
 
   const HISTORY_API =
     `${API_BASE}/history`;
+    const globalFontStyle = document.createElement('style');
+
+globalFontStyle.textContent = `
+  html,
+  body,
+  button,
+  input,
+  textarea,
+  select,
+  a,
+  span,
+  p,
+  div,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family:
+      -apple-system,
+      BlinkMacSystemFont,
+      "SF Pro Display",
+      "SF Pro Text",
+      "Helvetica Neue",
+      Arial,
+      sans-serif !important;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-weight: 700 !important;
+    letter-spacing: -0.5px !important;
+  }
+
+  button {
+    font-weight: 600 !important;
+    letter-spacing: -0.2px !important;
+  }
+
+  input,
+  textarea,
+  select {
+    font-weight: 400 !important;
+  }
+`;
+
+document.head.appendChild(globalFontStyle);
       /* =========================================================
      STYLE LỊCH SỬ ỦNG HỘ
   ========================================================= */
