@@ -1726,4 +1726,35 @@ button{
   .credit .wrap span{
     text-align:left;
   }
+/* ===== LỊCH SỬ ỦNG HỘ ===== */
+
+#supportersList,
+#supportersList * {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif !important;
+}
+
+#supportersList .supporter-name {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.3px !important;
+}
+
+#supportersList .supporter-time {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  letter-spacing: -0.1px !important;
+}
+
+#supportersList .supporter-amount {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.25px !important;
+}
 }
