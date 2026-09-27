@@ -43,6 +43,14 @@
 
 
   /* =========================================================
+     API
+  ========================================================= */
+
+  const API_BASE =
+    'https://doante-api.tnt300709.workers.dev';
+
+
+  /* =========================================================
      BĂNG CHỮ CHẠY
   ========================================================= */
 
@@ -260,13 +268,6 @@
   }
 
 
-  /*
-   * Cho phép HTML gọi:
-   *
-   * window.openDonationPopup()
-   *
-   * nên onclick trong index.html cũng hoạt động.
-   */
   window.openDonationPopup = openPopup;
 
 
@@ -664,29 +665,6 @@
   }
 
 
-  /*
-   * Backend của Worker:
-   *
-   * POST
-   * https://doante-api.tnt300709.workers.dev/check
-   *
-   * Body:
-   * {
-   *   code: "DXM-123456",
-   *   amount: 10000
-   * }
-   *
-   * Backend cần trả:
-   *
-   * {
-   *   "ok": true,
-   *   "paid": true
-   * }
-   *
-   * CHỈ khi paid === true mới báo
-   * giao dịch thành công.
-   */
-
   function startPayWatch(payment) {
     stopPayWatch();
 
@@ -697,7 +675,7 @@
 
 
     const API_URL =
-      'https://doante-api.tnt300709.workers.dev/check';
+      `${API_BASE}/check`;
 
 
     let checking = false;
@@ -749,14 +727,6 @@
           await response.json();
 
 
-        /*
-         * KHÔNG bao giờ tự xác nhận
-         * thanh toán ở frontend.
-         *
-         * Chỉ backend mới quyết định
-         * paid = true.
-         */
-
         if (
           data &&
           data.ok === true &&
@@ -782,12 +752,6 @@
         }
 
       } catch (error) {
-        /*
-         * API lỗi:
-         * giữ nguyên trạng thái chờ.
-         *
-         * Tuyệt đối không markPaid().
-         */
 
         console.warn(
           'Payment check error:',
@@ -800,11 +764,9 @@
     }
 
 
-    /* Kiểm tra ngay */
     checkPayment();
 
 
-    /* Sau đó kiểm tra mỗi 3 giây */
     payTimer =
       setInterval(
         checkPayment,
@@ -864,6 +826,16 @@
 
 
     capyRain();
+
+
+    /*
+     * Cập nhật lịch sử ngay sau khi
+     * giao dịch được xác nhận.
+     */
+    setTimeout(
+      loadSupporters,
+      1000
+    );
   }
 
 
@@ -1159,12 +1131,14 @@
 
 
         /* Kiểm tra cooldown */
+
         if (now < coolUntil) {
           return;
         }
 
 
         /* Kiểm tra số tiền */
+
         if (amt < MIN) {
           hideErr();
 
@@ -1186,6 +1160,7 @@
 
 
         /* Lọc lịch sử */
+
         genTimes =
           genTimes.filter(
             (time) =>
@@ -1195,6 +1170,7 @@
 
 
         /* Chống spam */
+
         if (
           genTimes.length >=
           SPAM_MAX
@@ -1246,11 +1222,12 @@
 
 
         /*
-         * Mã giao dịch.
+         * Mã giao dịch
          *
          * Ví dụ:
          * DXM-123456
          */
+
         const code =
           'DXM-' +
           String(now).slice(-6);
@@ -1264,6 +1241,7 @@
 
 
         /* Thông tin người ủng hộ */
+
         const psName = $('#psName');
         const psCode = $('#psCode');
         const psStk = $('#psStk');
@@ -1306,6 +1284,7 @@
 
 
         /* Ngân hàng */
+
         const bankRow =
           $('#psBankRow');
 
@@ -1328,6 +1307,7 @@
 
 
         /* Nội dung */
+
         const msgRow =
           $('#psMsgRow');
 
@@ -1350,6 +1330,7 @@
 
 
         /* Chuyển sang màn hình QR */
+
         if (pForm) {
           pForm.hidden = true;
         }
@@ -1364,13 +1345,13 @@
 
 
         /* =====================================================
-           VIETQR MB BANK
+           VIETQR MB BANK - CHỈ QR
         ===================================================== */
 
         const qrUrl =
           'https://img.vietqr.io/image/970422-' +
           encodeURIComponent(BANK.stk) +
-          '-compact2.png' +
+          '-qr_only.png' +
           '?amount=' +
           encodeURIComponent(amt) +
           '&addInfo=' +
@@ -1383,6 +1364,7 @@
 
 
         /* Hiển thị số tiền */
+
         countUp(
           $('#psAmount'),
           0,
@@ -1399,14 +1381,14 @@
 
 
         /* Bắt đầu đếm ngược */
+
         startExpiry();
 
 
         /*
          * Bắt đầu kiểm tra giao dịch thật.
-         *
-         * Không mô phỏng.
          */
+
         startPayWatch({
           amount: amt,
           code: code
@@ -1479,12 +1461,209 @@
 
 
   /* =========================================================
+     LỊCH SỬ 5 NGƯỜI ỦNG HỘ GẦN NHẤT
+  ========================================================= */
+
+  async function loadSupporters() {
+
+    const list =
+      document.getElementById(
+        'supportersList'
+      );
+
+
+    /*
+     * Nếu HTML chưa có khu vực lịch sử
+     * thì bỏ qua.
+     */
+
+    if (!list) {
+      return;
+    }
+
+
+    try {
+
+      const response =
+        await fetch(
+          `${API_BASE}/history`,
+          {
+            method: 'GET',
+
+            cache: 'no-store'
+          }
+        );
+
+
+      if (!response.ok) {
+        throw new Error(
+          `HTTP ${response.status}`
+        );
+      }
+
+
+      const data =
+        await response.json();
+
+
+      if (
+        !data ||
+        data.ok !== true ||
+        !Array.isArray(
+          data.history
+        )
+      ) {
+        throw new Error(
+          'Dữ liệu lịch sử không hợp lệ'
+        );
+      }
+
+
+      /*
+       * Không có giao dịch
+       *
+       * Để CSS :empty hiển thị:
+       * "Chưa có giao dịch nào"
+       */
+
+      if (
+        data.history.length === 0
+      ) {
+
+        list.innerHTML = '';
+
+        return;
+      }
+
+
+      /*
+       * Hiển thị tối đa 5 giao dịch.
+       */
+
+      list.innerHTML =
+        data.history
+          .slice(0, 5)
+          .map((item) => {
+
+            const amount =
+              Number(
+                item.amount || 0
+              );
+
+
+            let timeText =
+              '';
+
+
+            if (item.when) {
+
+              const date =
+                new Date(
+                  item.when
+                );
+
+
+              if (
+                !Number.isNaN(
+                  date.getTime()
+                )
+              ) {
+
+                timeText =
+                  date.toLocaleDateString(
+                    'vi-VN'
+                  ) +
+                  ' · ' +
+                  date.toLocaleTimeString(
+                    'vi-VN',
+                    {
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    }
+                  );
+              }
+            }
+
+
+            /*
+             * Không lấy description
+             * hiển thị ra ngoài vì nó có thể
+             * chứa mã giao dịch.
+             */
+
+            return `
+              <div class="supporter-row">
+
+                <div class="supporter-info">
+
+                  <strong>
+                    Người ủng hộ
+                  </strong>
+
+                  <span>
+                    ${timeText}
+                  </span>
+
+                </div>
+
+                <b>
+                  +${fmt(amount)}₫
+                </b>
+
+              </div>
+            `;
+          })
+          .join('');
+
+
+    } catch (error) {
+
+      console.warn(
+        'LOAD SUPPORTERS ERROR:',
+        error
+      );
+
+      /*
+       * Không làm hỏng toàn bộ website
+       * nếu API lịch sử tạm thời lỗi.
+       */
+
+    }
+  }
+
+
+  /*
+   * Load ngay khi trang mở.
+   */
+
+  loadSupporters();
+
+
+  /*
+   * Tự cập nhật lịch sử mỗi 30 giây.
+   */
+
+  setInterval(
+    loadSupporters,
+    30000
+  );
+
+
+  /* =========================================================
      HIỆU ỨNG CAPYBARA
   ========================================================= */
 
   const cv = $('#fx');
 
   if (!cv) {
+    const initialStk =
+      $('#psStk');
+
+    if (initialStk) {
+      initialStk.textContent =
+        BANK.stk;
+    }
+
     return;
   }
 
@@ -1494,6 +1673,14 @@
 
 
   if (!cx) {
+    const initialStk =
+      $('#psStk');
+
+    if (initialStk) {
+      initialStk.textContent =
+        BANK.stk;
+    }
+
     return;
   }
 
@@ -1782,6 +1969,7 @@
       ===================================================== */
 
       if (cap.kind === 'capy') {
+
         const bw =
           r * 2.4;
 
@@ -1790,6 +1978,7 @@
 
 
         /* Tai */
+
         cx.fillStyle =
           cap.dark;
 
@@ -1825,6 +2014,7 @@
 
 
         /* Thân */
+
         cx.fillStyle =
           cap.tint;
 
@@ -1843,6 +2033,7 @@
 
 
         /* Mõm */
+
         cx.fillStyle =
           '#C79A6B';
 
@@ -1861,6 +2052,7 @@
 
 
         /* Mắt */
+
         cx.fillStyle =
           '#2B1B0E';
 
@@ -1896,6 +2088,7 @@
 
 
         /* Mũi */
+
         cx.beginPath();
 
 
@@ -1933,6 +2126,7 @@
       ===================================================== */
 
       else {
+
         cx.fillStyle =
           '#F79420';
 
@@ -1962,6 +2156,7 @@
 
 
         /* Lá */
+
         cx.save();
 
 
@@ -1993,6 +2188,7 @@
 
 
         /* Highlight */
+
         cx.fillStyle =
           'rgba(255,255,255,.55)';
 
