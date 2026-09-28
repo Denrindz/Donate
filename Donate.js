@@ -11,9 +11,15 @@ const PROJECT_TARGET = 1000000;
 let received = 0;
 let currentContent = "";
 
-/* TÁCH RIÊNG 2 TIMER */
+
+/* =========================================
+   TIMER TÁCH RIÊNG
+========================================= */
+
 let countdownInterval = null;
 let paymentCheckInterval = null;
+
+let countdownEndTime = null;
 
 
 /* =========================================
@@ -52,8 +58,8 @@ async function updateProgress(){
 
         const response =
             await fetch(HISTORY_API, {
-                method: "GET",
-                cache: "no-store"
+                method:"GET",
+                cache:"no-store"
             });
 
         if(!response.ok){
@@ -68,6 +74,7 @@ async function updateProgress(){
             await response.json();
 
         let total = 0;
+
 
         if(
             data &&
@@ -96,7 +103,7 @@ async function updateProgress(){
                         .startsWith("DXM")
                     )
                     .reduce(
-                        (sum, item) =>
+                        (sum,item) =>
                             sum +
                             (
                                 Number(
@@ -108,8 +115,9 @@ async function updateProgress(){
 
         }
 
+
         received =
-            Math.max(0, total);
+            Math.max(0,total);
 
     }catch(error){
 
@@ -120,11 +128,13 @@ async function updateProgress(){
 
     }
 
+
     const percent =
         Math.min(
             (received / PROJECT_TARGET) * 100,
             100
         );
+
 
     const receivedElement =
         document.getElementById("received");
@@ -165,7 +175,7 @@ async function updateProgress(){
         percentElement.textContent =
             percent
                 .toFixed(1)
-                .replace(".", ",") +
+                .replace(".",",") +
             "%";
 
     }
@@ -215,9 +225,7 @@ function closeModal(){
 
 function outsideClose(event){
 
-    if(
-        event.target.id === "modal"
-    ){
+    if(event.target.id === "modal"){
 
         closeModal();
 
@@ -238,8 +246,11 @@ function setAmount(amount){
         );
 
     if(!input){
+
         return;
+
     }
+
 
     input.value =
         Number(amount).toLocaleString(
@@ -258,6 +269,7 @@ const donationInput =
         "donationAmount"
     );
 
+
 if(donationInput){
 
     donationInput.addEventListener(
@@ -265,7 +277,8 @@ if(donationInput){
         function(){
 
             let value =
-                this.value.replace(/\D/g, "");
+                this.value.replace(/\D/g,"");
+
 
             if(!value){
 
@@ -274,6 +287,7 @@ if(donationInput){
                 return;
 
             }
+
 
             this.value =
                 Number(value).toLocaleString(
@@ -292,21 +306,40 @@ if(donationInput){
 
 function generateQR(){
 
+    const nameElement =
+        document.getElementById(
+            "donorName"
+        );
+
+
+    const amountElement =
+        document.getElementById(
+            "donationAmount"
+        );
+
+
+    if(!nameElement || !amountElement){
+
+        return;
+
+    }
+
+
     const name =
-        document
-            .getElementById("donorName")
-            .value
-            .trim();
+        nameElement.value.trim();
 
 
     const amount =
         Number(
-            document
-                .getElementById("donationAmount")
-                .value
-                .replace(/\./g, "")
+            amountElement.value
+                .replace(/\./g,"")
+                .replace(/,/g,"")
         );
 
+
+    /* =====================================
+       KIỂM TRA TÊN
+    ===================================== */
 
     if(!name){
 
@@ -318,6 +351,10 @@ function generateQR(){
 
     }
 
+
+    /* =====================================
+       KIỂM TRA SỐ TIỀN
+    ===================================== */
 
     if(
         !amount ||
@@ -346,6 +383,12 @@ function generateQR(){
     );
 
 
+    countdownInterval = null;
+    paymentCheckInterval = null;
+
+    countdownEndTime = null;
+
+
     /* =====================================
        TẠO MÃ GIAO DỊCH
     ===================================== */
@@ -356,6 +399,7 @@ function generateQR(){
             Math.random() * 900000
         );
 
+
     currentContent =
         "DXM-" + randomCode;
 
@@ -364,35 +408,71 @@ function generateQR(){
        HIỂN THỊ THÔNG TIN
     ===================================== */
 
-    document
-        .getElementById("qrAmount")
-        .textContent =
-        formatMoney(amount);
+    const qrAmount =
+        document.getElementById(
+            "qrAmount"
+        );
+
+    const qrName =
+        document.getElementById(
+            "qrName"
+        );
+
+    const qrContent =
+        document.getElementById(
+            "qrContent"
+        );
+
+    const qrStk =
+        document.getElementById(
+            "qrStk"
+        );
+
+    const qrTime =
+        document.getElementById(
+            "qrTime"
+        );
 
 
-    document
-        .getElementById("qrName")
-        .textContent =
-        name;
+    if(qrAmount){
+
+        qrAmount.textContent =
+            formatMoney(amount);
+
+    }
 
 
-    document
-        .getElementById("qrContent")
-        .textContent =
-        currentContent;
+    if(qrName){
+
+        qrName.textContent =
+            name;
+
+    }
 
 
-    document
-        .getElementById("qrStk")
-        .textContent =
-        ACCOUNT_NO;
+    if(qrContent){
+
+        qrContent.textContent =
+            currentContent;
+
+    }
 
 
-    document
-        .getElementById("qrTime")
-        .textContent =
-        new Date()
-            .toLocaleString("vi-VN");
+    if(qrStk){
+
+        qrStk.textContent =
+            ACCOUNT_NO;
+
+    }
+
+
+    if(qrTime){
+
+        qrTime.textContent =
+            new Date()
+                .toLocaleString("vi-VN");
+
+    }
 
 
     /* =====================================
@@ -413,10 +493,18 @@ function generateQR(){
         );
 
 
-    document
-        .getElementById("qrImage")
-        .src =
-        qrURL;
+    const qrImage =
+        document.getElementById(
+            "qrImage"
+        );
+
+
+    if(qrImage){
+
+        qrImage.src =
+            qrURL;
+
+    }
 
 
     /* =====================================
@@ -428,12 +516,14 @@ function generateQR(){
             "paymentStatus"
         );
 
+
     if(status){
 
         status.classList.remove(
             "paid",
             "expired"
         );
+
 
         status.textContent =
             "● Đang chờ chuyển khoản…";
@@ -442,29 +532,47 @@ function generateQR(){
 
 
     /* =====================================
-       CHUYỂN SANG MÀN QR
+       CHUYỂN SANG QR
     ===================================== */
 
-    document
-        .getElementById("formArea")
-        .style.display =
-        "none";
+    const formArea =
+        document.getElementById(
+            "formArea"
+        );
+
+    const qrResult =
+        document.getElementById(
+            "qrResult"
+        );
 
 
-    document
-        .getElementById("qrResult")
-        .classList.add("show");
+    if(formArea){
+
+        formArea.style.display =
+            "none";
+
+    }
+
+
+    if(qrResult){
+
+        qrResult.classList.add(
+            "show"
+        );
+
+    }
 
 
     /* =====================================
        BẮT ĐẦU ĐẾM NGƯỢC
+       10 PHÚT
     ===================================== */
 
     startTimer();
 
 
     /* =====================================
-       KIỂM TRA THANH TOÁN
+       BẮT ĐẦU KIỂM TRA THANH TOÁN
     ===================================== */
 
     checkPayment(
@@ -482,12 +590,8 @@ function generateQR(){
 
 function copyStk(){
 
-    const stk =
-        ACCOUNT_NO;
-
-
     navigator.clipboard
-        .writeText(stk)
+        .writeText(ACCOUNT_NO)
         .then(() => {
 
             const button =
@@ -495,8 +599,11 @@ function copyStk(){
                     ".copy-btn"
                 );
 
+
             if(!button){
+
                 return;
+
             }
 
 
@@ -513,7 +620,7 @@ function copyStk(){
                 button.textContent =
                     oldText;
 
-            }, 1500);
+            },1500);
 
         });
 
@@ -530,10 +637,16 @@ function checkPayment(
     code
 ){
 
+    /* Dừng lần kiểm tra cũ */
+
     clearInterval(
         paymentCheckInterval
     );
 
+
+    /* =====================================
+       HÀM CHECK
+    ===================================== */
 
     const check =
         async () => {
@@ -544,26 +657,28 @@ function checkPayment(
                     await fetch(
                         CHECK_API,
                         {
-                            method: "POST",
+                            method:"POST",
 
-                            headers: {
+                            headers:{
                                 "Content-Type":
                                     "application/json"
                             },
 
                             body:
                                 JSON.stringify({
-                                    code: code,
-                                    amount: amount,
-                                    name: name,
-                                    message: code
+                                    code:code,
+                                    amount:amount,
+                                    name:name,
+                                    message:code
                                 })
                         }
                     );
 
 
                 if(!response.ok){
+
                     return;
+
                 }
 
 
@@ -571,29 +686,44 @@ function checkPayment(
                     await response.json();
 
 
+                /* =================================
+                   ĐÃ THANH TOÁN
+                ================================= */
+
                 if(
                     data &&
                     data.ok === true &&
                     data.paid === true
                 ){
 
-                    /* DỪNG KIỂM TRA THANH TOÁN */
+                    /* Dừng kiểm tra */
+
                     clearInterval(
                         paymentCheckInterval
                     );
 
+                    paymentCheckInterval =
+                        null;
 
-                    /* DỪNG ĐẾM NGƯỢC */
+
+                    /* Dừng countdown */
+
                     clearInterval(
                         countdownInterval
                     );
 
+                    countdownInterval =
+                        null;
+
+
+                    /* =================================
+                       HIỂN THỊ ĐÃ THANH TOÁN
+                    ================================= */
 
                     const status =
-                        document
-                            .getElementById(
-                                "paymentStatus"
-                            );
+                        document.getElementById(
+                            "paymentStatus"
+                        );
 
 
                     if(status){
@@ -614,13 +744,13 @@ function checkPayment(
                     }
 
 
-                    /* Cập nhật tổng donate */
+                    /* Cập nhật progress */
 
                     setTimeout(() => {
 
                         updateProgress();
 
-                    }, 1000);
+                    },1000);
 
                 }
 
@@ -636,11 +766,12 @@ function checkPayment(
         };
 
 
-    /* Kiểm tra ngay lập tức */
+    /* Kiểm tra ngay */
+
     check();
 
 
-    /* Sau đó kiểm tra mỗi 3 giây */
+    /* Kiểm tra mỗi 3 giây */
 
     paymentCheckInterval =
         setInterval(
@@ -652,19 +783,42 @@ function checkPayment(
 
 
 /* =========================================
-   TIMER ĐẾM NGƯỢC 10 PHÚT
+   TIMER ĐẾM NGƯỢC
+   10 PHÚT = 600 GIÂY
+
+   DÙNG TIMESTAMP THỰC
+   => KHÔNG BỊ SAI KHI TRÌNH DUYỆT
+      TẠM DỪNG JAVASCRIPT
 ========================================= */
 
 function startTimer(){
 
-    /* DỪNG TIMER CŨ */
+    /* =====================================
+       DỪNG TIMER CŨ
+    ===================================== */
+
     clearInterval(
         countdownInterval
     );
 
 
-    /* 10 PHÚT = 600 GIÂY */
-    let seconds = 10 * 60;
+    countdownInterval = null;
+
+
+    /* =====================================
+       10 PHÚT
+    ===================================== */
+
+    const TEN_MINUTES =
+        10 * 60 * 1000;
+
+
+    /* =====================================
+       THỜI ĐIỂM HẾT HẠN
+    ===================================== */
+
+    countdownEndTime =
+        Date.now() + TEN_MINUTES;
 
 
     const timer =
@@ -679,32 +833,70 @@ function startTimer(){
         );
 
 
-    function tick(){
+    /* =====================================
+       HÀM HIỂN THỊ THỜI GIAN
+    ===================================== */
 
-        const minutes =
-            Math.floor(
-                seconds / 60
+    function updateCountdown(){
+
+        /* Nếu không còn thời gian */
+
+        if(!countdownEndTime){
+
+            return;
+
+        }
+
+
+        const now =
+            Date.now();
+
+
+        let remaining =
+            Math.max(
+                0,
+                countdownEndTime - now
             );
 
 
-        const sec =
-            seconds % 60;
+        /* =================================
+           ĐỔI MILLISECOND -> GIÂY
+        ================================= */
+
+        const totalSeconds =
+            Math.ceil(
+                remaining / 1000
+            );
+
+
+        const minutes =
+            Math.floor(
+                totalSeconds / 60
+            );
+
+
+        const seconds =
+            totalSeconds % 60;
+
+
+        const displayMinutes =
+            String(minutes)
+                .padStart(2,"0");
+
+
+        const displaySeconds =
+            String(seconds)
+                .padStart(2,"0");
 
 
         /* =================================
-           HIỂN THỊ MM:SS
+           HIỂN THỊ
         ================================= */
 
         if(timer){
 
             timer.textContent =
-                String(minutes)
-                    .padStart(2, "0")
-                +
-                ":"
-                +
-                String(sec)
-                    .padStart(2, "0");
+                `${displayMinutes}:${displaySeconds}`;
 
         }
 
@@ -713,18 +905,31 @@ function startTimer(){
            HẾT HẠN
         ================================= */
 
-        if(seconds <= 0){
+        if(remaining <= 0){
 
             clearInterval(
                 countdownInterval
             );
 
+            countdownInterval =
+                null;
 
-            /* DỪNG API CHECK */
+
+            countdownEndTime =
+                null;
+
+
+            /* Dừng kiểm tra thanh toán */
+
             clearInterval(
                 paymentCheckInterval
             );
 
+            paymentCheckInterval =
+                null;
+
+
+            /* Hiển thị hết hạn */
 
             if(timer){
 
@@ -744,31 +949,34 @@ function startTimer(){
                     "expired"
                 );
 
+
                 status.textContent =
                     "Mã đã hết hạn.";
 
             }
 
-
-            return;
-
         }
-
-
-        seconds--;
 
     }
 
 
-    /* Chạy ngay lần đầu */
-    tick();
+    /* =====================================
+       HIỂN THỊ NGAY
+       10:00
+    ===================================== */
+
+    updateCountdown();
 
 
-    /* Sau đó giảm mỗi 1 giây */
+    /* =====================================
+       CẬP NHẬT MỖI 250ms
+       NHƯNG HIỂN THỊ THEO GIÂY
+    ===================================== */
+
     countdownInterval =
         setInterval(
-            tick,
-            1000
+            updateCountdown,
+            250
         );
 
 }
@@ -780,7 +988,10 @@ function startTimer(){
 
 function newCode(){
 
-    /* DỪNG CẢ 2 TIMER */
+    /* =====================================
+       DỪNG CẢ 2 TIMER
+    ===================================== */
+
     clearInterval(
         countdownInterval
     );
@@ -790,23 +1001,57 @@ function newCode(){
     );
 
 
-    countdownInterval = null;
-    paymentCheckInterval = null;
+    countdownInterval =
+        null;
+
+    paymentCheckInterval =
+        null;
+
+    countdownEndTime =
+        null;
 
 
-    /* ẨN QR */
-    document
-        .getElementById("qrResult")
-        .classList.remove("show");
+    /* =====================================
+       ẨN QR
+    ===================================== */
+
+    const qrResult =
+        document.getElementById(
+            "qrResult"
+        );
 
 
-    /* HIỆN LẠI FORM */
-    document
-        .getElementById("formArea")
-        .style.display = "";
+    if(qrResult){
+
+        qrResult.classList.remove(
+            "show"
+        );
+
+    }
 
 
-    /* RESET STATUS */
+    /* =====================================
+       HIỆN LẠI FORM
+    ===================================== */
+
+    const formArea =
+        document.getElementById(
+            "formArea"
+        );
+
+
+    if(formArea){
+
+        formArea.style.display =
+            "";
+
+    }
+
+
+    /* =====================================
+       RESET STATUS
+    ===================================== */
+
     const status =
         document.getElementById(
             "paymentStatus"
@@ -827,7 +1072,10 @@ function newCode(){
     }
 
 
-    /* RESET TIMER */
+    /* =====================================
+       RESET TIMER
+    ===================================== */
+
     const timer =
         document.getElementById(
             "timer"
