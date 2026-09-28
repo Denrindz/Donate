@@ -25,9 +25,7 @@ body{
   margin:0;
   min-height:100vh;
   overflow-x:hidden;
-
   color:var(--text);
-
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 
   background:
@@ -48,7 +46,6 @@ body{
 
 header{
   width:min(900px,calc(100% - 32px));
-
   margin:22px auto 0;
   padding:18px 4px;
 
@@ -71,7 +68,6 @@ header{
   height:10px;
 
   border-radius:50%;
-
   background:var(--accent);
 
   box-shadow:
@@ -100,9 +96,7 @@ main{
 
 .fund-overview{
   width:100%;
-
   margin:20px 0 22px;
-
   padding:0 22px 22px;
 
   background:#fff;
@@ -111,7 +105,6 @@ main{
   border-radius:24px;
 
   box-shadow:var(--shadow);
-
   overflow:hidden;
 }
 
@@ -122,16 +115,12 @@ main{
 
 .fund-overview .hero{
   width:100%;
-
   margin:0;
-
   padding:32px 0 38px;
 
   background:transparent;
-
   border:0;
   border-radius:0;
-
   box-shadow:none;
 }
 
@@ -159,12 +148,13 @@ main{
 
 /* ========================================
    TITLE
+   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 h1{
   margin:18px 0 14px;
 
-  font-size:clamp(38px,6vw,66px);
+  font-size:52px;
   line-height:1.02;
 
   letter-spacing:-2.8px;
@@ -179,7 +169,6 @@ h1{
 
 .fund-overview .hero p{
   max-width:680px;
-
   margin:0;
 
   color:var(--muted);
@@ -195,7 +184,6 @@ h1{
 
 .fund-overview .fund-goal{
   width:100%;
-
   margin:0;
   padding:20px;
 
@@ -242,7 +230,6 @@ h1{
 
 .fund-overview .progress-card{
   width:100%;
-
   margin:16px 0 0;
   padding:20px;
 
@@ -296,7 +283,6 @@ h1{
   overflow:hidden;
 
   background:#e8eeee;
-
   border-radius:999px;
 }
 
@@ -305,7 +291,6 @@ h1{
   height:100%;
 
   background:var(--accent);
-
   border-radius:999px;
 
   transition:width .5s ease;
@@ -558,11 +543,13 @@ footer{
 
 
 /* ========================================
-   KHUNG MODAL NHỎ GỌN
+   MODAL BOX
+   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .modal-box{
-  width:min(330px,100%);
+  width:330px;
+  max-width:calc(100vw - 24px);
   max-height:86vh;
 
   overflow:auto;
@@ -831,7 +818,8 @@ footer{
 
 
 /* ========================================
-   QR NHỎ
+   QR
+   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .qr-box{
@@ -874,8 +862,7 @@ footer{
 
 
 /* ========================================
-   BẢNG THÔNG TIN CHUYỂN KHOẢN
-   NHỎ GỌN
+   PAYMENT INFO
 ======================================== */
 
 .payment-info{
@@ -993,6 +980,8 @@ footer{
 
 /* ========================================
    MOBILE
+   CHỈ ĐỔI BỐ CỤC / CHIỀU RỘNG
+   KHÔNG ĐỔI KÍCH THƯỚC CHỮ, SỐ, QR...
 ======================================== */
 
 @media(max-width:600px){
@@ -1011,13 +1000,8 @@ footer{
 
   header{
     width:calc(100% - 24px);
-
     margin-top:12px;
     padding:14px 2px;
-  }
-
-  .header-tag{
-    display:none;
   }
 
   main{
@@ -1026,29 +1010,12 @@ footer{
 
   .fund-overview{
     margin-top:16px;
-
     padding:0 16px 16px;
-
     border-radius:20px;
   }
 
   .fund-overview .hero{
-    width:100%;
-
-    margin:0;
-
     padding:24px 0 30px;
-  }
-
-  h1{
-    font-size:39px;
-    line-height:1.04;
-    letter-spacing:-2px;
-  }
-
-  .fund-overview .hero p{
-    font-size:14px;
-    line-height:1.7;
   }
 
   .fund-overview .fund-goal{
@@ -1070,6 +1037,10 @@ footer{
     border-radius:20px;
   }
 
+  /*
+    Chỉ đổi cách xếp vị trí.
+    KHÔNG đổi kích thước chữ.
+  */
   .section-title{
     align-items:flex-start;
     flex-direction:column;
@@ -1080,13 +1051,10 @@ footer{
     align-items:flex-start;
   }
 
-  .progress-bottom{
-    font-size:11px;
-  }
-
 
   /* ======================================
-     MODAL MOBILE — RẤT GỌN
+     MODAL
+     KHÔNG ĐỔI FONT / QR / BUTTON
   ====================================== */
 
   .modal{
@@ -1094,200 +1062,12 @@ footer{
   }
 
   .modal-box{
-    width:min(300px,100%);
-
-    padding:12px;
-
-    border-radius:13px;
-  }
-
-  .modal-head{
-    margin-bottom:9px;
-  }
-
-  .modal-head h2{
-    font-size:17px;
-  }
-
-  .modal-label{
-    font-size:7px;
-  }
-
-  .close{
-    width:27px;
-    height:27px;
-
-    flex:0 0 27px;
-
-    border-radius:7px;
-
-    font-size:18px;
-  }
-
-
-  /* FORM MOBILE */
-
-  .field{
-    margin-bottom:9px;
-  }
-
-  .field label{
-    margin-bottom:5px;
-
-    font-size:8px;
-  }
-
-  .field input{
-    height:38px;
-
-    padding:0 9px;
-
-    border-radius:8px;
-
-    font-size:12px;
-  }
-
-  .currency{
-    right:9px;
-
-    font-size:9px;
-  }
-
-
-  /* ======================================
-     4 NÚT TIỀN NHANH
-  ====================================== */
-
-  .quick{
-    grid-template-columns:repeat(4,minmax(0,1fr));
-
-    gap:5px;
-
-    margin-bottom:9px;
-  }
-
-  .quick button{
-    height:31px;
-
-    font-size:9px;
-
-    padding:0 2px;
-
-    border-radius:7px;
-  }
-
-
-  /* ======================================
-     GENERATE MOBILE
-  ====================================== */
-
-  .generate{
-    height:38px;
-
-    border-radius:8px;
-
-    font-size:12px;
-  }
-
-  .note{
-    margin-top:6px;
-
-    font-size:8px;
-  }
-
-
-  /* ======================================
-     QR MOBILE — NHỎ
-  ====================================== */
-
-  .qr-title{
-    margin-bottom:6px;
-  }
-
-  .qr-title .small{
-    font-size:7px;
-  }
-
-  .qr-title h3{
-    font-size:14px;
-  }
-
-  .qr-box{
-    width:120px;
-    height:120px;
-
-    padding:4px;
-
-    margin-bottom:7px;
-
-    border-radius:8px;
-  }
-
-  .payment-status{
-    margin-bottom:6px;
-
-    font-size:8px;
-  }
-
-
-  /* ======================================
-     BẢNG THÔNG TIN MOBILE
-  ====================================== */
-
-  .payment-info{
-    border-radius:7px;
-  }
-
-  .info-row{
-    gap:5px;
-
-    padding:5px 7px;
-
-    font-size:8px;
-
-    line-height:1.15;
-  }
-
-  .info-label{
-    font-size:8px;
-  }
-
-  .info-value{
-    max-width:65%;
-
-    font-size:8px;
-  }
-
-  .copy-btn{
-    padding:2px 3px;
-
-    font-size:6px;
-
-    border-radius:3px;
-  }
-
-
-  /* ======================================
-     TIMER MOBILE
-  ====================================== */
-
-  .timer{
-    margin:6px 0;
-
-    font-size:8px;
-  }
-
-
-  /* ======================================
-     NÚT TẠO MÃ MỚI
-  ====================================== */
-
-  .new-code{
-    height:32px;
-
-    border-radius:7px;
-
-    font-size:9px;
+    /*
+      Giữ nguyên width 330px.
+      Chỉ giới hạn để không vượt màn hình nhỏ.
+    */
+    width:330px;
+    max-width:calc(100vw - 20px);
   }
 
 }
