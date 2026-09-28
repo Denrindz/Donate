@@ -211,9 +211,39 @@ function outsideClose(event){
 
 function setAmount(amount){
 
-    document
-        .getElementById("donationAmount")
-        .value = amount;
+    const input =
+        document.getElementById("donationAmount");
+
+    if(!input){
+        return;
+    }
+
+    input.value =
+        Number(amount).toLocaleString("vi-VN");
+
+}
+const donationInput =
+    document.getElementById("donationAmount");
+
+if(donationInput){
+
+    donationInput.addEventListener(
+        "input",
+        function(){
+
+            let value =
+                this.value.replace(/\D/g, "");
+
+            if(!value){
+                this.value = "";
+                return;
+            }
+
+            this.value =
+                Number(value).toLocaleString("vi-VN");
+
+        }
+    );
 
 }
 
