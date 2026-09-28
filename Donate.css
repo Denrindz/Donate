@@ -1138,4 +1138,1186 @@ footer{
     font-size:12px !important;
   }
 
+/* =========================================================
+   ✨ DENRINDZ — CUTE / MODERN UI EFFECTS
+   Không thay đổi layout hoặc kích thước gốc
+========================================================= */
+
+
+/* =========================================================
+   1. NỀN TRANG — ÁNH SÁNG MỀM
+========================================================= */
+
+body{
+  position:relative;
+  isolation:isolate;
+}
+
+body::before,
+body::after{
+  content:"";
+
+  position:fixed;
+
+  z-index:-1;
+
+  pointer-events:none;
+
+  border-radius:50%;
+
+  filter:blur(8px);
+
+  opacity:.7;
+}
+
+body::before{
+  width:360px;
+  height:360px;
+
+  top:-150px;
+  left:-130px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.16) 0%,
+      rgba(0,144,144,.07) 35%,
+      transparent 72%
+    );
+
+  animation:
+    floatingBlob 10s ease-in-out infinite;
+}
+
+body::after{
+  width:420px;
+  height:420px;
+
+  right:-180px;
+  bottom:-180px;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.12) 0%,
+      rgba(0,144,144,.04) 38%,
+      transparent 72%
+    );
+
+  animation:
+    floatingBlobReverse 13s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   2. HEADER
+========================================================= */
+
+header{
+  animation:
+    fadeDown .7s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.logo{
+  transition:
+    transform .3s ease,
+    color .3s ease;
+}
+
+.logo:hover{
+  transform:translateY(-2px);
+}
+
+.logo-dot{
+  position:relative;
+
+  animation:
+    cutePulse 2.5s ease-in-out infinite;
+}
+
+.logo-dot::after{
+  content:"";
+
+  position:absolute;
+
+  inset:-5px;
+
+  border-radius:50%;
+
+  border:1px solid rgba(0,144,144,.18);
+
+  animation:
+    dotRing 2.5s ease-out infinite;
+}
+
+
+/* =========================================================
+   3. KHUNG CHÍNH
+========================================================= */
+
+.fund-overview{
+  position:relative;
+
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    box-shadow .35s ease,
+    border-color .35s ease;
+}
+
+.fund-overview::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:15%;
+
+  width:70%;
+  height:1px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(0,144,144,.35),
+      transparent
+    );
+
+  opacity:.8;
+}
+
+.fund-overview:hover{
+  box-shadow:
+    0 24px 70px rgba(0,40,40,.12);
+}
+
+
+/* =========================================================
+   4. EYEBROW
+========================================================= */
+
+.eyebrow{
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 5px 18px rgba(0,144,144,.08);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.eyebrow:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 8px 24px rgba(0,144,144,.15);
+}
+
+.eyebrow::after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:65%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent,
+      rgba(255,255,255,.7),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  animation:
+    softShine 4.5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   5. TIÊU ĐỀ
+========================================================= */
+
+h1{
+  animation:
+    titleAppear .8s cubic-bezier(.2,.8,.2,1) both;
+
+  text-shadow:
+    0 2px 18px rgba(0,144,144,.04);
+}
+
+
+/* =========================================================
+   6. DESCRIPTION
+========================================================= */
+
+.fund-overview .hero p{
+  animation:
+    fadeUp .8s .12s ease both;
+}
+
+
+/* =========================================================
+   7. MỤC TIÊU SỬ DỤNG
+========================================================= */
+
+.fund-overview .fund-goal{
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+.fund-overview .fund-goal::before{
+  content:"";
+
+  position:absolute;
+
+  width:130px;
+  height:130px;
+
+  top:-75px;
+  right:-55px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.13),
+      transparent 70%
+    );
+
+  pointer-events:none;
+}
+
+.fund-overview .fund-goal:hover{
+  transform:translateY(-3px);
+
+  border-color:
+    rgba(0,144,144,.25);
+
+  box-shadow:
+    0 12px 32px rgba(0,144,144,.08);
+}
+
+.fund-goal-title{
+  transition:
+    color .25s ease;
+}
+
+.fund-goal-title i{
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1);
+}
+
+.fund-goal:hover .fund-goal-title i{
+  transform:
+    rotate(-8deg)
+    scale(1.12);
+}
+
+.fund-goal li{
+  transition:
+    transform .22s ease,
+    color .22s ease;
+}
+
+.fund-goal li:hover{
+  transform:translateX(4px);
+
+  color:var(--text);
+}
+
+
+/* =========================================================
+   8. PROGRESS CARD
+========================================================= */
+
+.fund-overview .progress-card{
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+.fund-overview .progress-card::after{
+  content:"";
+
+  position:absolute;
+
+  width:150px;
+  height:150px;
+
+  right:-85px;
+  bottom:-100px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.08),
+      transparent 70%
+    );
+
+  pointer-events:none;
+}
+
+.fund-overview .progress-card:hover{
+  transform:translateY(-3px);
+
+  border-color:
+    rgba(0,144,144,.22);
+
+  box-shadow:
+    0 12px 35px rgba(0,40,40,.07);
+}
+
+
+/* =========================================================
+   9. PROGRESS BAR
+========================================================= */
+
+.progress{
+  position:relative;
+
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,.04);
+}
+
+.progress-bar{
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 0 14px rgba(0,144,144,.24);
+}
+
+.progress-bar::after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-100%;
+
+  width:65%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,.55),
+      transparent
+    );
+
+  animation:
+    progressGlow 3s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   10. HẠN DỰ ÁN
+========================================================= */
+
+.deadline{
+  transition:
+    color .25s ease;
+}
+
+.deadline strong{
+  transition:
+    color .25s ease;
+}
+
+.deadline:hover{
+  color:#526060;
+}
+
+.deadline:hover strong{
+  color:var(--accent);
+}
+
+
+/* =========================================================
+   11. DONATE SECTION
+========================================================= */
+
+.fund-overview .donate-section{
+  animation:
+    fadeUp .8s .2s ease both;
+}
+
+.donate-section h2{
+  transition:
+    transform .25s ease,
+    color .25s ease;
+}
+
+.donate-section:hover h2{
+  transform:translateY(-2px);
+
+  color:var(--accent);
+}
+
+
+/* =========================================================
+   12. NÚT DONATE
+========================================================= */
+
+.donate-btn{
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 22px rgba(0,144,144,.20);
+
+  transition:
+    transform .25s cubic-bezier(.2,.8,.2,1),
+    box-shadow .25s ease,
+    background .25s ease;
+}
+
+.donate-btn::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:70%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent,
+      rgba(255,255,255,.4),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  transition:left .6s ease;
+}
+
+.donate-btn:hover::before{
+  left:140%;
+}
+
+.donate-btn:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    0 13px 30px rgba(0,144,144,.28);
+}
+
+.donate-btn:active{
+  transform:
+    translateY(0)
+    scale(.97);
+}
+
+
+/* =========================================================
+   13. SUPPORTERS
+========================================================= */
+
+.supporters{
+  transition:
+    transform .35s cubic-bezier(.2,.8,.2,1),
+    box-shadow .35s ease;
+}
+
+.supporters:hover{
+  box-shadow:
+    0 24px 70px rgba(0,40,40,.11);
+}
+
+.supporter{
+  transition:
+    background .25s ease,
+    padding-left .25s ease,
+    padding-right .25s ease;
+}
+
+.supporter:hover{
+  padding-left:6px;
+  padding-right:6px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,144,144,.035),
+      transparent
+    );
+}
+
+.avatar{
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease;
+}
+
+.supporter:hover .avatar{
+  transform:
+    scale(1.08)
+    rotate(-4deg);
+
+  box-shadow:
+    0 6px 17px rgba(0,144,144,.13);
+}
+
+.amount{
+  transition:
+    transform .25s ease;
+}
+
+.supporter:hover .amount{
+  transform:translateX(-2px);
+}
+
+
+/* =========================================================
+   14. LIVE INDICATOR
+========================================================= */
+
+.live i{
+  box-shadow:
+    0 0 0 0 rgba(57,169,107,.35);
+
+  animation:
+    livePulse 2s infinite;
+}
+
+
+/* =========================================================
+   15. MODAL BACKDROP
+========================================================= */
+
+.modal.show{
+  animation:
+    modalFade .25s ease both;
+}
+
+
+/* =========================================================
+   16. MODAL BOX
+========================================================= */
+
+.modal-box{
+  animation:
+    modalPop .38s cubic-bezier(.2,.8,.2,1) both;
+
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.18);
+}
+
+
+/* =========================================================
+   17. CLOSE BUTTON
+========================================================= */
+
+.close{
+  transition:
+    transform .22s ease,
+    background .22s ease,
+    color .22s ease;
+}
+
+.close:hover{
+  transform:
+    rotate(8deg)
+    scale(1.06);
+
+  background:var(--accent-soft);
+
+  color:var(--accent-dark);
+}
+
+.close:active{
+  transform:scale(.92);
+}
+
+
+/* =========================================================
+   18. INPUT
+========================================================= */
+
+.field input{
+  transition:
+    border-color .22s ease,
+    box-shadow .22s ease,
+    transform .22s ease;
+}
+
+.field input:hover{
+  border-color:
+    rgba(0,144,144,.32);
+}
+
+.field input:focus{
+  transform:translateY(-1px);
+
+  box-shadow:
+    0 0 0 3px rgba(0,144,144,.10),
+    0 7px 18px rgba(0,144,144,.05);
+}
+
+
+/* =========================================================
+   19. QUICK AMOUNT BUTTONS
+========================================================= */
+
+.quick button{
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
+}
+
+.quick button:hover{
+  transform:translateY(-2px);
+
+  background:#fff;
+
+  border-color:var(--accent);
+
+  color:var(--accent);
+
+  box-shadow:
+    0 6px 16px rgba(0,144,144,.10);
+}
+
+.quick button:active{
+  transform:
+    translateY(0)
+    scale(.95);
+}
+
+
+/* =========================================================
+   20. GENERATE BUTTON
+========================================================= */
+
+.generate{
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 20px rgba(0,144,144,.20);
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background .22s ease;
+}
+
+.generate::after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:65%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      105deg,
+      transparent,
+      rgba(255,255,255,.4),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  transition:left .55s ease;
+}
+
+.generate:hover::after{
+  left:140%;
+}
+
+.generate:hover{
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 12px 28px rgba(0,144,144,.27);
+}
+
+.generate:active{
+  transform:
+    translateY(0)
+    scale(.98);
+}
+
+
+/* =========================================================
+   21. QR
+========================================================= */
+
+.qr-box{
+  transition:
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    box-shadow .3s ease;
+}
+
+.qr-box:hover{
+  transform:
+    translateY(-3px)
+    scale(1.015);
+
+  box-shadow:
+    0 12px 28px rgba(0,40,40,.11);
+}
+
+
+/* =========================================================
+   22. PAYMENT STATUS
+========================================================= */
+
+.payment-status{
+  transition:
+    color .25s ease,
+    transform .25s ease;
+}
+
+.payment-status:not(.paid):not(.expired){
+  animation:
+    waitingPulse 2s ease-in-out infinite;
+}
+
+.payment-status.paid{
+  animation:
+    successPop .45s cubic-bezier(.2,.8,.2,1) both;
+}
+
+.payment-status.expired{
+  animation:
+    expiredShake .35s ease both;
+}
+
+
+/* =========================================================
+   23. PAYMENT INFO
+========================================================= */
+
+.payment-info{
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.payment-info:hover{
+  border-color:
+    rgba(0,144,144,.25);
+
+  box-shadow:
+    0 7px 22px rgba(0,144,144,.07);
+}
+
+.info-row{
+  transition:
+    background .2s ease;
+}
+
+.info-row:hover{
+  background:
+    rgba(0,144,144,.035);
+}
+
+
+/* =========================================================
+   24. COPY BUTTON
+========================================================= */
+
+.copy-btn{
+  transition:
+    transform .2s ease,
+    background .2s ease;
+}
+
+.copy-btn:hover{
+  transform:
+    translateY(-1px)
+    scale(1.03);
+
+  background:#d5efec;
+}
+
+.copy-btn:active{
+  transform:scale(.92);
+}
+
+
+/* =========================================================
+   25. TIMER
+========================================================= */
+
+.timer strong{
+  display:inline-block;
+
+  animation:
+    timerPulse 1.5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   26. NÚT TẠO MÃ MỚI
+========================================================= */
+
+.new-code{
+  transition:
+    transform .22s ease,
+    border-color .22s ease,
+    background .22s ease,
+    box-shadow .22s ease;
+}
+
+.new-code:hover{
+  transform:translateY(-2px);
+
+  border-color:var(--accent);
+
+  background:var(--accent-soft);
+
+  color:var(--accent-dark);
+
+  box-shadow:
+    0 7px 18px rgba(0,144,144,.08);
+}
+
+.new-code:active{
+  transform:scale(.97);
+}
+
+
+/* =========================================================
+   27. FOOTER
+========================================================= */
+
+footer{
+  transition:
+    color .25s ease;
+}
+
+footer:hover{
+  color:var(--accent);
+}
+
+
+/* =========================================================
+   28. ANIMATION KEYFRAMES
+========================================================= */
+
+@keyframes floatingBlob{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translate3d(35px,25px,0)
+      scale(1.08);
+  }
+}
+
+@keyframes floatingBlobReverse{
+
+  0%,100%{
+    transform:
+      translate3d(0,0,0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translate3d(-30px,-25px,0)
+      scale(1.06);
+  }
+}
+
+@keyframes cutePulse{
+
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.15);
+  }
+}
+
+@keyframes dotRing{
+
+  0%{
+    transform:scale(.8);
+    opacity:.8;
+  }
+
+  70%,100%{
+    transform:scale(1.8);
+    opacity:0;
+  }
+}
+
+@keyframes fadeDown{
+
+  from{
+    opacity:0;
+    transform:translateY(-12px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes fadeUp{
+
+  from{
+    opacity:0;
+    transform:translateY(10px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+}
+
+@keyframes titleAppear{
+
+  from{
+    opacity:0;
+    transform:
+      translateY(12px)
+      scale(.98);
+  }
+
+  to{
+    opacity:1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes softShine{
+
+  0%,55%{
+    left:-120%;
+  }
+
+  75%,100%{
+    left:140%;
+  }
+}
+
+@keyframes progressGlow{
+
+  0%,45%{
+    left:-100%;
+  }
+
+  70%,100%{
+    left:130%;
+  }
+}
+
+@keyframes livePulse{
+
+  0%{
+    box-shadow:
+      0 0 0 0 rgba(57,169,107,.4);
+  }
+
+  70%{
+    box-shadow:
+      0 0 0 7px rgba(57,169,107,0);
+  }
+
+  100%{
+    box-shadow:
+      0 0 0 0 rgba(57,169,107,0);
+  }
+}
+
+@keyframes modalFade{
+
+  from{
+    opacity:0;
+  }
+
+  to{
+    opacity:1;
+  }
+}
+
+@keyframes modalPop{
+
+  from{
+    opacity:0;
+    transform:
+      translateY(14px)
+      scale(.96);
+  }
+
+  to{
+    opacity:1;
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes waitingPulse{
+
+  0%,100%{
+    opacity:1;
+  }
+
+  50%{
+    opacity:.65;
+  }
+}
+
+@keyframes successPop{
+
+  0%{
+    transform:scale(.95);
+    opacity:.5;
+  }
+
+  70%{
+    transform:scale(1.04);
+  }
+
+  100%{
+    transform:scale(1);
+    opacity:1;
+  }
+}
+
+@keyframes expiredShake{
+
+  0%,100%{
+    transform:translateX(0);
+  }
+
+  25%{
+    transform:translateX(-3px);
+  }
+
+  75%{
+    transform:translateX(3px);
+  }
+}
+
+@keyframes timerPulse{
+
+  0%,100%{
+    transform:scale(1);
+  }
+
+  50%{
+    transform:scale(1.04);
+  }
+}
+
+
+/* =========================================================
+   29. MOBILE — GIỮ HIỆU ỨNG NHẸ HƠN
+========================================================= */
+
+@media (max-width:600px){
+
+  body::before{
+    width:260px;
+    height:260px;
+
+    top:-110px;
+    left:-120px;
+  }
+
+  body::after{
+    width:280px;
+    height:280px;
+
+    right:-130px;
+    bottom:-120px;
+  }
+
+  .fund-overview:hover,
+  .supporters:hover{
+    box-shadow:var(--shadow);
+  }
+
+  .fund-overview .fund-goal:hover,
+  .fund-overview .progress-card:hover{
+    transform:none;
+  }
+
+  .supporter:hover{
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .donate-btn:hover,
+  .generate:hover{
+    transform:none;
+  }
+
+  .qr-box:hover{
+    transform:none;
+  }
+}
+
+
+/* =========================================================
+   30. GIẢM CHUYỂN ĐỘNG NẾU THIẾT BỊ YÊU CẦU
+========================================================= */
+
+@media (prefers-reduced-motion:reduce){
+
+  *,
+  *::before,
+  *::after{
+    animation-duration:.01ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.01ms !important;
+    scroll-behavior:auto !important;
+  }
+
 }
