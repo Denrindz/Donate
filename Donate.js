@@ -10,7 +10,11 @@ const PROJECT_TARGET = 1000000;
 
 let received = 0;
 let currentContent = "";
-let timerInterval;
+
+/* TÁCH RIÊNG 2 TIMER */
+let countdownInterval = null;
+let paymentCheckInterval = null;
+
 
 /* =========================================
    API
@@ -25,14 +29,18 @@ const CHECK_API =
 const HISTORY_API =
     `${API_BASE}/history`;
 
+
 /* =========================================
    FORMAT TIỀN
 ========================================= */
 
 function formatMoney(number){
+
     return new Intl.NumberFormat("vi-VN")
         .format(number) + " ₫";
+
 }
+
 
 /* =========================================
    PROGRESS
@@ -49,9 +57,11 @@ async function updateProgress(){
             });
 
         if(!response.ok){
+
             throw new Error(
                 `HTTP ${response.status}`
             );
+
         }
 
         const data =
@@ -95,6 +105,7 @@ async function updateProgress(){
                             ),
                         0
                     );
+
         }
 
         received =
@@ -106,6 +117,7 @@ async function updateProgress(){
             "Không lấy được lịch sử donate:",
             error
         );
+
     }
 
     const percent =
@@ -126,12 +138,14 @@ async function updateProgress(){
     const progressBar =
         document.getElementById("progressBar");
 
+
     if(receivedElement){
 
         receivedElement.textContent =
             formatMoney(received);
 
     }
+
 
     if(remainingElement){
 
@@ -145,6 +159,7 @@ async function updateProgress(){
 
     }
 
+
     if(percentElement){
 
         percentElement.textContent =
@@ -155,15 +170,18 @@ async function updateProgress(){
 
     }
 
+
     if(progressBar){
 
         progressBar.style.width =
             percent + "%";
 
     }
+
 }
 
 updateProgress();
+
 
 /* =========================================
    MỞ MODAL
@@ -177,6 +195,7 @@ function openModal(){
 
 }
 
+
 /* =========================================
    ĐÓNG MODAL
 ========================================= */
@@ -188,6 +207,7 @@ function closeModal(){
         .classList.remove("show");
 
 }
+
 
 /* =========================================
    CLICK RA NGOÀI MODAL
@@ -205,6 +225,7 @@ function outsideClose(event){
 
 }
 
+
 /* =========================================
    CHỌN NHANH SỐ TIỀN
 ========================================= */
@@ -212,18 +233,30 @@ function outsideClose(event){
 function setAmount(amount){
 
     const input =
-        document.getElementById("donationAmount");
+        document.getElementById(
+            "donationAmount"
+        );
 
     if(!input){
         return;
     }
 
     input.value =
-        Number(amount).toLocaleString("vi-VN");
+        Number(amount).toLocaleString(
+            "vi-VN"
+        );
 
 }
+
+
+/* =========================================
+   FORMAT INPUT SỐ TIỀN
+========================================= */
+
 const donationInput =
-    document.getElementById("donationAmount");
+    document.getElementById(
+        "donationAmount"
+    );
 
 if(donationInput){
 
@@ -235,17 +268,23 @@ if(donationInput){
                 this.value.replace(/\D/g, "");
 
             if(!value){
+
                 this.value = "";
+
                 return;
+
             }
 
             this.value =
-                Number(value).toLocaleString("vi-VN");
+                Number(value).toLocaleString(
+                    "vi-VN"
+                );
 
         }
     );
 
 }
+
 
 /* =========================================
    TẠO QR
@@ -259,13 +298,15 @@ function generateQR(){
             .value
             .trim();
 
+
     const amount =
-    Number(
-        document
-            .getElementById("donationAmount")
-            .value
-            .replace(/\./g, "")
-    );
+        Number(
+            document
+                .getElementById("donationAmount")
+                .value
+                .replace(/\./g, "")
+        );
+
 
     if(!name){
 
@@ -274,9 +315,9 @@ function generateQR(){
         );
 
         return;
+
     }
 
-    /* File thật quy định tối thiểu 10.000đ */
 
     if(
         !amount ||
@@ -288,7 +329,22 @@ function generateQR(){
         );
 
         return;
+
     }
+
+
+    /* =====================================
+       DỪNG TIMER CŨ
+    ===================================== */
+
+    clearInterval(
+        countdownInterval
+    );
+
+    clearInterval(
+        paymentCheckInterval
+    );
+
 
     /* =====================================
        TẠO MÃ GIAO DỊCH
@@ -303,6 +359,7 @@ function generateQR(){
     currentContent =
         "DXM-" + randomCode;
 
+
     /* =====================================
        HIỂN THỊ THÔNG TIN
     ===================================== */
@@ -312,26 +369,31 @@ function generateQR(){
         .textContent =
         formatMoney(amount);
 
+
     document
         .getElementById("qrName")
         .textContent =
         name;
+
 
     document
         .getElementById("qrContent")
         .textContent =
         currentContent;
 
+
     document
         .getElementById("qrStk")
         .textContent =
         ACCOUNT_NO;
+
 
     document
         .getElementById("qrTime")
         .textContent =
         new Date()
             .toLocaleString("vi-VN");
+
 
     /* =====================================
        TẠO VIETQR MB BANK
@@ -350,9 +412,34 @@ function generateQR(){
             currentContent
         );
 
+
     document
         .getElementById("qrImage")
-        .src = qrURL;
+        .src =
+        qrURL;
+
+
+    /* =====================================
+       RESET PAYMENT STATUS
+    ===================================== */
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+    if(status){
+
+        status.classList.remove(
+            "paid",
+            "expired"
+        );
+
+        status.textContent =
+            "● Đang chờ chuyển khoản…";
+
+    }
+
 
     /* =====================================
        CHUYỂN SANG MÀN QR
@@ -360,13 +447,21 @@ function generateQR(){
 
     document
         .getElementById("formArea")
-        .style.display = "none";
+        .style.display =
+        "none";
+
 
     document
         .getElementById("qrResult")
         .classList.add("show");
 
+
+    /* =====================================
+       BẮT ĐẦU ĐẾM NGƯỢC
+    ===================================== */
+
     startTimer();
+
 
     /* =====================================
        KIỂM TRA THANH TOÁN
@@ -377,7 +472,9 @@ function generateQR(){
         name,
         currentContent
     );
+
 }
+
 
 /* =========================================
    COPY SỐ TÀI KHOẢN
@@ -387,6 +484,7 @@ function copyStk(){
 
     const stk =
         ACCOUNT_NO;
+
 
     navigator.clipboard
         .writeText(stk)
@@ -401,11 +499,14 @@ function copyStk(){
                 return;
             }
 
+
             const oldText =
                 button.textContent;
 
+
             button.textContent =
                 "Đã sao chép";
+
 
             setTimeout(() => {
 
@@ -418,6 +519,7 @@ function copyStk(){
 
 }
 
+
 /* =========================================
    KIỂM TRA THANH TOÁN
 ========================================= */
@@ -429,8 +531,9 @@ function checkPayment(
 ){
 
     clearInterval(
-        timerInterval
+        paymentCheckInterval
     );
+
 
     const check =
         async () => {
@@ -458,12 +561,15 @@ function checkPayment(
                         }
                     );
 
+
                 if(!response.ok){
                     return;
                 }
 
+
                 const data =
                     await response.json();
+
 
                 if(
                     data &&
@@ -471,9 +577,17 @@ function checkPayment(
                     data.paid === true
                 ){
 
+                    /* DỪNG KIỂM TRA THANH TOÁN */
                     clearInterval(
-                        timerInterval
+                        paymentCheckInterval
                     );
+
+
+                    /* DỪNG ĐẾM NGƯỢC */
+                    clearInterval(
+                        countdownInterval
+                    );
+
 
                     const status =
                         document
@@ -481,10 +595,17 @@ function checkPayment(
                                 "paymentStatus"
                             );
 
+
                     if(status){
 
                         status.textContent =
                             `✓ Đã nhận ${formatMoney(amount)} — cảm ơn bạn!`;
+
+
+                        status.classList.remove(
+                            "expired"
+                        );
+
 
                         status.classList.add(
                             "paid"
@@ -492,7 +613,8 @@ function checkPayment(
 
                     }
 
-                    /* Cập nhật lại tổng donate */
+
+                    /* Cập nhật tổng donate */
 
                     setTimeout(() => {
 
@@ -513,11 +635,14 @@ function checkPayment(
 
         };
 
+
+    /* Kiểm tra ngay lập tức */
     check();
 
-    /* API thật kiểm tra mỗi 3 giây */
 
-    timerInterval =
+    /* Sau đó kiểm tra mỗi 3 giây */
+
+    paymentCheckInterval =
         setInterval(
             check,
             3000
@@ -525,23 +650,34 @@ function checkPayment(
 
 }
 
+
 /* =========================================
-   TIMER 10 PHÚT
+   TIMER ĐẾM NGƯỢC 10 PHÚT
 ========================================= */
 
 function startTimer(){
 
+    /* DỪNG TIMER CŨ */
     clearInterval(
-        timerInterval
+        countdownInterval
     );
 
-    let seconds =
-        10 * 60;
+
+    /* 10 PHÚT = 600 GIÂY */
+    let seconds = 10 * 60;
+
 
     const timer =
         document.getElementById(
             "timer"
         );
+
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
 
     function tick(){
 
@@ -550,27 +686,45 @@ function startTimer(){
                 seconds / 60
             );
 
+
         const sec =
             seconds % 60;
+
+
+        /* =================================
+           HIỂN THỊ MM:SS
+        ================================= */
 
         if(timer){
 
             timer.textContent =
                 String(minutes)
-                    .padStart(2,"0")
+                    .padStart(2, "0")
                 +
                 ":"
                 +
                 String(sec)
-                    .padStart(2,"0");
+                    .padStart(2, "0");
 
         }
+
+
+        /* =================================
+           HẾT HẠN
+        ================================= */
 
         if(seconds <= 0){
 
             clearInterval(
-                timerInterval
+                countdownInterval
             );
+
+
+            /* DỪNG API CHECK */
+            clearInterval(
+                paymentCheckInterval
+            );
+
 
             if(timer){
 
@@ -579,31 +733,39 @@ function startTimer(){
 
             }
 
-            const status =
-                document.getElementById(
-                    "paymentStatus"
-                );
 
             if(status){
 
-                status.textContent =
-                    "Mã đã hết hạn.";
+                status.classList.remove(
+                    "paid"
+                );
 
                 status.classList.add(
                     "expired"
                 );
 
+                status.textContent =
+                    "Mã đã hết hạn.";
+
             }
 
+
+            return;
+
         }
+
 
         seconds--;
 
     }
 
+
+    /* Chạy ngay lần đầu */
     tick();
 
-    timerInterval =
+
+    /* Sau đó giảm mỗi 1 giây */
+    countdownInterval =
         setInterval(
             tick,
             1000
@@ -611,28 +773,45 @@ function startTimer(){
 
 }
 
+
 /* =========================================
    TẠO MÃ MỚI
 ========================================= */
 
 function newCode(){
 
+    /* DỪNG CẢ 2 TIMER */
     clearInterval(
-        timerInterval
+        countdownInterval
     );
 
+    clearInterval(
+        paymentCheckInterval
+    );
+
+
+    countdownInterval = null;
+    paymentCheckInterval = null;
+
+
+    /* ẨN QR */
     document
         .getElementById("qrResult")
         .classList.remove("show");
 
+
+    /* HIỆN LẠI FORM */
     document
         .getElementById("formArea")
         .style.display = "";
 
+
+    /* RESET STATUS */
     const status =
         document.getElementById(
             "paymentStatus"
         );
+
 
     if(status){
 
@@ -641,8 +820,24 @@ function newCode(){
             "expired"
         );
 
+
         status.textContent =
             "● Đang chờ chuyển khoản…";
+
+    }
+
+
+    /* RESET TIMER */
+    const timer =
+        document.getElementById(
+            "timer"
+        );
+
+
+    if(timer){
+
+        timer.textContent =
+            "10:00";
 
     }
 
