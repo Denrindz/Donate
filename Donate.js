@@ -13,7 +13,6 @@
   const reduceMotion =
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-
   const store = {
     get(key, fallback) {
       try {
@@ -31,7 +30,6 @@
     }
   };
 
-
   /* =========================================================
      THÔNG TIN TÀI KHOẢN
   ========================================================= */
@@ -40,7 +38,6 @@
     stk: '09637164106868',
     name: 'MB Bank'
   };
-
 
   /* =========================================================
      API
@@ -54,57 +51,64 @@
 
   const HISTORY_API =
     `${API_BASE}/history`;
-    const globalFontStyle = document.createElement('style');
 
-globalFontStyle.textContent = `
-  html,
-  body,
-  button,
-  input,
-  textarea,
-  select,
-  a,
-  span,
-  p,
-  div,
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    font-family:
-      -apple-system,
-      BlinkMacSystemFont,
-      "SF Pro Display",
-      "SF Pro Text",
-      "Helvetica Neue",
-      Arial,
-      sans-serif !important;
-  }
+  /* =========================================================
+     FONT
+  ========================================================= */
 
-  h1,
-  h2,
-  h3,
-  h4 {
-    font-weight: 700 !important;
-    letter-spacing: -0.5px !important;
-  }
+  const globalFontStyle =
+    document.createElement('style');
 
-  button {
-    font-weight: 600 !important;
-    letter-spacing: -0.2px !important;
-  }
+  globalFontStyle.textContent = `
+    html,
+    body,
+    button,
+    input,
+    textarea,
+    select,
+    a,
+    span,
+    p,
+    div,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "SF Pro Display",
+        "SF Pro Text",
+        "Helvetica Neue",
+        Arial,
+        sans-serif !important;
+    }
 
-  input,
-  textarea,
-  select {
-    font-weight: 400 !important;
-  }
-`;
+    h1,
+    h2,
+    h3,
+    h4 {
+      font-weight: 700 !important;
+      letter-spacing: -0.5px !important;
+    }
 
-document.head.appendChild(globalFontStyle);
-      /* =========================================================
+    button {
+      font-weight: 600 !important;
+      letter-spacing: -0.2px !important;
+    }
+
+    input,
+    textarea,
+    select {
+      font-weight: 400 !important;
+    }
+  `;
+
+  document.head.appendChild(globalFontStyle);
+
+  /* =========================================================
      STYLE LỊCH SỬ ỦNG HỘ
   ========================================================= */
 
@@ -171,10 +175,7 @@ document.head.appendChild(globalFontStyle);
     }
   `;
 
-  document.head.appendChild(
-    supporterStyle
-  );
-
+  document.head.appendChild(supporterStyle);
 
   /* =========================================================
      BĂNG CHỮ CHẠY
@@ -192,7 +193,6 @@ document.head.appendChild(globalFontStyle);
       `<span>${html.repeat(4)}</span>` +
       `<span aria-hidden="true">${html.repeat(4)}</span>`;
   });
-
 
   /* =========================================================
      CẤU HÌNH
@@ -215,6 +215,12 @@ document.head.appendChild(globalFontStyle);
   const POLL_MS =
     3000;
 
+  /* =========================================================
+     MỤC TIÊU ỦNG HỘ
+  ========================================================= */
+
+  const DONATION_TARGET =
+    1000000000;
 
   /* =========================================================
      DOM
@@ -253,7 +259,6 @@ document.head.appendChild(globalFontStyle);
 
   const qrImage = $('#qrImage');
 
-
   /* =========================================================
      TRẠNG THÁI
   ========================================================= */
@@ -269,7 +274,6 @@ document.head.appendChild(globalFontStyle);
   let cancelArmed = false;
   let cancelArmTimer = null;
 
-
   /* =========================================================
      CHỐNG SPAM
   ========================================================= */
@@ -281,24 +285,20 @@ document.head.appendChild(globalFontStyle);
         Date.now() - Number(time) < SPAM_WINDOW
     );
 
-
   let coolUntil =
     Number(
       store.get('dxm_cool', 0)
     ) || 0;
 
-
   if (coolUntil <= Date.now()) {
     coolUntil = 0;
   }
-
 
   function startCooldown(ms) {
     clearInterval(coolTimer);
 
     const end =
       Date.now() + ms;
-
 
     const tick = () => {
       const left =
@@ -309,16 +309,15 @@ document.head.appendChild(globalFontStyle);
           )
         );
 
-
       if (submitBtn) {
-        submitBtn.disabled = left > 0;
+        submitBtn.disabled =
+          left > 0;
 
         submitBtn.textContent =
           left > 0
             ? `Chờ ${left}s…`
             : 'Tạo mã ủng hộ';
       }
-
 
       if (left <= 0) {
         clearInterval(coolTimer);
@@ -328,7 +327,6 @@ document.head.appendChild(globalFontStyle);
       }
     };
 
-
     tick();
 
     coolTimer =
@@ -337,7 +335,6 @@ document.head.appendChild(globalFontStyle);
         250
       );
   }
-
 
   function syncCooldownUI() {
     if (
@@ -349,7 +346,6 @@ document.head.appendChild(globalFontStyle);
       );
     }
   }
-
 
   /* =========================================================
      MỞ / ĐÓNG POPUP
@@ -375,7 +371,6 @@ document.head.appendChild(globalFontStyle);
     }, 320);
   }
 
-
   function closePopup() {
     if (!ov) return;
 
@@ -393,14 +388,21 @@ document.head.appendChild(globalFontStyle);
     document.body.style.overflow = '';
   }
 
-
-  window.openDonationPopup = openPopup;
-
+  window.openDonationPopup =
+    openPopup;
 
   function resetForm() {
-    if (pSuccess) pSuccess.hidden = true;
-    if (pForm) pForm.hidden = false;
-    if (pNotice) pNotice.hidden = true;
+    if (pSuccess) {
+      pSuccess.hidden = true;
+    }
+
+    if (pForm) {
+      pForm.hidden = false;
+    }
+
+    if (pNotice) {
+      pNotice.hidden = true;
+    }
 
     amt = 0;
 
@@ -469,7 +471,6 @@ document.head.appendChild(globalFontStyle);
     syncCooldownUI();
   }
 
-
   /* =========================================================
      EVENT POPUP
   ========================================================= */
@@ -481,14 +482,12 @@ document.head.appendChild(globalFontStyle);
     );
   }
 
-
   if (closeBtn) {
     closeBtn.addEventListener(
       'click',
       closePopup
     );
   }
-
 
   if (ov) {
     ov.addEventListener(
@@ -500,7 +499,6 @@ document.head.appendChild(globalFontStyle);
       }
     );
   }
-
 
   window.addEventListener(
     'keydown',
@@ -514,7 +512,6 @@ document.head.appendChild(globalFontStyle);
       }
     }
   );
-
 
   /* =========================================================
      MOBILE KEYBOARD
@@ -539,7 +536,6 @@ document.head.appendChild(globalFontStyle);
     );
   }
 
-
   /* =========================================================
      SỐ TIỀN
   ========================================================= */
@@ -555,7 +551,6 @@ document.head.appendChild(globalFontStyle);
     }
   }
 
-
   function hideErr() {
     if (pErr) {
       pErr.hidden = true;
@@ -566,7 +561,6 @@ document.head.appendChild(globalFontStyle);
     }
   }
 
-
   function setAmount(
     value,
     fromChip = false
@@ -574,12 +568,10 @@ document.head.appendChild(globalFontStyle);
     amt =
       Number(value) || 0;
 
-
     if (amtInput) {
       amtInput.value =
         amt ? fmt(amt) : '';
     }
-
 
     chips.forEach((chip) => {
       chip.classList.toggle(
@@ -588,12 +580,10 @@ document.head.appendChild(globalFontStyle);
       );
     });
 
-
     if (!fromChip) {
       hideErr();
     }
   }
-
 
   chips.forEach((chip) => {
     chip.addEventListener(
@@ -613,7 +603,6 @@ document.head.appendChild(globalFontStyle);
     );
   });
 
-
   if (amtInput) {
     amtInput.addEventListener(
       'input',
@@ -629,7 +618,6 @@ document.head.appendChild(globalFontStyle);
       }
     );
 
-
     amtInput.addEventListener(
       'blur',
       () => {
@@ -644,7 +632,6 @@ document.head.appendChild(globalFontStyle);
       }
     );
   }
-
 
   /* =========================================================
      TRẠNG THÁI THANH TOÁN
@@ -663,15 +650,13 @@ document.head.appendChild(globalFontStyle);
       'dead'
     );
 
-
     if (kind !== 'wait') {
       payStatus.classList.add(kind);
     }
 
-
-    payStatusText.textContent = text;
+    payStatusText.textContent =
+      text;
   }
-
 
   /* =========================================================
      TIMER HẾT HẠN
@@ -683,7 +668,6 @@ document.head.appendChild(globalFontStyle);
       expTimer = null;
     }
   }
-
 
   function startExpiry() {
     stopExpiry();
@@ -700,10 +684,8 @@ document.head.appendChild(globalFontStyle);
         'Mã hết hạn sau <b id="psCount">10:00</b>';
     }
 
-
     const end =
       Date.now() + EXPIRY_MS;
-
 
     expTimer =
       setInterval(
@@ -711,11 +693,9 @@ document.head.appendChild(globalFontStyle);
           const left =
             end - Date.now();
 
-
           if (left <= 0) {
             stopExpiry();
             stopPayWatch();
-
 
             if (qrBox) {
               qrBox.classList.add(
@@ -723,49 +703,40 @@ document.head.appendChild(globalFontStyle);
               );
             }
 
-
             if (psNote) {
               psNote.textContent =
                 'Mã đã hết hạn — tạo mã mới để ủng hộ tiếp nhé.';
             }
-
 
             setPayStatus(
               'dead',
               'Hết thời gian chờ — chưa nhận được tiền.'
             );
 
-
             if (doneBtn) {
               doneBtn.hidden = true;
             }
-
 
             if (retryBtn) {
               retryBtn.hidden = false;
             }
 
-
             if (cancelBtn) {
               cancelBtn.hidden = true;
             }
-
 
             disarmCancel();
 
             return;
           }
 
-
           const seconds =
             Math.ceil(
               left / 1000
             );
 
-
           const count =
             $('#psCount');
-
 
           if (count) {
             count.textContent =
@@ -782,7 +753,6 @@ document.head.appendChild(globalFontStyle);
       );
   }
 
-
   /* =========================================================
      KIỂM TRA THANH TOÁN
   ========================================================= */
@@ -794,7 +764,6 @@ document.head.appendChild(globalFontStyle);
     }
   }
 
-
   function startPayWatch(payment) {
     stopPayWatch();
 
@@ -803,9 +772,7 @@ document.head.appendChild(globalFontStyle);
       'Đang chờ chuyển khoản…'
     );
 
-
     let checking = false;
-
 
     async function checkPayment() {
       if (
@@ -815,9 +782,7 @@ document.head.appendChild(globalFontStyle);
         return;
       }
 
-
       checking = true;
-
 
       try {
         const response =
@@ -830,11 +795,6 @@ document.head.appendChild(globalFontStyle);
                 'Content-Type':
                   'application/json'
               },
-
-              /*
-               * Gửi tên + lời nhắn lên Worker.
-               * Worker sẽ lưu vào D1 khi giao dịch được xác nhận.
-               */
 
               body: JSON.stringify({
                 code:
@@ -852,17 +812,14 @@ document.head.appendChild(globalFontStyle);
             }
           );
 
-
         if (!response.ok) {
           throw new Error(
             `HTTP ${response.status}`
           );
         }
 
-
         const data =
           await response.json();
-
 
         if (
           data &&
@@ -871,13 +828,11 @@ document.head.appendChild(globalFontStyle);
         ) {
           stopPayWatch();
 
-
           const transactionAmount =
             Number(
               data.transaction &&
               data.transaction.amount
             ) || payment.amount;
-
 
           markPaid({
             amount:
@@ -889,20 +844,16 @@ document.head.appendChild(globalFontStyle);
         }
 
       } catch (error) {
-
         console.warn(
           'Payment check error:',
           error
         );
-
       } finally {
         checking = false;
       }
     }
 
-
     checkPayment();
-
 
     payTimer =
       setInterval(
@@ -910,7 +861,6 @@ document.head.appendChild(globalFontStyle);
         POLL_MS
       );
   }
-
 
   /* =========================================================
      ĐÁNH DẤU ĐÃ THANH TOÁN
@@ -922,11 +872,9 @@ document.head.appendChild(globalFontStyle);
     stopPayWatch();
     stopExpiry();
 
-
     if (qrBox) {
       qrBox.classList.add('paid');
     }
-
 
     if (psNote) {
       psNote.textContent =
@@ -940,12 +888,10 @@ document.head.appendChild(globalFontStyle);
         );
     }
 
-
     setPayStatus(
       'ok',
       `Đã nhận được ${fmt(payment.amount)}₫ — cảm ơn bạn nhiều!`
     );
-
 
     if (doneBtn) {
       doneBtn.disabled = false;
@@ -953,24 +899,19 @@ document.head.appendChild(globalFontStyle);
         'Hoàn tất';
     }
 
-
     if (cancelBtn) {
       cancelBtn.hidden = true;
     }
 
-
     disarmCancel();
-
 
     capyRain();
 
-
-    /* Cập nhật lịch sử */
     setTimeout(() => {
       loadSupporters();
+      loadDonationProgress();
     }, 1000);
   }
-
 
   /* =========================================================
      HOÀN TẤT
@@ -987,7 +928,6 @@ document.head.appendChild(globalFontStyle);
     );
   }
 
-
   /* =========================================================
      TẠO MÃ MỚI
   ========================================================= */
@@ -1001,7 +941,6 @@ document.head.appendChild(globalFontStyle);
 
         paid = false;
 
-
         if (pSuccess) {
           pSuccess.hidden = true;
         }
@@ -1014,7 +953,6 @@ document.head.appendChild(globalFontStyle);
           pNotice.hidden = true;
         }
 
-
         if (qrBox) {
           qrBox.classList.remove(
             'expired',
@@ -1022,17 +960,14 @@ document.head.appendChild(globalFontStyle);
           );
         }
 
-
         if (qrImage) {
           qrImage.removeAttribute('src');
         }
-
 
         setPayStatus(
           'wait',
           'Đang chờ chuyển khoản…'
         );
-
 
         if (doneBtn) {
           doneBtn.hidden = false;
@@ -1041,20 +976,16 @@ document.head.appendChild(globalFontStyle);
             'Chưa nhận được tiền';
         }
 
-
         retryBtn.hidden = true;
-
 
         if (cancelBtn) {
           cancelBtn.hidden = false;
         }
 
-
         syncCooldownUI();
       }
     );
   }
-
 
   /* =========================================================
      HUỶ GIAO DỊCH
@@ -1063,21 +994,20 @@ document.head.appendChild(globalFontStyle);
   function disarmCancel() {
     cancelArmed = false;
 
-
     if (cancelBtn) {
-      cancelBtn.classList.remove('armed');
+      cancelBtn.classList.remove(
+        'armed'
+      );
 
       cancelBtn.textContent =
         'Huỷ giao dịch';
     }
-
 
     if (cancelArmTimer) {
       clearTimeout(cancelArmTimer);
       cancelArmTimer = null;
     }
   }
-
 
   if (cancelBtn) {
     cancelBtn.addEventListener(
@@ -1086,15 +1016,12 @@ document.head.appendChild(globalFontStyle);
         if (!cancelArmed) {
           cancelArmed = true;
 
-
           cancelBtn.classList.add(
             'armed'
           );
 
-
           cancelBtn.textContent =
             'Bấm lần nữa để xác nhận huỷ';
-
 
           cancelArmTimer =
             setTimeout(
@@ -1102,10 +1029,8 @@ document.head.appendChild(globalFontStyle);
               3500
             );
 
-
           return;
         }
-
 
         stopPayWatch();
         stopExpiry();
@@ -1113,7 +1038,6 @@ document.head.appendChild(globalFontStyle);
         paid = false;
 
         disarmCancel();
-
 
         if (pSuccess) {
           pSuccess.hidden = true;
@@ -1123,14 +1047,12 @@ document.head.appendChild(globalFontStyle);
           pForm.hidden = false;
         }
 
-
         if (pNotice) {
           pNotice.textContent =
             'Đã huỷ giao dịch — chưa có khoản nào được ghi nhận. Bạn có thể tạo mã mới bất cứ lúc nào.';
 
           pNotice.hidden = false;
         }
-
 
         if (qrBox) {
           qrBox.classList.remove(
@@ -1139,17 +1061,14 @@ document.head.appendChild(globalFontStyle);
           );
         }
 
-
         if (qrImage) {
           qrImage.removeAttribute('src');
         }
-
 
         setPayStatus(
           'wait',
           'Đang chờ chuyển khoản…'
         );
-
 
         if (doneBtn) {
           doneBtn.hidden = false;
@@ -1158,14 +1077,11 @@ document.head.appendChild(globalFontStyle);
             'Chưa nhận được tiền';
         }
 
-
         if (retryBtn) {
           retryBtn.hidden = true;
         }
 
-
         cancelBtn.hidden = false;
-
 
         if (submitBtn) {
           submitBtn.disabled = false;
@@ -1173,12 +1089,10 @@ document.head.appendChild(globalFontStyle);
             'Tạo mã ủng hộ';
         }
 
-
         syncCooldownUI();
       }
     );
   }
-
 
   /* =========================================================
      COPY SỐ TÀI KHOẢN
@@ -1194,36 +1108,28 @@ document.head.appendChild(globalFontStyle);
       );
     }
 
-
     const textarea =
       document.createElement('textarea');
-
 
     textarea.value = text;
 
     textarea.style.position = 'fixed';
     textarea.style.opacity = '0';
 
-
     document.body.appendChild(
       textarea
     );
 
-
     textarea.select();
-
 
     try {
       document.execCommand('copy');
     } catch (e) {}
 
-
     textarea.remove();
-
 
     return Promise.resolve();
   }
-
 
   if (copyBtn) {
     copyBtn.addEventListener(
@@ -1235,7 +1141,6 @@ document.head.appendChild(globalFontStyle);
               'Đã copy';
 
             copyBtn.classList.add('ok');
-
 
             setTimeout(() => {
               copyBtn.textContent =
@@ -1251,7 +1156,6 @@ document.head.appendChild(globalFontStyle);
     );
   }
 
-
   /* =========================================================
      TẠO MÃ ỦNG HỘ
   ========================================================= */
@@ -1262,11 +1166,9 @@ document.head.appendChild(globalFontStyle);
       () => {
         const now = Date.now();
 
-
         if (now < coolUntil) {
           return;
         }
-
 
         if (amt < MIN) {
           hideErr();
@@ -1279,14 +1181,12 @@ document.head.appendChild(globalFontStyle);
             `Số tiền tối thiểu là ${fmt(MIN)}₫ nhé.`
           );
 
-
           if (amtInput) {
             amtInput.focus();
           }
 
           return;
         }
-
 
         genTimes =
           genTimes.filter(
@@ -1295,7 +1195,6 @@ document.head.appendChild(globalFontStyle);
               SPAM_WINDOW
           );
 
-
         if (
           genTimes.length >=
           SPAM_MAX
@@ -1303,35 +1202,28 @@ document.head.appendChild(globalFontStyle);
           coolUntil =
             now + COOL_MS;
 
-
           store.set(
             'dxm_cool',
             coolUntil
           );
 
-
           showErr(
             'Phát hiện spam — bạn tạo mã quá nhanh, vui lòng chờ 30 giây.'
           );
-
 
           startCooldown(
             COOL_MS
           );
 
-
           return;
         }
 
-
         genTimes.push(now);
-
 
         store.set(
           'dxm_qrgen',
           genTimes
         );
-
 
         const name =
           nameInput &&
@@ -1339,48 +1231,39 @@ document.head.appendChild(globalFontStyle);
             ? nameInput.value.trim()
             : 'Người ẩn danh';
 
-
         const msg =
           msgInput
             ? msgInput.value.trim()
             : '';
 
-
         const code =
           'DXM-' +
           String(now).slice(-6);
 
-
         const date =
           new Date();
 
-
         paid = false;
-
 
         const psName = $('#psName');
         const psCode = $('#psCode');
         const psStk = $('#psStk');
         const psTime = $('#psTime');
 
-
         if (psName) {
           psName.textContent =
             name;
         }
-
 
         if (psCode) {
           psCode.textContent =
             code;
         }
 
-
         if (psStk) {
           psStk.textContent =
             BANK.stk;
         }
-
 
         if (psTime) {
           psTime.textContent =
@@ -1398,10 +1281,8 @@ document.head.appendChild(globalFontStyle);
             );
         }
 
-
         const bankRow =
           $('#psBankRow');
-
 
         if (bankRow) {
           if (BANK.name) {
@@ -1419,10 +1300,8 @@ document.head.appendChild(globalFontStyle);
           }
         }
 
-
         const msgRow =
           $('#psMsgRow');
-
 
         if (msgRow) {
           if (msg) {
@@ -1440,7 +1319,6 @@ document.head.appendChild(globalFontStyle);
           }
         }
 
-
         if (pForm) {
           pForm.hidden = true;
         }
@@ -1453,9 +1331,8 @@ document.head.appendChild(globalFontStyle);
           pSuccess.hidden = false;
         }
 
-
         /* =====================================================
-           VIETQR MB BANK - QR ONLY
+           VIETQR MB BANK
         ===================================================== */
 
         const qrUrl =
@@ -1467,11 +1344,9 @@ document.head.appendChild(globalFontStyle);
           '&addInfo=' +
           encodeURIComponent(code);
 
-
         if (qrImage) {
           qrImage.src = qrUrl;
         }
-
 
         countUp(
           $('#psAmount'),
@@ -1481,36 +1356,22 @@ document.head.appendChild(globalFontStyle);
           '₫'
         );
 
-
         setPayStatus(
           'wait',
           'Đang chờ chuyển khoản…'
         );
 
-
         startExpiry();
-
-
-        /*
-         * Quan trọng:
-         * Gửi cả tên + lời nhắn vào quá trình kiểm tra.
-         * Khi Casso xác nhận giao dịch, Worker sẽ lưu
-         * các thông tin này vào D1.
-         */
 
         startPayWatch({
           amount: amt,
-
           code: code,
-
           name: name,
-
           message: msg
         });
       }
     );
   }
-
 
   /* =========================================================
      COUNT UP
@@ -1527,10 +1388,8 @@ document.head.appendChild(globalFontStyle);
       return;
     }
 
-
     const start =
       performance.now();
-
 
     function animate(time) {
       const progress =
@@ -1540,7 +1399,6 @@ document.head.appendChild(globalFontStyle);
           duration
         );
 
-
       const easing =
         1 -
         Math.pow(
@@ -1548,17 +1406,14 @@ document.head.appendChild(globalFontStyle);
           3
         );
 
-
       const value =
         from +
         (to - from) *
         easing;
 
-
       element.textContent =
         fmt(value) +
         (suffix || '');
-
 
       if (progress < 1) {
         requestAnimationFrame(
@@ -1567,15 +1422,13 @@ document.head.appendChild(globalFontStyle);
       }
     }
 
-
     requestAnimationFrame(
       animate
     );
   }
 
-
   /* =========================================================
-     HÀM LẤY CHỮ CÁI AVATAR
+     AVATAR
   ========================================================= */
 
   function getInitial(name) {
@@ -1592,9 +1445,8 @@ document.head.appendChild(globalFontStyle);
       .toUpperCase();
   }
 
-
   /* =========================================================
-     FORMAT THỜI GIAN LỊCH SỬ
+     FORMAT THỜI GIAN
   ========================================================= */
 
   function formatHistoryTime(value) {
@@ -1602,10 +1454,8 @@ document.head.appendChild(globalFontStyle);
       return '';
     }
 
-
     const date =
       new Date(value);
-
 
     if (
       Number.isNaN(
@@ -1614,7 +1464,6 @@ document.head.appendChild(globalFontStyle);
     ) {
       return '';
     }
-
 
     return (
       date.toLocaleDateString(
@@ -1636,9 +1485,212 @@ document.head.appendChild(globalFontStyle);
     );
   }
 
+  /* =========================================================
+     LẤY DỮ LIỆU LỊCH SỬ
+  ========================================================= */
+
+  async function fetchHistory() {
+    const response =
+      await fetch(
+        HISTORY_API,
+        {
+          method: 'GET',
+          cache: 'no-store'
+        }
+      );
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP ${response.status}`
+      );
+    }
+
+    const data =
+      await response.json();
+
+    if (
+      !data ||
+      data.ok !== true ||
+      !Array.isArray(data.history)
+    ) {
+      throw new Error(
+        'Dữ liệu lịch sử không hợp lệ'
+      );
+    }
+
+    return data;
+  }
 
   /* =========================================================
-     LỊCH SỬ 5 NGƯỜI ỦNG HỘ GẦN NHẤT
+     TIẾN ĐỘ ỦNG HỘ
+  ========================================================= */
+
+  async function loadDonationProgress() {
+    const totalEl =
+      document.getElementById(
+        'totalDonated'
+      );
+
+    const percentEl =
+      document.getElementById(
+        'donationPercent'
+      );
+
+    const fillEl =
+      document.getElementById(
+        'progressFill'
+      );
+
+    const remainingEl =
+      document.getElementById(
+        'remainingDonated'
+      );
+
+    if (
+      !totalEl ||
+      !percentEl ||
+      !fillEl ||
+      !remainingEl
+    ) {
+      return;
+    }
+
+    try {
+      const data =
+        await fetchHistory();
+
+      /*
+       * ƯU TIÊN:
+       * Nếu Worker trả về tổng tiền thật
+       * bằng data.total thì dùng trực tiếp.
+       *
+       * Ví dụ:
+       * {
+       *   ok: true,
+       *   total: 3207777,
+       *   history: [...]
+       * }
+       */
+
+      let total;
+
+      if (
+        data.total !== undefined &&
+        data.total !== null &&
+        Number.isFinite(
+          Number(data.total)
+        )
+      ) {
+        total =
+          Number(data.total);
+      } else {
+
+        /*
+         * Fallback:
+         * Nếu API chưa có total,
+         * cộng những giao dịch DXM
+         * mà API trả về.
+         */
+
+        const history =
+          data.history.filter((item) => {
+            const code =
+              String(
+                item.code || ''
+              )
+                .trim()
+                .toUpperCase();
+
+            return code.startsWith('DXM');
+          });
+
+        total =
+          history.reduce(
+            (sum, item) => {
+              return (
+                sum +
+                (Number(item.amount) || 0)
+              );
+            },
+            0
+          );
+      }
+
+      /*
+       * Không cho tổng âm.
+       */
+
+      total =
+        Math.max(
+          0,
+          total
+        );
+
+      /*
+       * Tính còn lại.
+       */
+
+      const remaining =
+        Math.max(
+          0,
+          DONATION_TARGET - total
+        );
+
+      /*
+       * Tính phần trăm.
+       */
+
+      const percent =
+        Math.min(
+          100,
+          (total / DONATION_TARGET) * 100
+        );
+
+      /*
+       * Hiển thị tổng tiền.
+       */
+
+      totalEl.textContent =
+        `${fmt(total)} ₫`;
+
+      /*
+       * Hiển thị tiền còn thiếu.
+       */
+
+      remainingEl.textContent =
+        `${fmt(remaining)} ₫`;
+
+      /*
+       * Hiển thị phần trăm.
+       */
+
+      percentEl.textContent =
+        `${percent.toLocaleString('vi-VN', {
+          minimumFractionDigits:
+            percent % 1 === 0 ? 0 : 1,
+          maximumFractionDigits: 1
+        })}%`;
+
+      /*
+       * Thanh tiến độ.
+       */
+
+      requestAnimationFrame(() => {
+        fillEl.style.width =
+          `${percent}%`;
+      });
+
+    } catch (error) {
+
+      console.warn(
+        'LOAD DONATION PROGRESS ERROR:',
+        error
+      );
+    }
+  }
+
+  /* =========================================================
+     LỊCH SỬ 5 NGƯỜI GẦN NHẤT
   ========================================================= */
 
   async function loadSupporters() {
@@ -1647,54 +1699,14 @@ document.head.appendChild(globalFontStyle);
         'supportersList'
       );
 
-
     if (!list) {
       return;
     }
 
-
     try {
 
-      const response =
-        await fetch(
-          HISTORY_API,
-          {
-            method: 'GET',
-            cache: 'no-store'
-          }
-        );
-
-
-      if (!response.ok) {
-        throw new Error(
-          `HTTP ${response.status}`
-        );
-      }
-
-
       const data =
-        await response.json();
-
-
-      if (
-        !data ||
-        data.ok !== true ||
-        !Array.isArray(
-          data.history
-        )
-      ) {
-        throw new Error(
-          'Dữ liệu lịch sử không hợp lệ'
-        );
-      }
-
-
-      /*
-       * Worker mới đã lọc sẵn những người
-       * đã thanh toán và trả về code.
-       *
-       * Chỉ giữ những bản ghi có mã DXM.
-       */
+        await fetchHistory();
 
       const history =
         data.history
@@ -1707,74 +1719,41 @@ document.head.appendChild(globalFontStyle);
                 .trim()
                 .toUpperCase();
 
-
             return code.startsWith(
               'DXM'
             );
           })
           .slice(0, 5);
 
-
-      /*
-       * Xoá danh sách cũ.
-       */
-
       list.replaceChildren();
-
-
-      /*
-       * Không có giao dịch:
-       * CSS :empty sẽ tự hiện
-       * "Chưa có giao dịch nào".
-       */
 
       if (!history.length) {
         return;
       }
 
-
       history.forEach((item) => {
-
-        /* -----------------------------
-           TÊN
-        ----------------------------- */
 
         const donorName =
           String(
-            item.name || 'Người ẩn danh'
+            item.name ||
+            'Người ẩn danh'
           ).trim() ||
           'Người ẩn danh';
-
 
         const initial =
           getInitial(
             donorName
           );
 
-
-        /* -----------------------------
-           THỜI GIAN
-        ----------------------------- */
-
         const timeText =
           formatHistoryTime(
             item.when
           );
 
-
-        /* -----------------------------
-           SỐ TIỀN
-        ----------------------------- */
-
         const amount =
           Number(
             item.amount || 0
           );
-
-
-        /* -----------------------------
-           ROW
-        ----------------------------- */
 
         const row =
           document.createElement(
@@ -1783,11 +1762,6 @@ document.head.appendChild(globalFontStyle);
 
         row.className =
           'supporter-row';
-
-
-        /* -----------------------------
-           AVATAR
-        ----------------------------- */
 
         const avatar =
           document.createElement(
@@ -1800,19 +1774,13 @@ document.head.appendChild(globalFontStyle);
         avatar.textContent =
           initial;
 
-
-        /* -----------------------------
-           INFO
-        ----------------------------- */
-
-                const info =
+        const info =
           document.createElement(
             'div'
           );
 
         info.className =
           'supporter-info';
-
 
         const name =
           document.createElement(
@@ -1825,7 +1793,6 @@ document.head.appendChild(globalFontStyle);
         name.textContent =
           donorName;
 
-
         const time =
           document.createElement(
             'span'
@@ -1837,14 +1804,8 @@ document.head.appendChild(globalFontStyle);
         time.textContent =
           timeText;
 
-
         info.appendChild(name);
         info.appendChild(time);
-
-
-        /* -----------------------------
-           AMOUNT
-        ----------------------------- */
 
         const money =
           document.createElement(
@@ -1857,23 +1818,16 @@ document.head.appendChild(globalFontStyle);
         money.textContent =
           `+${fmt(amount)}₫`;
 
-
-        /* -----------------------------
-           GHÉP ROW
-        ----------------------------- */
-
         row.append(
           avatar,
           info,
           money
         );
 
-
         list.appendChild(
           row
         );
       });
-
 
     } catch (error) {
 
@@ -1881,27 +1835,27 @@ document.head.appendChild(globalFontStyle);
         'LOAD SUPPORTERS ERROR:',
         error
       );
-
     }
   }
 
-
   /* =========================================================
-     LOAD LỊCH SỬ
+     LOAD DỮ LIỆU BAN ĐẦU
   ========================================================= */
 
   loadSupporters();
-
+  loadDonationProgress();
 
   /* =========================================================
      TỰ CẬP NHẬT MỖI 30 GIÂY
   ========================================================= */
 
   setInterval(
-    loadSupporters,
+    () => {
+      loadSupporters();
+      loadDonationProgress();
+    },
     30000
   );
-
 
   /* =========================================================
      HIỆU ỨNG CAPYBARA
@@ -1921,10 +1875,8 @@ document.head.appendChild(globalFontStyle);
     return;
   }
 
-
   const cx =
     cv.getContext('2d');
-
 
   if (!cx) {
     const initialStk =
@@ -1938,11 +1890,9 @@ document.head.appendChild(globalFontStyle);
     return;
   }
 
-
   let caps = [];
 
   let rafId = null;
-
 
   function fit() {
     cv.width =
@@ -1952,15 +1902,12 @@ document.head.appendChild(globalFontStyle);
       window.innerHeight;
   }
 
-
   fit();
-
 
   window.addEventListener(
     'resize',
     fit
   );
-
 
   window.addEventListener(
     'orientationchange',
@@ -1972,13 +1919,11 @@ document.head.appendChild(globalFontStyle);
     }
   );
 
-
   const CAPY_PAIRS = [
     ['#A9744F', '#7E5233'],
     ['#96633F', '#6E4426'],
     ['#B98357', '#8A5A38']
   ];
-
 
   const pick = (array) =>
     array[
@@ -1987,7 +1932,6 @@ document.head.appendChild(globalFontStyle);
         array.length
       )
     ];
-
 
   function rr(
     context,
@@ -1998,7 +1942,6 @@ document.head.appendChild(globalFontStyle);
     r
   ) {
     context.beginPath();
-
 
     if (context.roundRect) {
       context.roundRect(
@@ -2012,13 +1955,11 @@ document.head.appendChild(globalFontStyle);
       return;
     }
 
-
     context.moveTo(
       x + r,
       y
     );
 
-
     context.arcTo(
       x + w,
       y,
@@ -2026,7 +1967,6 @@ document.head.appendChild(globalFontStyle);
       y + h,
       r
     );
-
 
     context.arcTo(
       x + w,
@@ -2036,7 +1976,6 @@ document.head.appendChild(globalFontStyle);
       r
     );
 
-
     context.arcTo(
       x,
       y + h,
@@ -2045,7 +1984,6 @@ document.head.appendChild(globalFontStyle);
       r
     );
 
-
     context.arcTo(
       x,
       y,
@@ -2053,11 +1991,9 @@ document.head.appendChild(globalFontStyle);
       y,
       r
     );
-
 
     context.closePath();
   }
-
 
   function capyRain() {
     const small =
@@ -2066,14 +2002,12 @@ document.head.appendChild(globalFontStyle);
         cv.height
       ) < 700;
 
-
     const count =
       reduceMotion
         ? 30
         : small
           ? 70
           : 120;
-
 
     for (
       let i = 0;
@@ -2082,7 +2016,6 @@ document.head.appendChild(globalFontStyle);
     ) {
       const pair =
         pick(CAPY_PAIRS);
-
 
       caps.push({
         x:
@@ -2143,19 +2076,16 @@ document.head.appendChild(globalFontStyle);
       });
     }
 
-
     if (!rafId) {
       tick();
     }
   }
-
 
   function tick() {
     rafId =
       requestAnimationFrame(
         tick
       );
-
 
     cx.clearRect(
       0,
@@ -2164,14 +2094,12 @@ document.head.appendChild(globalFontStyle);
       cv.height
     );
 
-
     caps =
       caps.filter(
         (cap) =>
           cap.y <
           cv.height + 40
       );
-
 
     if (!caps.length) {
       cancelAnimationFrame(
@@ -2183,11 +2111,9 @@ document.head.appendChild(globalFontStyle);
       return;
     }
 
-
     for (const cap of caps) {
       cap.x += cap.vx;
       cap.y += cap.vy;
-
 
       cap.vy =
         Math.min(
@@ -2195,28 +2121,22 @@ document.head.appendChild(globalFontStyle);
           7
         );
 
-
       cap.ph += cap.phv;
       cap.tilt += cap.tv;
-
 
       const r =
         cap.r;
 
-
       cx.save();
-
 
       cx.translate(
         cap.x,
         cap.y
       );
 
-
       cx.rotate(
         cap.tilt * 0.25
       );
-
 
       /* =====================================================
          CAPYBARA
@@ -2230,13 +2150,10 @@ document.head.appendChild(globalFontStyle);
         const bh =
           r * 1.9;
 
-
         cx.fillStyle =
           cap.dark;
 
-
         cx.beginPath();
-
 
         cx.arc(
           -bw * 0.32,
@@ -2246,12 +2163,9 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
-
         cx.beginPath();
-
 
         cx.arc(
           bw * 0.32,
@@ -2261,13 +2175,10 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
-
 
         cx.fillStyle =
           cap.tint;
-
 
         rr(
           cx,
@@ -2278,13 +2189,10 @@ document.head.appendChild(globalFontStyle);
           bh * 0.45
         );
 
-
         cx.fill();
-
 
         cx.fillStyle =
           '#C79A6B';
-
 
         rr(
           cx,
@@ -2295,16 +2203,12 @@ document.head.appendChild(globalFontStyle);
           bh * 0.25
         );
 
-
         cx.fill();
-
 
         cx.fillStyle =
           '#2B1B0E';
 
-
         cx.beginPath();
-
 
         cx.arc(
           -bw * 0.18,
@@ -2314,12 +2218,9 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
-
         cx.beginPath();
-
 
         cx.arc(
           bw * 0.18,
@@ -2329,12 +2230,9 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
-
         cx.beginPath();
-
 
         cx.arc(
           -bw * 0.1,
@@ -2344,12 +2242,9 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
-
         cx.beginPath();
-
 
         cx.arc(
           bw * 0.1,
@@ -2359,11 +2254,9 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
       }
-
 
       /* =====================================================
          CAM
@@ -2374,9 +2267,7 @@ document.head.appendChild(globalFontStyle);
         cx.fillStyle =
           '#F79420';
 
-
         cx.beginPath();
-
 
         cx.arc(
           0,
@@ -2386,31 +2277,23 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
-
 
         cx.lineWidth = 1.2;
 
         cx.strokeStyle =
           '#C96F0A';
 
-
         cx.stroke();
-
 
         cx.save();
 
-
         cx.rotate(-0.5);
-
 
         cx.fillStyle =
           '#4C7A3F';
 
-
         cx.beginPath();
-
 
         cx.ellipse(
           r * 0.45,
@@ -2422,19 +2305,14 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
 
-
         cx.restore();
-
 
         cx.fillStyle =
           'rgba(255,255,255,.55)';
 
-
         cx.beginPath();
-
 
         cx.arc(
           -r * 0.3,
@@ -2444,15 +2322,12 @@ document.head.appendChild(globalFontStyle);
           Math.PI * 2
         );
 
-
         cx.fill();
       }
-
 
       cx.restore();
     }
   }
-
 
   /* =========================================================
      HIỂN THỊ STK BAN ĐẦU
@@ -2460,7 +2335,6 @@ document.head.appendChild(globalFontStyle);
 
   const initialStk =
     $('#psStk');
-
 
   if (initialStk) {
     initialStk.textContent =
