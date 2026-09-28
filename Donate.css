@@ -58,7 +58,6 @@ button{
   display:none!important;
 }
 
-
 /* =========================================================
    NỀN
 ========================================================= */
@@ -71,7 +70,6 @@ button{
   opacity:.018;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-
 
 /* =========================================================
    KHUNG CHÍNH
@@ -106,7 +104,6 @@ button{
   padding-right:clamp(20px,4vw,34px);
 }
 
-
 /* =========================================================
    HEADER
 ========================================================= */
@@ -135,7 +132,6 @@ button{
   margin:0 3px;
 }
 
-
 /* =========================================================
    MARQUEE
 ========================================================= */
@@ -143,7 +139,6 @@ button{
 .marquee{
   display:none !important;
 }
-
 
 /* =========================================================
    HERO
@@ -231,7 +226,6 @@ button{
   color:#707070;
 }
 
-
 /* =========================================================
    CAPYBARA
 ========================================================= */
@@ -311,7 +305,6 @@ button{
   }
 }
 
-
 /* =========================================================
    CTA
 ========================================================= */
@@ -389,7 +382,6 @@ button{
 
   letter-spacing:.02em;
 }
-
 
 /* =========================================================
    DONATION PROGRESS
@@ -522,7 +514,6 @@ button{
   font-variant-numeric:tabular-nums;
 }
 
-
 /* =========================================================
    THANKS / LỊCH SỬ DONATE
 ========================================================= */
@@ -585,7 +576,6 @@ button{
   color:#8b8b8b;
 }
 
-
 /* =========================================================
    SUPPORTERS
 ========================================================= */
@@ -627,7 +617,6 @@ button{
   font-size:12px;
   color:#aaa;
 }
-
 
 /* =========================================================
    SUPPORTER ROW
@@ -729,7 +718,6 @@ button{
   font-variant-numeric:tabular-nums;
 }
 
-
 /* =========================================================
    FOOTER
 ========================================================= */
@@ -748,7 +736,6 @@ button{
   font-size:10px;
   color:#999;
 }
-
 
 /* =========================================================
    POPUP
@@ -818,7 +805,6 @@ button{
   transform:none;
 }
 
-
 /* =========================================================
    CLOSE
 ========================================================= */
@@ -856,7 +842,6 @@ button{
   width:14px;
   height:14px;
 }
-
 
 /* =========================================================
    POPUP FORM
@@ -940,7 +925,6 @@ button{
     0 0 0 3px rgba(0,144,144,.08);
 }
 
-
 /* =========================================================
    AMOUNT
 ========================================================= */
@@ -981,7 +965,6 @@ button{
   60%{transform:translateX(-3px)}
   80%{transform:translateX(3px)}
 }
-
 
 /* =========================================================
    CHIPS
@@ -1026,7 +1009,6 @@ button{
   color:#fff;
 }
 
-
 /* =========================================================
    NOTICE / ERROR
 ========================================================= */
@@ -1055,7 +1037,6 @@ button{
 
   color:var(--success);
 }
-
 
 /* =========================================================
    SUBMIT
@@ -1112,7 +1093,6 @@ button{
   color:#aaa;
 }
 
-
 /* =========================================================
    CANCEL
 ========================================================= */
@@ -1148,7 +1128,6 @@ button{
   border-color:#d94a3d;
   color:#fff;
 }
-
 
 /* =========================================================
    STATUS
@@ -1206,7 +1185,6 @@ button{
   border-color:#f1cbc6;
   color:var(--danger);
 }
-
 
 /* =========================================================
    QR
@@ -1305,7 +1283,6 @@ button{
   color:#666;
 }
 
-
 /* =========================================================
    BANK INFO
 ========================================================= */
@@ -1378,7 +1355,6 @@ button{
   color:var(--success);
 }
 
-
 /* =========================================================
    ANIMATION
 ========================================================= */
@@ -1414,7 +1390,6 @@ button{
   outline-offset:3px;
 }
 
-
 /* =========================================================
    REDUCED MOTION
 ========================================================= */
@@ -1435,7 +1410,6 @@ button{
     animation:none;
   }
 }
-
 
 /* =========================================================
    MOBILE
@@ -1508,7 +1482,6 @@ button{
     font-size:15px;
   }
 
-
   /* PROGRESS MOBILE */
 
   .progress-section{
@@ -1559,7 +1532,6 @@ button{
 
     margin-top:9px;
   }
-
 
   /* HISTORY MOBILE */
 
@@ -1624,7 +1596,6 @@ button{
     gap:10px;
   }
 }
-
 
 /* =========================================================
    POPUP MOBILE
@@ -1722,7 +1693,6 @@ button{
   }
 }
 
-
 /* =========================================================
    IPHONE NHỎ
 ========================================================= */
@@ -1782,7 +1752,6 @@ button{
   }
 }
 
-
 /* =========================================================
    GIỮ FONT LỊCH SỬ ỦNG HỘ
 ========================================================= */
@@ -1817,7 +1786,6 @@ button{
   letter-spacing:-.25px !important;
 }
 
-
 /* =========================================================
    EXTRA POLISH
 ========================================================= */
@@ -1843,623 +1811,4 @@ button{
 .popup::-webkit-scrollbar-thumb{
   background:#d8d8d5;
   border-radius:999px;
-}
-/* =========================================================
-   POPUP QR - STYLE GIỐNG ẢNH MẪU
-========================================================= */
-
-.overlay{
-  position:fixed;
-  inset:0;
-  z-index:1000;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  padding:20px;
-
-  background:rgba(35,35,32,.48);
-
-  backdrop-filter:blur(7px);
-  -webkit-backdrop-filter:blur(7px);
-
-  opacity:0;
-  pointer-events:none;
-
-  transition:opacity .22s ease;
-}
-
-.overlay.show{
-  opacity:1;
-  pointer-events:auto;
-}
-
-
-/* CARD */
-
-.popup{
-  position:relative;
-
-  width:min(640px,100%);
-  max-height:calc(100dvh - 40px);
-
-  overflow:auto;
-
-  padding:52px 38px 34px;
-
-  background:#faf9f4;
-
-  border:0;
-  border-radius:34px;
-
-  box-shadow:
-    0 25px 80px rgba(0,0,0,.22);
-
-  color:#171715;
-
-  transform:translateY(18px) scale(.97);
-
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1),
-    opacity .25s ease;
-}
-
-.overlay.show .popup{
-  transform:none;
-}
-
-
-/* NÚT ĐÓNG */
-
-.p-close{
-  position:absolute;
-
-  top:32px;
-  right:30px;
-
-  width:66px;
-  height:66px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  border:2px solid #e5e3dc;
-  border-radius:22px;
-
-  background:#faf9f4;
-
-  color:#70706b;
-
-  cursor:pointer;
-
-  transition:.18s ease;
-}
-
-.p-close:hover{
-  background:#f0efea;
-  transform:none;
-}
-
-.p-close svg{
-  width:25px;
-  height:25px;
-  stroke-width:2.2;
-}
-
-
-/* DÒNG NHỎ TRÊN */
-
-.p-over{
-  margin:0;
-
-  font-size:16px;
-  line-height:1;
-
-  font-weight:800;
-
-  letter-spacing:.19em;
-  text-transform:uppercase;
-
-  color:#777771;
-}
-
-
-/* TIÊU ĐỀ */
-
-.p-title{
-  margin-top:20px;
-
-  font-size:39px;
-  line-height:1.05;
-
-  font-weight:800;
-
-  letter-spacing:-.055em;
-
-  color:#11110f;
-}
-
-
-/* MÔ TẢ */
-
-.p-desc{
-  margin-top:18px;
-
-  max-width:530px;
-
-  font-size:20px;
-  line-height:1.55;
-
-  font-weight:400;
-
-  color:#77766f;
-}
-
-
-/* =========================================================
-   QR + THÔNG TIN
-========================================================= */
-
-.p-payment{
-  display:grid;
-
-  grid-template-columns:270px 1fr;
-
-  align-items:center;
-
-  gap:28px;
-
-  margin-top:30px;
-}
-
-
-/* QR CARD */
-
-.p-qr{
-  width:100%;
-
-  margin:0;
-
-  padding:18px;
-
-  background:#fff;
-
-  border:1px solid #e4e2db;
-
-  border-radius:28px;
-
-  box-shadow:
-    0 5px 18px rgba(0,0,0,.035);
-}
-
-#qrImage{
-  display:block;
-
-  width:100%;
-  height:auto;
-
-  aspect-ratio:1/1;
-
-  object-fit:contain;
-
-  border-radius:0;
-}
-
-
-/* THÔNG TIN THANH TOÁN */
-
-.p-payment-info{
-  display:flex;
-  flex-direction:column;
-
-  gap:20px;
-}
-
-
-/* STATUS */
-
-.p-status{
-  display:flex;
-  align-items:center;
-
-  gap:11px;
-
-  margin:0;
-
-  padding:0;
-
-  border:0;
-
-  background:none;
-
-  font-size:19px;
-  font-weight:750;
-
-  color:#171715;
-}
-
-.p-status .spin{
-  width:17px;
-  height:17px;
-
-  border:5px solid #f5df9a;
-  border-top-color:#e59b00;
-
-  border-radius:50%;
-
-  animation:none;
-}
-
-
-/* NHÃN */
-
-.p-row{
-  display:block;
-
-  padding:0;
-
-  border:0;
-
-  color:#999891;
-
-  font-size:13px;
-  line-height:1.2;
-
-  font-weight:800;
-
-  letter-spacing:.14em;
-  text-transform:uppercase;
-}
-
-.p-row b{
-  display:block;
-
-  margin-top:8px;
-
-  color:#171715;
-
-  font-size:20px;
-  line-height:1.2;
-
-  font-weight:800;
-
-  letter-spacing:0;
-
-  text-align:left;
-}
-
-
-/* NỘI DUNG CHUYỂN KHOẢN */
-
-.p-row.transfer-content{
-  position:relative;
-}
-
-.p-row.transfer-content b{
-  padding-right:75px;
-}
-
-
-/* NÚT SAO CHÉP */
-
-.copy{
-  display:inline-flex;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:9px 13px;
-
-  border:1px solid #d9d7cf;
-
-  border-radius:13px;
-
-  background:#f5f4ee;
-
-  color:#66655f;
-
-  font-size:13px;
-  font-weight:700;
-
-  letter-spacing:0;
-
-  cursor:pointer;
-
-  transition:.15s;
-}
-
-.copy:hover{
-  background:#ecebe5;
-
-  border-color:#c9c7be;
-
-  color:#333;
-}
-
-
-/* HẾT HẠN */
-
-.p-qr-note{
-  display:none;
-}
-
-
-/* =========================================================
-   TIMER
-========================================================= */
-
-.p-expire{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-
-  margin-top:2px;
-
-  padding:13px 17px;
-
-  border-radius:18px;
-
-  background:#fff2bc;
-
-  color:#5e5b4d;
-
-  font-size:14px;
-}
-
-.p-expire b{
-  color:#3e3c35;
-
-  font-size:16px;
-}
-
-
-/* =========================================================
-   DÒNG CUỐI
-========================================================= */
-
-.p-note{
-  margin-top:29px;
-
-  text-align:center;
-
-  font-size:14px;
-
-  line-height:1.4;
-
-  color:#77766f;
-}
-
-
-/* ẨN NHỮNG THÀNH PHẦN FORM KHÔNG CẦN */
-
-.popup .p-label,
-.popup .p-input,
-.popup .p-amount,
-.popup .p-chips,
-.popup .p-submit,
-.popup .p-cancel,
-.popup .p-err,
-.popup .p-notice{
-  display:none;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media(max-width:640px){
-
-  .overlay{
-    padding:14px;
-  }
-
-  .popup{
-    width:100%;
-
-    max-height:calc(100dvh - 28px);
-
-    padding:48px 36px 30px;
-
-    border-radius:34px;
-  }
-
-  .p-close{
-    top:30px;
-    right:27px;
-
-    width:66px;
-    height:66px;
-
-    border-radius:21px;
-  }
-
-  .p-over{
-    padding-right:70px;
-
-    font-size:15px;
-    line-height:1.3;
-  }
-
-  .p-title{
-    margin-top:18px;
-
-    font-size:34px;
-  }
-
-  .p-desc{
-    margin-top:16px;
-
-    font-size:18px;
-    line-height:1.5;
-  }
-
-  .p-payment{
-    grid-template-columns:1fr 1fr;
-
-    gap:20px;
-
-    margin-top:27px;
-  }
-
-  .p-qr{
-    padding:13px;
-
-    border-radius:24px;
-  }
-
-  .p-payment-info{
-    gap:17px;
-  }
-
-  .p-status{
-    font-size:16px;
-  }
-
-  .p-status .spin{
-    width:15px;
-    height:15px;
-  }
-
-  .p-row{
-    font-size:11px;
-  }
-
-  .p-row b{
-    font-size:17px;
-  }
-
-  .copy{
-    padding:7px 10px;
-
-    font-size:11px;
-  }
-
-  .p-note{
-    margin-top:24px;
-
-    font-size:12px;
-  }
-}
-
-
-/* =========================================================
-   IPHONE NHỎ
-========================================================= */
-
-@media(max-width:430px){
-
-  .overlay{
-    padding:10px;
-  }
-
-  .popup{
-    padding:43px 25px 25px;
-
-    border-radius:32px;
-  }
-
-  .p-close{
-    top:27px;
-    right:22px;
-
-    width:58px;
-    height:58px;
-
-    border-radius:19px;
-  }
-
-  .p-close svg{
-    width:22px;
-    height:22px;
-  }
-
-  .p-over{
-    padding-right:65px;
-
-    font-size:12px;
-  }
-
-  .p-title{
-    margin-top:17px;
-
-    font-size:30px;
-  }
-
-  .p-desc{
-    font-size:16px;
-  }
-
-  .p-payment{
-    grid-template-columns:1fr 1fr;
-
-    gap:14px;
-  }
-
-  .p-qr{
-    padding:9px;
-
-    border-radius:21px;
-  }
-
-  .p-payment-info{
-    gap:14px;
-  }
-
-  .p-status{
-    font-size:14px;
-  }
-
-  .p-row{
-    font-size:9px;
-  }
-
-  .p-row b{
-    margin-top:6px;
-
-    font-size:15px;
-  }
-
-  .copy{
-    padding:6px 8px;
-
-    border-radius:10px;
-
-    font-size:10px;
-  }
-
-  .p-note{
-    font-size:11px;
-  }
-}
-
-
-/* =========================================================
-   IPHONE 390px - GIỐNG ẢNH MẪU HƠN
-========================================================= */
-
-@media(max-width:390px){
-
-  .popup{
-    padding-left:22px;
-    padding-right:22px;
-  }
-
-  .p-payment{
-    gap:12px;
-  }
-
-  .p-title{
-    font-size:29px;
-  }
-
-  .p-desc{
-    font-size:15px;
-  }
-
-  .p-row b{
-    font-size:14px;
-  }
 }
