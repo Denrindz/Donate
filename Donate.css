@@ -187,328 +187,82 @@ h1{
 }
 
 
-/* ==================================================
-   KHUNG LỚN
-   MỤC TIÊU + TIẾN ĐỘ + ỦNG HỘ
-================================================== */
+/* =========================================
+   KHUNG LỚN BAO TOÀN BỘ KHU VỰC QUỸ
+========================================= */
 
 .fund-overview{
-
   width:100%;
-
   margin:0 0 22px;
-
   padding:22px;
 
-  background:rgba(255,255,255,.92);
+  background:#ffffff !important;
 
-  border:1px solid var(--line);
+  border:1px solid #dfe7e5 !important;
+  border-radius:24px !important;
 
-  border-radius:var(--radius);
+  box-shadow:
+    0 18px 55px rgba(0,40,40,.09) !important;
 
-  box-shadow:var(--shadow);
+  display:block;
 }
 
 
-/* ==================================================
+/* =========================================
    KHUNG MỤC TIÊU
-================================================== */
+========================================= */
 
-.fund-goal{
-
+.fund-overview .fund-goal{
   width:100%;
-
   margin:0;
 
   padding:24px;
 
   background:#ffffff;
-
-  border:1px solid var(--line);
-
+  border:1px solid #dfe7e5;
   border-radius:18px;
 
-  box-shadow:
-    0 8px 25px rgba(0,40,40,.05);
-
-  text-align:left;
-}
-
-.fund-goal-title{
-
-  display:flex;
-
-  align-items:center;
-
-  gap:10px;
-
-  color:var(--text);
-
-  font-size:14px;
-
-  font-weight:800;
-}
-
-.fund-goal-title i{
-
-  color:var(--accent);
-
-  font-size:16px;
-}
-
-.fund-goal ul{
-
-  margin:14px 0 0;
-
-  padding-left:22px;
-
-  color:var(--muted);
-
-  font-size:13px;
-
-  line-height:1.7;
-}
-
-.fund-goal li + li{
-
-  margin-top:7px;
+  box-shadow:0 8px 25px rgba(0,40,40,.05);
 }
 
 
-/* ==================================================
+/* =========================================
    KHUNG TIẾN ĐỘ
-================================================== */
+========================================= */
 
-.progress-card{
-
+.fund-overview .progress-card{
   width:100%;
-
   margin:16px 0 0;
 
   padding:24px;
 
   background:#ffffff;
-
-  border:1px solid var(--line);
-
+  border:1px solid #dfe7e5;
   border-radius:18px;
 
-  box-shadow:
-    0 8px 25px rgba(0,40,40,.05);
+  box-shadow:0 8px 25px rgba(0,40,40,.05);
 }
 
 
-/* TOP */
-
-.progress-top{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:flex-end;
-
-  gap:20px;
-}
-
-.received{
-
-  display:flex;
-
-  flex-direction:column;
-
-  gap:7px;
-}
-
-.received span:first-child{
-
-  color:var(--muted);
-
-  font-size:11px;
-
-  font-weight:800;
-
-  letter-spacing:1px;
-}
-
-#received{
-
-  font-size:32px;
-
-  font-weight:800;
-
-  letter-spacing:-1px;
-}
-
-
-/* PHẦN TRĂM */
-
-.percent{
-
-  width:78px;
-
-  height:42px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  flex-shrink:0;
-
-  background:#009090;
-
-  color:#ffffff;
-
-  border:1px solid #009090;
-
-  border-radius:12px;
-
-  font-size:16px;
-
-  font-weight:800;
-
-  line-height:1;
-
-  text-align:center;
-
-  box-shadow:
-    0 6px 18px rgba(0,144,144,.22);
-}
-
-
-/* PROGRESS BAR */
-
-.progress{
-
-  width:100%;
-
-  height:13px;
-
-  margin:22px 0 15px;
-
-  border-radius:999px;
-
-  background:#edf1f0;
-
-  overflow:hidden;
-}
-
-.progress-bar{
-
-  width:0%;
-
-  height:100%;
-
-  border-radius:inherit;
-
-  background:
-    linear-gradient(
-      90deg,
-      var(--accent),
-      #00a9a9
-    );
-
-  transition:
-    width .7s ease;
-}
-
-
-/* PROGRESS INFO */
-
-.progress-bottom{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  gap:20px;
-
-  color:var(--muted);
-
-  font-size:13px;
-}
-
-.progress-bottom strong{
-
-  color:var(--text);
-}
-
-
-/* DEADLINE */
-
-.deadline{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  gap:20px;
-
-  margin-top:20px;
-
-  padding-top:18px;
-
-  border-top:1px solid var(--line);
-
-  color:var(--muted);
-
-  font-size:12px;
-}
-
-.deadline strong{
-
-  color:var(--text);
-}
-
-
-/* ==================================================
-   ỦNG HỘ NGAY
-   NẰM CUỐI KHUNG LỚN
-================================================== */
+/* =========================================
+   PHẦN ỦNG HỘ NẰM TRONG KHUNG LỚN
+========================================= */
 
 .fund-overview .donate-section{
-
   width:100%;
 
   margin:16px 0 0;
-
   padding:24px 10px 8px;
 
-  background:transparent;
+  background:transparent !important;
 
-  border:0;
+  border:0 !important;
+  border-top:1px solid #dfe7e5 !important;
+  border-radius:0 !important;
 
-  border-top:1px solid var(--line);
-
-  border-radius:0;
-
-  box-shadow:none;
+  box-shadow:none !important;
 
   text-align:center;
-}
-
-.fund-overview .donate-section h2{
-
-  margin:0;
-
-  font-size:25px;
-
-  letter-spacing:-1px;
-}
-
-.fund-overview .donate-section p{
-
-  color:var(--muted);
-
-  line-height:1.7;
-
-  margin:9px auto 18px;
-
-  max-width:600px;
-
-  font-size:13px;
 }
 
 
