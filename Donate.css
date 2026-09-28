@@ -545,7 +545,7 @@ footer{
   align-items:center;
   justify-content:center;
 
-  padding:20px;
+  padding:16px;
 
   background:rgba(10,20,20,.45);
 
@@ -557,56 +557,58 @@ footer{
 }
 
 .modal-box{
-  width:min(460px,100%);
-  max-height:90vh;
+  width:min(390px,100%);
+  max-height:88vh;
 
   overflow:auto;
 
-  padding:24px;
+  padding:20px;
 
   background:#fff;
 
   border:1px solid var(--line);
-  border-radius:22px;
+  border-radius:18px;
 
-  box-shadow:0 30px 90px rgba(0,0,0,.20);
+  box-shadow:0 25px 70px rgba(0,0,0,.18);
 }
 
 .modal-head{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:20px;
+  gap:15px;
 
-  margin-bottom:22px;
+  margin-bottom:16px;
 }
 
 .modal-label{
   color:var(--accent);
 
-  font-size:10px;
+  font-size:9px;
   font-weight:850;
   letter-spacing:.7px;
 }
 
 .modal-head h2{
-  margin:6px 0 0;
+  margin:5px 0 0;
 
-  font-size:24px;
-  letter-spacing:-.7px;
+  font-size:21px;
+  letter-spacing:-.6px;
 }
 
 .close{
-  width:34px;
-  height:34px;
+  width:32px;
+  height:32px;
+
+  flex:0 0 32px;
 
   border:0;
 
   background:#f1f4f4;
 
-  border-radius:10px;
+  border-radius:9px;
 
-  font-size:23px;
+  font-size:21px;
   line-height:1;
 
   cursor:pointer;
@@ -659,7 +661,7 @@ footer{
 .money input{
   padding-right:60px;
 
-  /* SỐ TIỀN NHẬP ĐẬM HƠN */
+  /* SỐ TIỀN ĐẬM */
   font-weight:700;
 }
 
@@ -680,13 +682,12 @@ footer{
 
 /* ========================================
    SỐ TIỀN NHANH
-   LUÔN 4 NÚT TRÊN 1 HÀNG
+   LUÔN 4 NÚT / 1 HÀNG
 ======================================== */
 
 .quick{
   display:grid;
 
-  /* 4 CỘT Ở MỌI KÍCH THƯỚC */
   grid-template-columns:repeat(4,minmax(0,1fr));
 
   gap:8px;
@@ -716,7 +717,6 @@ footer{
 
   cursor:pointer;
 
-  /* Không cho chữ xuống dòng */
   white-space:nowrap;
 
   overflow:hidden;
@@ -784,6 +784,7 @@ footer{
 
 /* ========================================
    QR RESULT
+   GỌN - NHỎ - DỄ NHÌN
 ======================================== */
 
 .qr-result{
@@ -795,7 +796,7 @@ footer{
 }
 
 .qr-title{
-  margin-bottom:15px;
+  margin-bottom:11px;
 
   text-align:center;
 }
@@ -803,26 +804,32 @@ footer{
 .qr-title .small{
   color:var(--accent);
 
-  font-size:10px;
+  font-size:9px;
   font-weight:850;
   letter-spacing:.5px;
 }
 
 .qr-title h3{
-  margin:5px 0 0;
+  margin:4px 0 0;
 
-  font-size:20px;
+  font-size:18px;
+  line-height:1.2;
 }
 
-.qr-box{
-  width:230px;
-  height:230px;
 
-  margin:0 auto 15px;
-  padding:10px;
+/* ========================================
+   KHUNG QR NHỎ
+======================================== */
+
+.qr-box{
+  width:180px;
+  height:180px;
+
+  margin:0 auto 11px;
+  padding:7px;
 
   border:1px solid var(--line);
-  border-radius:15px;
+  border-radius:12px;
 
   background:#fff;
 }
@@ -836,35 +843,45 @@ footer{
   object-fit:contain;
 }
 
+
+/* ========================================
+   PAYMENT STATUS
+======================================== */
+
 .payment-status{
-  margin-bottom:15px;
+  margin-bottom:11px;
 
   color:var(--accent);
 
-  font-size:12px;
+  font-size:11px;
   font-weight:750;
 
   text-align:center;
 }
 
+
+/* ========================================
+   THÔNG TIN CHUYỂN KHOẢN
+======================================== */
+
 .payment-info{
   overflow:hidden;
 
   border:1px solid var(--line);
-  border-radius:14px;
+  border-radius:11px;
 }
 
 .info-row{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap:15px;
+  gap:12px;
 
-  padding:11px 13px;
+  padding:8px 11px;
 
   border-bottom:1px solid var(--line);
 
-  font-size:12px;
+  font-size:11px;
 }
 
 .info-row:last-child{
@@ -873,13 +890,16 @@ footer{
 
 .info-label{
   color:var(--muted);
+
+  white-space:nowrap;
 }
 
 .info-value{
-  max-width:60%;
+  max-width:65%;
 
   color:var(--text);
 
+  font-size:11px;
   font-weight:750;
 
   text-align:right;
@@ -888,29 +908,34 @@ footer{
 }
 
 .copy-btn{
-  margin-left:5px;
+  margin-left:4px;
 
-  padding:4px 7px;
+  padding:3px 6px;
 
   border:0;
 
   background:var(--accent-soft);
   color:var(--accent-dark);
 
-  border-radius:6px;
+  border-radius:5px;
 
-  font-size:10px;
+  font-size:9px;
   font-weight:800;
 
   cursor:pointer;
 }
 
+
+/* ========================================
+   TIMER
+======================================== */
+
 .timer{
-  margin:15px 0;
+  margin:11px 0;
 
   color:var(--muted);
 
-  font-size:12px;
+  font-size:11px;
 
   text-align:center;
 }
@@ -919,18 +944,23 @@ footer{
   color:var(--accent);
 }
 
+
+/* ========================================
+   NÚT TẠO MÃ MỚI
+======================================== */
+
 .new-code{
   width:100%;
-  height:43px;
+  height:39px;
 
   border:1px solid var(--line);
 
   background:#fff;
   color:var(--text);
 
-  border-radius:10px;
+  border-radius:9px;
 
-  font-size:13px;
+  font-size:12px;
   font-weight:800;
 
   cursor:pointer;
@@ -1030,36 +1060,95 @@ footer{
     font-size:11px;
   }
 
+
+  /* ==============================
+     MODAL MOBILE
+  ============================== */
+
   .modal{
     padding:12px;
   }
 
   .modal-box{
-    padding:20px;
-    border-radius:18px;
+    width:min(360px,100%);
+
+    padding:17px;
+
+    border-radius:17px;
   }
 
-  /*
-    KHÔNG CHUYỂN QUICK SANG 2 HÀNG.
-    Vẫn giữ 4 nút trên 1 hàng.
-  */
+  .modal-head{
+    margin-bottom:13px;
+  }
+
+  .modal-head h2{
+    font-size:20px;
+  }
+
+
+  /* ==============================
+     4 NÚT TIỀN NHANH
+  ============================== */
+
   .quick{
     grid-template-columns:repeat(4,minmax(0,1fr));
+
     gap:6px;
   }
 
   .quick button{
     font-size:11px;
+
     padding:0 2px;
   }
 
+
+  /* ==============================
+     QR MOBILE NHỎ HƠN
+  ============================== */
+
+  .qr-title{
+    margin-bottom:9px;
+  }
+
+  .qr-title h3{
+    font-size:17px;
+  }
+
+  .qr-box{
+    width:160px;
+    height:160px;
+
+    padding:6px;
+
+    margin-bottom:10px;
+
+    border-radius:11px;
+  }
+
+  .payment-info{
+    border-radius:10px;
+  }
+
   .info-row{
-    flex-direction:column;
-    gap:4px;
+    padding:8px 10px;
+
+    font-size:10px;
   }
 
   .info-value{
-    max-width:100%;
-    text-align:left;
+    font-size:10px;
+  }
+
+  .copy-btn{
+    font-size:8px;
+
+    padding:3px 5px;
+  }
+
+  .new-code{
+    height:38px;
+
+    font-size:11px;
   }
 }
