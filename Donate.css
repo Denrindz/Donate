@@ -1812,3 +1812,9 @@ button{
   background:#d8d8d5;
   border-radius:999px;
 }
+.p-amount .p-input,
+.p-amount .p-input[type="number"] {
+    font-size: 16px !important;
+    font-weight: 800 !important;
+    -webkit-text-stroke: 0.15px currentColor;
+}
