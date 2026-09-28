@@ -22,24 +22,87 @@ html{
 }
 
 body{
+  position:relative;
   margin:0;
   min-height:100vh;
   overflow-x:hidden;
 
+  background:#f5f7f7;
   color:var(--text);
 
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+}
 
-  /* GRADIENT XANH NHẠT Ở ĐẦU TRANG */
+
+/* ========================================
+   HIỆU ỨNG GLOW ĐẦU TRANG
+======================================== */
+
+body::before{
+  content:"";
+
+  position:absolute;
+  top:-170px;
+  left:50%;
+
+  width:1050px;
+  height:650px;
+
+  transform:translateX(-50%);
+
+  pointer-events:none;
+  z-index:0;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(0,144,144,.22) 0%,
+      rgba(0,144,144,.15) 23%,
+      rgba(0,144,144,.08) 43%,
+      rgba(0,144,144,.035) 60%,
+      transparent 76%
+    );
+
+  filter:blur(8px);
+}
+
+
+/* ========================================
+   LỚP FADE TOÀN TRANG
+======================================== */
+
+body::after{
+  content:"";
+
+  position:absolute;
+  top:0;
+  left:0;
+
+  width:100%;
+  height:500px;
+
+  pointer-events:none;
+  z-index:0;
+
   background:
     linear-gradient(
       to bottom,
-      #dff4f2 0px,
-      #e5f6f4 80px,
-      #edf8f7 170px,
-      #f5f7f7 360px,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,.02) 35%,
+      rgba(245,247,247,.65) 78%,
       #f5f7f7 100%
     );
+}
+
+
+/* ========================================
+   NỘI DUNG
+======================================== */
+
+header,
+main{
+  position:relative;
+  z-index:1;
 }
 
 
@@ -76,7 +139,8 @@ header{
   background:var(--accent);
 
   box-shadow:
-    0 0 0 5px rgba(0,144,144,.10);
+    0 0 0 5px rgba(0,144,144,.10),
+    0 0 20px rgba(0,144,144,.20);
 }
 
 .header-tag{
@@ -100,20 +164,53 @@ main{
 ======================================== */
 
 .fund-overview{
+  position:relative;
+
   width:100%;
 
   margin:20px 0 22px;
 
   padding:0 22px 22px;
 
-  background:#fff;
+  background:rgba(255,255,255,.97);
 
-  border:1px solid var(--line);
+  border:1px solid rgba(223,231,229,.95);
   border-radius:24px;
 
-  box-shadow:var(--shadow);
+  box-shadow:
+    0 18px 55px rgba(0,40,40,.09),
+    0 0 70px rgba(0,144,144,.045);
 
   overflow:hidden;
+}
+
+
+/* Glow nhẹ phía trong mép trên card */
+
+.fund-overview::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:50%;
+
+  width:70%;
+  height:170px;
+
+  transform:translateX(-50%);
+
+  pointer-events:none;
+
+  background:
+    radial-gradient(
+      ellipse at center top,
+      rgba(0,144,144,.11),
+      rgba(0,144,144,.035) 45%,
+      transparent 75%
+    );
+
+  filter:blur(10px);
 }
 
 
@@ -122,6 +219,9 @@ main{
 ======================================== */
 
 .fund-overview .hero{
+  position:relative;
+  z-index:1;
+
   width:100%;
 
   margin:0;
@@ -155,6 +255,9 @@ main{
   font-size:11px;
   font-weight:800;
   letter-spacing:.7px;
+
+  box-shadow:
+    0 4px 18px rgba(0,144,144,.07);
 }
 
 
@@ -195,6 +298,9 @@ h1{
 ======================================== */
 
 .fund-overview .fund-goal{
+  position:relative;
+  z-index:1;
+
   width:100%;
 
   margin:0;
@@ -242,6 +348,9 @@ h1{
 ======================================== */
 
 .fund-overview .progress-card{
+  position:relative;
+  z-index:1;
+
   width:100%;
 
   margin:16px 0 0;
@@ -348,6 +457,9 @@ h1{
 ======================================== */
 
 .fund-overview .donate-section{
+  position:relative;
+  z-index:1;
+
   width:100%;
 
   margin:16px 0 0;
@@ -400,11 +512,17 @@ h1{
   cursor:pointer;
 
   transition:.2s ease;
+
+  box-shadow:
+    0 8px 20px rgba(0,144,144,.16);
 }
 
 .donate-btn:hover{
   background:var(--accent-dark);
   transform:translateY(-1px);
+
+  box-shadow:
+    0 10px 25px rgba(0,144,144,.22);
 }
 
 
@@ -910,16 +1028,24 @@ footer{
 
 @media(max-width:600px){
 
-  body{
+  body::before{
+    top:-100px;
+
+    width:600px;
+    height:470px;
+
     background:
-      linear-gradient(
-        to bottom,
-        #dff4f2 0px,
-        #e8f7f5 70px,
-        #eff9f8 150px,
-        #f5f7f7 320px,
-        #f5f7f7 100%
+      radial-gradient(
+        ellipse at center,
+        rgba(0,144,144,.19) 0%,
+        rgba(0,144,144,.11) 27%,
+        rgba(0,144,144,.05) 50%,
+        transparent 76%
       );
+  }
+
+  body::after{
+    height:390px;
   }
 
   header{
@@ -943,6 +1069,11 @@ footer{
     padding:0 16px 16px;
 
     border-radius:20px;
+  }
+
+  .fund-overview::before{
+    width:100%;
+    height:150px;
   }
 
   .fund-overview .hero{
