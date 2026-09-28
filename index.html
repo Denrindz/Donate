@@ -13,7 +13,9 @@
   >
 </head>
 <body>
-  <!-- HEADER -->
+  <!-- =========================
+       HEADER
+  ========================= -->
   <header>
     <div class="logo">
       <span class="logo-dot"></span>
@@ -24,7 +26,9 @@
     </div>
   </header>
   <main>
-    <!-- HERO -->
+    <!-- =========================
+         HERO
+    ========================= -->
     <section class="hero">
       <div class="eyebrow">
         QUỸ DONATE DENRINDZ
@@ -39,11 +43,37 @@
         và sử dụng để tiếp tục phát triển dự án.
       </p>
     </section>
-    <!-- PROGRESS -->
+    <!-- =========================
+         MỤC TIÊU SỬ DỤNG QUỸ
+         CARD RIÊNG
+    ========================= -->
+    <section class="fund-goal">
+      <div class="fund-goal-title">
+        <i class="fa-solid fa-bullseye"></i>
+        <span>
+          Mục tiêu sử dụng quỹ:
+        </span>
+      </div>
+      <ul>
+        <li>
+          Mua các bộ hình nền cực đẹp, chất lượng cao
+          từ tác giả/nền tảng uy tín.
+        </li>
+        <li>
+          Sưu tầm, thiết kế và tổng hợp kho mẫu hình nền
+          siêu nét chia sẻ cho anh em.
+        </li>
+      </ul>
+    </section>
+    <!-- =========================
+         PROGRESS
+    ========================= -->
     <section class="progress-card">
       <div class="progress-top">
         <div class="received">
-          <span>ĐÃ NHẬN ĐƯỢC</span>
+          <span>
+            ĐÃ NHẬN ĐƯỢC
+          </span>
           <span id="received">
             0 ₫
           </span>
@@ -55,12 +85,14 @@
           0%
         </div>
       </div>
+      <!-- PROGRESS BAR -->
       <div class="progress">
         <div
           class="progress-bar"
           id="progressBar"
         ></div>
       </div>
+      <!-- PROGRESS INFO -->
       <div class="progress-bottom">
         <span>
           Còn
@@ -75,6 +107,7 @@
           </strong>
         </span>
       </div>
+      <!-- DEADLINE -->
       <div class="deadline">
         <span>
           Hạn dự án:
@@ -87,7 +120,9 @@
         </span>
       </div>
     </section>
-    <!-- SUPPORTERS -->
+    <!-- =========================
+         SUPPORTERS
+    ========================= -->
     <section class="supporters">
       <div class="section-title">
         <h2>
@@ -117,7 +152,9 @@
         </div>
       </div>
     </section>
-    <!-- DONATE -->
+    <!-- =========================
+         DONATE
+    ========================= -->
     <section class="donate-section">
       <h2>
         Ủng hộ dự án
@@ -126,25 +163,6 @@
         Chỉ cần tên và số tiền, hệ thống sẽ tạo mã VietQR
         chuyển khoản trực tiếp đến tài khoản MB Bank của Denrindz.
       </p>
-      <!-- MỤC TIÊU SỬ DỤNG QUỸ -->
-      <div class="fund-goal">
-        <div class="fund-goal-title">
-          <i class="fa-solid fa-bullseye"></i>
-          <span>
-            Mục tiêu sử dụng quỹ:
-          </span>
-        </div>
-        <ul>
-          <li>
-            Mua các bộ hình nền cực đẹp, chất lượng cao
-            từ tác giả/nền tảng uy tín.
-          </li>
-          <li>
-            Sưu tầm, thiết kế và tổng hợp kho mẫu hình nền
-            siêu nét chia sẻ cho anh em.
-          </li>
-        </ul>
-      </div>
       <button
         class="donate-btn"
         onclick="openModal()"
@@ -152,12 +170,16 @@
         Ủng hộ ngay
       </button>
     </section>
-    <!-- FOOTER -->
+    <!-- =========================
+         FOOTER
+    ========================= -->
     <footer>
       © 2026 Denrindz · Cảm ơn bạn đã ghé qua.
     </footer>
   </main>
-  <!-- MODAL DONATE -->
+  <!-- =========================
+       MODAL DONATE
+  ========================= -->
   <div
     class="modal"
     id="modal"
@@ -181,8 +203,11 @@
           ×
         </button>
       </div>
-      <!-- FORM -->
+      <!-- =========================
+           FORM
+      ========================= -->
       <div id="formArea">
+        <!-- TÊN -->
         <div class="field">
           <label>
             TÊN HIỂN THỊ
@@ -194,6 +219,7 @@
             placeholder="Tên của bạn"
           >
         </div>
+        <!-- SỐ TIỀN -->
         <div class="field">
           <label>
             SỐ TIỀN ỦNG HỘ
@@ -242,7 +268,9 @@
           Thanh toán qua ngân hàng · Không cần đăng nhập
         </div>
       </div>
-      <!-- QR RESULT -->
+      <!-- =========================
+           QR RESULT
+      ========================= -->
       <div
         class="qr-result"
         id="qrResult"
@@ -274,6 +302,7 @@
         </div>
         <!-- PAYMENT INFO -->
         <div class="payment-info">
+          <!-- SỐ TIỀN -->
           <div class="info-row">
             <span class="info-label">
               Số tiền
@@ -285,6 +314,7 @@
               —
             </span>
           </div>
+          <!-- NGƯỜI ỦNG HỘ -->
           <div class="info-row">
             <span class="info-label">
               Người ủng hộ
@@ -296,6 +326,7 @@
               —
             </span>
           </div>
+          <!-- NGÂN HÀNG -->
           <div class="info-row">
             <span class="info-label">
               Ngân hàng
@@ -304,6 +335,7 @@
               MB Bank
             </span>
           </div>
+          <!-- SỐ TÀI KHOẢN -->
           <div class="info-row">
             <span class="info-label">
               Số tài khoản
@@ -320,6 +352,7 @@
               </button>
             </span>
           </div>
+          <!-- NỘI DUNG -->
           <div class="info-row">
             <span class="info-label">
               Nội dung chuyển khoản
@@ -331,6 +364,7 @@
               —
             </span>
           </div>
+          <!-- THỜI GIAN -->
           <div class="info-row">
             <span class="info-label">
               Thời gian tạo
@@ -343,14 +377,18 @@
             </span>
           </div>
         </div>
-        <!-- TIMER -->
+        <!-- =========================
+             TIMER
+        ========================= -->
         <div class="timer">
           Mã còn hiệu lực
           <strong id="timer">
             10:00
           </strong>
         </div>
-        <!-- NEW CODE -->
+        <!-- =========================
+             NEW CODE
+        ========================= -->
         <button
           class="new-code"
           onclick="newCode()"
@@ -360,7 +398,15 @@
       </div>
     </div>
   </div>
-  <!-- JAVASCRIPT -->
+  <!-- =========================
+       JAVASCRIPT
+  ========================= -->
   <script src="Donate.js"></script>
 </body>
 </html>
+
+Giờ thứ tự trên web sẽ là:
+
+Hero → Mục tiêu sử dụng quỹ → Đã nhận được/tiến độ → Lời cảm ơn → Ủng hộ dự án → Footer.
+
+Phần Mục tiêu sử dụng quỹ cũng không còn nằm trong khung Ủng hộ dự án nữa.
