@@ -2,16 +2,35 @@
   --bg:#f5f7f7;
   --surface:#ffffff;
   --surface-soft:#f8faf9;
+
   --text:#111818;
   --muted:#6d7777;
+
   --line:#dfe7e5;
+
   --accent:#009090;
   --accent-dark:#006f6f;
+  --accent-light:#00b8b8;
   --accent-soft:#e5f5f3;
+
   --danger:#c44;
-  --shadow:0 18px 55px rgba(0,40,40,.09);
+
+  --shadow:
+    0 18px 55px rgba(0,40,40,.09);
+
+  --shadow-hover:
+    0 25px 70px rgba(0,100,100,.15);
+
+  --glow:
+    0 0 25px rgba(0,144,144,.18);
+
   --radius:24px;
 }
+
+
+/* =========================================================
+   RESET
+========================================================= */
 
 *{
   box-sizing:border-box;
@@ -37,6 +56,18 @@ body{
     sans-serif;
 
   background:
+    radial-gradient(
+      circle at 15% 5%,
+      rgba(0,144,144,.14),
+      transparent 25%
+    ),
+
+    radial-gradient(
+      circle at 90% 25%,
+      rgba(0,180,180,.08),
+      transparent 28%
+    ),
+
     linear-gradient(
       to bottom,
       #dff4f2 0px,
@@ -45,30 +76,111 @@ body{
       #f5f7f7 360px,
       #f5f7f7 100%
     );
+
+  position:relative;
 }
 
 
-/* ========================================
+/* =========================================================
+   BACKGROUND GLOW
+========================================================= */
+
+body::before{
+  content:"";
+
+  position:fixed;
+
+  width:420px;
+  height:420px;
+
+  left:-180px;
+  top:-170px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.22) 0%,
+      rgba(0,144,144,.08) 38%,
+      transparent 72%
+    );
+
+  filter:blur(5px);
+
+  pointer-events:none;
+
+  z-index:-1;
+
+  animation:
+    backgroundFloat 8s ease-in-out infinite;
+}
+
+body::after{
+  content:"";
+
+  position:fixed;
+
+  width:420px;
+  height:420px;
+
+  right:-190px;
+  bottom:-180px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.16) 0%,
+      rgba(0,144,144,.05) 40%,
+      transparent 72%
+    );
+
+  filter:blur(8px);
+
+  pointer-events:none;
+
+  z-index:-1;
+
+  animation:
+    backgroundFloatReverse 10s ease-in-out infinite;
+}
+
+
+/* =========================================================
    HEADER
-======================================== */
+========================================================= */
 
 header{
   width:min(900px,calc(100% - 32px));
+
   margin:22px auto 0;
   padding:18px 4px;
 
   display:flex;
   align-items:center;
   justify-content:space-between;
+
+  animation:
+    headerIn .7s ease both;
 }
 
 .logo{
   display:flex;
   align-items:center;
+
   gap:9px;
 
   font-size:18px;
   font-weight:800;
+
+  transition:
+    transform .25s ease;
+}
+
+.logo:hover{
+  transform:translateY(-2px);
 }
 
 .logo-dot{
@@ -82,69 +194,140 @@ header{
   background:var(--accent);
 
   box-shadow:
-    0 0 0 5px rgba(0,144,144,.10);
+    0 0 0 5px rgba(0,144,144,.10),
+    0 0 18px rgba(0,144,144,.35);
+
+  animation:
+    logoPulse 2.2s ease-in-out infinite;
 }
 
 .header-tag{
   color:var(--muted);
+
   font-size:12px;
+
+  transition:
+    color .25s ease;
+}
+
+.header-tag:hover{
+  color:var(--accent);
 }
 
 
-/* ========================================
+/* =========================================================
    MAIN
-======================================== */
+========================================================= */
 
 main{
   width:min(900px,calc(100% - 32px));
+
   margin:0 auto 50px;
 }
 
 
-/* ========================================
+/* =========================================================
    KHUNG LỚN
-======================================== */
+========================================================= */
 
 .fund-overview{
   width:100%;
 
   margin:20px 0 22px;
+
   padding:0 22px 22px;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.98),
+      rgba(250,253,252,.96)
+    );
 
-  border:1px solid var(--line);
+  border:1px solid rgba(0,144,144,.10);
+
   border-radius:24px;
 
   box-shadow:var(--shadow);
 
   overflow:hidden;
+
+  position:relative;
+
+  animation:
+    cardIn .75s cubic-bezier(.2,.8,.2,1) both;
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease,
+    border-color .35s ease;
+}
+
+.fund-overview::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:3px;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      var(--accent),
+      var(--accent-light),
+      var(--accent),
+      transparent
+    );
+
+  background-size:200% 100%;
+
+  animation:
+    topGlow 4s linear infinite;
+}
+
+.fund-overview:hover{
+  transform:translateY(-3px);
+
+  box-shadow:
+    var(--shadow-hover);
+
+  border-color:
+    rgba(0,144,144,.18);
 }
 
 
-/* ========================================
+/* =========================================================
    HERO
-   KÍCH THƯỚC CỐ ĐỊNH
-======================================== */
+========================================================= */
 
 .fund-overview .hero{
   width:100%;
 
   margin:0;
+
   padding:32px 0 38px;
 
   background:transparent;
 
   border:0;
+
   border-radius:0;
 
   box-shadow:none;
+
+  animation:
+    heroIn .8s .05s ease both;
 }
 
 
-/* ========================================
+/* =========================================================
    EYEBROW
-======================================== */
+========================================================= */
 
 .eyebrow{
   display:inline-flex;
@@ -152,8 +335,17 @@ main{
 
   padding:7px 11px;
 
-  background:var(--accent-soft);
+  background:
+    linear-gradient(
+      135deg,
+      #e5f5f3,
+      #d8f2ef
+    );
+
   color:var(--accent-dark);
+
+  border:
+    1px solid rgba(0,144,144,.10);
 
   border-radius:999px;
 
@@ -163,31 +355,98 @@ main{
   letter-spacing:.7px;
 
   white-space:nowrap;
+
+  box-shadow:
+    0 5px 18px rgba(0,144,144,.10);
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.eyebrow:hover{
+  transform:
+    translateY(-2px)
+    scale(1.02);
+
+  box-shadow:
+    0 9px 25px rgba(0,144,144,.18);
+}
+
+.eyebrow::after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:70%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent,
+      rgba(255,255,255,.9),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  animation:
+    eyebrowShine 3.5s ease-in-out infinite;
 }
 
 
-/* ========================================
+/* =========================================================
    TITLE
-======================================== */
+========================================================= */
 
 h1{
   margin:18px 0 14px;
 
   font-size:52px;
+
   line-height:1.02;
 
   letter-spacing:-2.8px;
 
   font-weight:850;
+
+  background:
+    linear-gradient(
+      110deg,
+      #111818 0%,
+      #111818 35%,
+      #008f8f 55%,
+      #111818 75%
+    );
+
+  background-size:220% auto;
+
+  -webkit-background-clip:text;
+  background-clip:text;
+
+  -webkit-text-fill-color:transparent;
+
+  animation:
+    titleIn .9s ease both,
+    titleGradient 5s ease-in-out infinite;
 }
 
 
-/* ========================================
+/* =========================================================
    DESCRIPTION
-======================================== */
+========================================================= */
 
 .fund-overview .hero p{
   width:100%;
+
   max-width:680px;
 
   margin:0;
@@ -195,43 +454,123 @@ h1{
   color:var(--muted);
 
   font-size:15px;
+
   line-height:1.75;
+
+  animation:
+    fadeUp .8s .18s ease both;
 }
 
 
-/* ========================================
+/* =========================================================
    MỤC TIÊU SỬ DỤNG
-   GIỮ KÍCH THƯỚC CỐ ĐỊNH
-======================================== */
+========================================================= */
 
 .fund-overview .fund-goal{
   width:100%;
 
   margin:0;
+
   padding:20px;
 
-  background:var(--surface-soft);
+  background:
+    linear-gradient(
+      135deg,
+      rgba(248,250,249,.98),
+      rgba(239,249,247,.88)
+    );
 
-  border:1px solid var(--line);
+  border:
+    1px solid rgba(0,144,144,.10);
+
   border-radius:18px;
 
-  /*
-    Không cho padding tự thay đổi
-    khi viewport thay đổi.
-  */
   flex:none;
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+.fund-overview .fund-goal::before{
+  content:"";
+
+  position:absolute;
+
+  width:150px;
+  height:150px;
+
+  right:-80px;
+  top:-80px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.18),
+      transparent 70%
+    );
+
+  pointer-events:none;
+}
+
+.fund-overview .fund-goal::after{
+  content:"";
+
+  position:absolute;
+
+  width:5px;
+  height:45%;
+
+  left:0;
+  top:27%;
+
+  background:
+    linear-gradient(
+      to bottom,
+      transparent,
+      var(--accent),
+      transparent
+    );
+
+  border-radius:99px;
+
+  opacity:.5;
+}
+
+.fund-overview .fund-goal:hover{
+  transform:translateY(-3px);
+
+  border-color:
+    rgba(0,144,144,.25);
+
+  box-shadow:
+    0 12px 35px rgba(0,144,144,.10);
 }
 
 .fund-goal-title{
   display:flex;
   align-items:center;
+
   gap:10px;
 
   margin-bottom:13px;
 
   font-size:14px;
+
   line-height:normal;
+
   font-weight:800;
+
+  position:relative;
+
+  z-index:1;
 }
 
 .fund-goal-title i{
@@ -240,21 +579,47 @@ h1{
   font-size:16px;
 
   flex:0 0 auto;
+
+  transition:
+    transform .3s ease;
+}
+
+.fund-goal:hover .fund-goal-title i{
+  transform:
+    rotate(-8deg)
+    scale(1.15);
 }
 
 .fund-goal ul{
   margin:0;
+
   padding-left:20px;
 
   color:var(--muted);
 
   font-size:14px;
+
   line-height:1.7;
+
+  position:relative;
+
+  z-index:1;
 }
 
 .fund-goal li{
   font-size:14px;
+
   line-height:1.7;
+
+  transition:
+    color .2s ease,
+    transform .2s ease;
+}
+
+.fund-goal li:hover{
+  color:var(--text);
+
+  transform:translateX(4px);
 }
 
 .fund-goal li+li{
@@ -262,27 +627,77 @@ h1{
 }
 
 
-/* ========================================
+/* =========================================================
    PROGRESS
-======================================== */
+========================================================= */
 
 .fund-overview .progress-card{
   width:100%;
 
   margin:16px 0 0;
+
   padding:20px;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfdfc
+    );
 
-  border:1px solid var(--line);
+  border:
+    1px solid rgba(0,144,144,.10);
+
   border-radius:18px;
 
   flex:none;
+
+  position:relative;
+
+  overflow:hidden;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease,
+    border-color .3s ease;
+}
+
+.fund-overview .progress-card::before{
+  content:"";
+
+  position:absolute;
+
+  width:160px;
+  height:160px;
+
+  right:-100px;
+  bottom:-110px;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      rgba(0,144,144,.13),
+      transparent 70%
+    );
+}
+
+.fund-overview .progress-card:hover{
+  transform:translateY(-3px);
+
+  border-color:
+    rgba(0,144,144,.22);
+
+  box-shadow:
+    0 12px 35px rgba(0,40,40,.08);
 }
 
 .progress-top{
   display:flex;
+
   align-items:flex-end;
+
   justify-content:space-between;
 
   gap:20px;
@@ -290,6 +705,7 @@ h1{
 
 .received{
   display:flex;
+
   flex-direction:column;
 
   gap:5px;
@@ -301,6 +717,7 @@ h1{
   color:var(--muted);
 
   font-size:11px;
+
   line-height:normal;
 
   font-weight:800;
@@ -314,51 +731,182 @@ h1{
   color:var(--text);
 
   font-size:25px;
+
   line-height:normal;
 
   font-weight:850;
 
   white-space:nowrap;
+
+  transition:
+    color .25s ease;
+}
+
+.progress-card:hover .received span:last-child{
+  color:var(--accent);
 }
 
 .percent{
   color:var(--accent);
 
   font-size:22px;
+
   line-height:normal;
 
   font-weight:850;
 
   white-space:nowrap;
+
+  text-shadow:
+    0 0 15px rgba(0,144,144,.15);
 }
+
+
+/* =========================================================
+   THANH TIẾN ĐỘ - ĐÃ SỬA MƯỢT
+========================================================= */
 
 .progress{
   width:100%;
+
   height:9px;
 
   margin:16px 0 11px;
 
   overflow:hidden;
 
-  background:#e8eeee;
+  background:
+    linear-gradient(
+      90deg,
+      #e8eeee,
+      #eef4f3
+    );
 
   border-radius:999px;
+
+  box-shadow:
+    inset 0 1px 3px rgba(0,0,0,.05);
 }
+
+
+/* PHẦN MÀU TEAL */
 
 .progress-bar{
   width:0%;
+
   height:100%;
 
-  background:var(--accent);
+  position:relative;
+
+  overflow:hidden;
 
   border-radius:999px;
 
-  transition:width .5s ease;
+  background:
+    linear-gradient(
+      90deg,
+      #008080 0%,
+      #009090 50%,
+      #00aaaa 100%
+    );
+
+  box-shadow:
+    0 0 14px rgba(0,144,144,.30);
+
+  transition:
+    width .7s cubic-bezier(.22,.61,.36,1);
+
+  /* KHÔNG animation background nữa */
 }
+
+
+/* =========================================================
+   VỆT ÁNH SÁNG MƯỢT
+========================================================= */
+
+.progress-bar::after{
+  content:"";
+
+  position:absolute;
+
+  top:-120%;
+
+  left:-45%;
+
+  width:32%;
+
+  height:340%;
+
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255,255,255,.05) 15%,
+      rgba(255,255,255,.25) 35%,
+      rgba(255,255,255,.82) 50%,
+      rgba(255,255,255,.25) 65%,
+      rgba(255,255,255,.05) 85%,
+      transparent 100%
+    );
+
+  filter:blur(1.5px);
+
+  transform:
+    translate3d(0,0,0)
+    skewX(-18deg);
+
+  will-change:transform,opacity;
+
+  animation:
+    progressLightSmooth 3s
+    cubic-bezier(.45,0,.55,1)
+    infinite;
+
+  pointer-events:none;
+}
+
+
+/* =========================================================
+   ÁNH SÁNG CHẠY
+========================================================= */
+
+@keyframes progressLightSmooth{
+
+  0%{
+    transform:
+      translate3d(0,0,0)
+      skewX(-18deg);
+
+    opacity:0;
+  }
+
+  8%{
+    opacity:.85;
+  }
+
+  45%{
+    opacity:.95;
+  }
+
+  72%{
+    opacity:.75;
+  }
+
+  100%{
+    transform:
+      translate3d(460%,0,0)
+      skewX(-18deg);
+
+    opacity:0;
+  }
+}
+
 
 .progress-bottom{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   gap:10px;
@@ -366,63 +914,87 @@ h1{
   color:var(--muted);
 
   font-size:12px;
+
   line-height:normal;
 }
 
 .progress-bottom strong{
   color:var(--text);
+
+  transition:
+    color .25s ease;
+}
+
+.progress-card:hover .progress-bottom strong{
+  color:var(--accent);
 }
 
 
-/* ========================================
-   HẠN DỰ ÁN
-   KÍCH THƯỚC CỐ ĐỊNH
-======================================== */
+/* =========================================================
+   DEADLINE
+========================================================= */
 
 .deadline{
   width:100%;
 
   margin-top:13px;
+
   padding-top:13px;
 
-  border-top:1px solid var(--line);
+  border-top:
+    1px solid var(--line);
 
   color:var(--muted);
 
   font-size:12px;
+
   line-height:normal;
 
-  /*
-    Giữ kích thước chữ và khoảng cách
-    không bị thay đổi theo viewport.
-  */
   flex:none;
+
+  transition:
+    color .25s ease;
 }
 
 .deadline strong{
   color:var(--text);
 
   font-size:12px;
+
   line-height:normal;
 
   white-space:nowrap;
+
+  transition:
+    color .25s ease;
+}
+
+.deadline:hover{
+  color:#526060;
+}
+
+.deadline:hover strong{
+  color:var(--accent);
 }
 
 
-/* ========================================
+/* =========================================================
    DONATE
-======================================== */
+========================================================= */
 
 .fund-overview .donate-section{
   width:100%;
 
   margin:16px 0 0;
+
   padding:25px 10px 8px;
 
   background:transparent;
 
   border:0;
-  border-top:1px solid var(--line);
+
+  border-top:
+    1px solid var(--line);
 
   border-radius:0;
 
@@ -435,13 +1007,25 @@ h1{
   margin:0 0 8px;
 
   font-size:23px;
+
   line-height:normal;
 
   letter-spacing:-.5px;
+
+  transition:
+    color .25s ease,
+    transform .25s ease;
+}
+
+.donate-section:hover h2{
+  color:var(--accent);
+
+  transform:translateY(-2px);
 }
 
 .donate-section p{
   width:100%;
+
   max-width:600px;
 
   margin:0 auto 18px;
@@ -449,58 +1033,152 @@ h1{
   color:var(--muted);
 
   font-size:14px;
+
   line-height:1.65;
 }
 
+
+/* =========================================================
+   DONATE BUTTON
+========================================================= */
+
 .donate-btn{
   border:0;
+
   outline:0;
 
   padding:13px 22px;
 
-  background:var(--accent);
+  background:
+    linear-gradient(
+      135deg,
+      #008080,
+      #009090,
+      #00a5a5
+    );
+
+  background-size:180% 180%;
+
   color:#fff;
 
   border-radius:12px;
 
   font-size:14px;
+
   line-height:normal;
 
   font-weight:800;
 
   cursor:pointer;
 
-  transition:.2s ease;
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 24px rgba(0,144,144,.25);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.donate-btn::before{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:70%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent,
+      rgba(255,255,255,.45),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  transition:
+    left .55s ease;
+}
+
+.donate-btn:hover::before{
+  left:140%;
 }
 
 .donate-btn:hover{
-  background:var(--accent-dark);
+  background-position:
+    100% 50%;
 
-  transform:translateY(-1px);
+  transform:
+    translateY(-4px)
+    scale(1.02);
+
+  box-shadow:
+    0 15px 35px rgba(0,144,144,.32);
+}
+
+.donate-btn:active{
+  transform:
+    translateY(0)
+    scale(.96);
 }
 
 
-/* ========================================
+/* =========================================================
    SUPPORTERS
-======================================== */
+========================================================= */
 
 .supporters{
   width:100%;
 
   margin:0 0 22px;
+
   padding:24px;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #fbfdfc
+    );
 
-  border:1px solid var(--line);
+  border:
+    1px solid rgba(0,144,144,.08);
+
   border-radius:24px;
 
   box-shadow:var(--shadow);
+
+  transition:
+    transform .35s ease,
+    box-shadow .35s ease,
+    border-color .35s ease;
+
+  animation:
+    cardIn .8s .12s ease both;
+}
+
+.supporters:hover{
+  transform:translateY(-3px);
+
+  box-shadow:var(--shadow-hover);
+
+  border-color:
+    rgba(0,144,144,.15);
 }
 
 .section-title{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   gap:15px;
@@ -512,6 +1190,7 @@ h1{
   margin:0;
 
   font-size:21px;
+
   line-height:normal;
 
   letter-spacing:-.5px;
@@ -519,6 +1198,7 @@ h1{
 
 .live{
   display:flex;
+
   align-items:center;
 
   gap:7px;
@@ -526,6 +1206,7 @@ h1{
   color:var(--muted);
 
   font-size:11px;
+
   line-height:normal;
 
   white-space:nowrap;
@@ -536,22 +1217,47 @@ h1{
   height:7px;
 
   display:block;
+
   flex:0 0 7px;
 
   border-radius:50%;
 
   background:#39a96b;
+
+  box-shadow:
+    0 0 0 0 rgba(57,169,107,.4);
+
+  animation:
+    livePulse 2s infinite;
 }
 
 .supporter{
   display:flex;
+
   align-items:center;
 
   gap:12px;
 
   padding:13px 0;
 
-  border-top:1px solid var(--line);
+  border-top:
+    1px solid var(--line);
+
+  transition:
+    background .25s ease,
+    padding .25s ease;
+}
+
+.supporter:hover{
+  padding-left:7px;
+  padding-right:7px;
+
+  background:
+    linear-gradient(
+      90deg,
+      rgba(0,144,144,.04),
+      transparent
+    );
 }
 
 .avatar{
@@ -561,26 +1267,50 @@ h1{
   flex:0 0 40px;
 
   display:flex;
+
   align-items:center;
   justify-content:center;
 
   border-radius:50%;
 
-  background:var(--accent-soft);
+  background:
+    linear-gradient(
+      135deg,
+      #e5f5f3,
+      #d2efec
+    );
+
   color:var(--accent-dark);
 
   font-size:13px;
+
   font-weight:800;
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.supporter:hover .avatar{
+  transform:
+    scale(1.1)
+    rotate(-5deg);
+
+  box-shadow:
+    0 7px 18px rgba(0,144,144,.16);
 }
 
 .supporter-info{
   min-width:0;
+
   flex:1;
 }
 
 .supporter-name{
   font-size:14px;
+
   line-height:normal;
+
   font-weight:800;
 }
 
@@ -590,6 +1320,7 @@ h1{
   color:var(--muted);
 
   font-size:11px;
+
   line-height:normal;
 }
 
@@ -597,17 +1328,25 @@ h1{
   color:var(--accent);
 
   font-size:14px;
+
   line-height:normal;
 
   font-weight:850;
 
   white-space:nowrap;
+
+  transition:
+    transform .25s ease;
+}
+
+.supporter:hover .amount{
+  transform:translateX(-3px);
 }
 
 
-/* ========================================
+/* =========================================================
    FOOTER
-======================================== */
+========================================================= */
 
 footer{
   padding:5px 0 30px;
@@ -615,18 +1354,27 @@ footer{
   color:var(--muted);
 
   font-size:11px;
+
   line-height:normal;
 
   text-align:center;
+
+  transition:
+    color .25s ease;
+}
+
+footer:hover{
+  color:var(--accent);
 }
 
 
-/* ========================================
+/* =========================================================
    MODAL
-======================================== */
+========================================================= */
 
 .modal{
   position:fixed;
+
   inset:0;
 
   z-index:1000;
@@ -638,46 +1386,69 @@ footer{
 
   padding:12px;
 
-  background:rgba(10,20,20,.45);
+  background:
+    rgba(10,20,20,.48);
 
-  backdrop-filter:blur(8px);
+  backdrop-filter:
+    blur(12px);
+
+  -webkit-backdrop-filter:
+    blur(12px);
 }
 
 .modal.show{
   display:flex;
+
+  animation:
+    modalFade .25s ease both;
 }
 
 
-/* ========================================
+/* =========================================================
    MODAL BOX
-======================================== */
+========================================================= */
 
 .modal-box{
   width:330px;
 
   max-width:calc(100vw - 24px);
+
   max-height:86vh;
 
   overflow:auto;
 
   padding:14px;
 
-  background:#fff;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.99),
+      rgba(248,252,251,.98)
+    );
 
-  border:1px solid var(--line);
-  border-radius:15px;
+  border:
+    1px solid rgba(0,144,144,.16);
 
-  box-shadow:0 20px 55px rgba(0,0,0,.16);
+  border-radius:18px;
+
+  box-shadow:
+    0 25px 80px rgba(0,40,40,.24),
+    0 0 30px rgba(0,144,144,.08);
+
+  animation:
+    modalPop .4s cubic-bezier(.2,.8,.2,1) both;
 }
 
 
-/* ========================================
+/* =========================================================
    MODAL HEADER
-======================================== */
+========================================================= */
 
 .modal-head{
   display:flex;
+
   align-items:flex-start;
+
   justify-content:space-between;
 
   gap:10px;
@@ -689,6 +1460,7 @@ footer{
   color:var(--accent);
 
   font-size:8px;
+
   line-height:normal;
 
   font-weight:850;
@@ -700,6 +1472,7 @@ footer{
   margin:4px 0 0;
 
   font-size:18px;
+
   line-height:normal;
 
   letter-spacing:-.5px;
@@ -718,15 +1491,35 @@ footer{
   border-radius:8px;
 
   font-size:19px;
+
   line-height:1;
 
   cursor:pointer;
+
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    color .2s ease;
+}
+
+.close:hover{
+  transform:
+    rotate(8deg)
+    scale(1.08);
+
+  background:var(--accent-soft);
+
+  color:var(--accent-dark);
+}
+
+.close:active{
+  transform:scale(.9);
 }
 
 
-/* ========================================
+/* =========================================================
    FORM
-======================================== */
+========================================================= */
 
 .field{
   margin-bottom:12px;
@@ -740,6 +1533,7 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+
   line-height:normal;
 
   font-weight:850;
@@ -749,11 +1543,14 @@ footer{
 
 .field input{
   width:100%;
+
   height:42px;
 
   padding:0 11px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
+
   border-radius:9px;
 
   outline:0;
@@ -763,13 +1560,26 @@ footer{
   color:var(--text);
 
   font-size:13px;
+
+  transition:
+    border-color .2s ease,
+    box-shadow .2s ease,
+    transform .2s ease;
+}
+
+.field input:hover{
+  border-color:
+    rgba(0,144,144,.30);
 }
 
 .field input:focus{
   border-color:var(--accent);
 
+  transform:translateY(-1px);
+
   box-shadow:
-    0 0 0 3px rgba(0,144,144,.10);
+    0 0 0 3px rgba(0,144,144,.10),
+    0 8px 20px rgba(0,144,144,.06);
 }
 
 .money{
@@ -793,16 +1603,16 @@ footer{
   color:var(--muted);
 
   font-size:10px;
+
   line-height:normal;
 
   font-weight:800;
 }
 
 
-/* ========================================
-   SỐ TIỀN NHANH
-   LUÔN 4 NÚT / 1 HÀNG
-======================================== */
+/* =========================================================
+   QUICK BUTTONS
+========================================================= */
 
 .quick{
   display:grid;
@@ -819,20 +1629,29 @@ footer{
 
 .quick button{
   width:100%;
+
   min-width:0;
+
   height:34px;
 
   padding:0 3px;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
-  background:var(--surface-soft);
+  background:
+    linear-gradient(
+      145deg,
+      #f8faf9,
+      #ffffff
+    );
 
   border-radius:8px;
 
   color:var(--text);
 
   font-size:10px;
+
   line-height:normal;
 
   font-weight:750;
@@ -845,19 +1664,37 @@ footer{
 
   text-overflow:ellipsis;
 
-  transition:.2s ease;
+  transition:
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
 }
 
 .quick button:hover{
+  transform:translateY(-3px);
+
   border-color:var(--accent);
 
-  color:var(--accent);
+  background:var(--accent-soft);
+
+  color:var(--accent-dark);
+
+  box-shadow:
+    0 7px 17px rgba(0,144,144,.12);
+}
+
+.quick button:active{
+  transform:
+    translateY(0)
+    scale(.94);
 }
 
 
-/* ========================================
+/* =========================================================
    ERROR
-======================================== */
+========================================================= */
 
 .error{
   min-height:15px;
@@ -867,35 +1704,100 @@ footer{
   color:var(--danger);
 
   font-size:10px;
+
   line-height:normal;
 }
 
 
-/* ========================================
+/* =========================================================
    GENERATE
-======================================== */
+========================================================= */
 
 .generate{
   width:100%;
+
   height:42px;
 
   border:0;
 
-  background:var(--accent);
+  background:
+    linear-gradient(
+      135deg,
+      #008080,
+      #009090,
+      #00aaaa
+    );
+
+  background-size:180% 180%;
+
   color:#fff;
 
   border-radius:9px;
 
   font-size:13px;
+
   line-height:normal;
 
   font-weight:800;
 
   cursor:pointer;
+
+  position:relative;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 8px 22px rgba(0,144,144,.22);
+
+  transition:
+    transform .22s ease,
+    box-shadow .22s ease,
+    background-position .4s ease;
+}
+
+.generate::after{
+  content:"";
+
+  position:absolute;
+
+  top:0;
+  left:-120%;
+
+  width:70%;
+  height:100%;
+
+  background:
+    linear-gradient(
+      100deg,
+      transparent,
+      rgba(255,255,255,.5),
+      transparent
+    );
+
+  transform:skewX(-20deg);
+
+  transition:
+    left .55s ease;
+}
+
+.generate:hover::after{
+  left:140%;
 }
 
 .generate:hover{
-  background:var(--accent-dark);
+  transform:translateY(-3px);
+
+  background-position:
+    100% 50%;
+
+  box-shadow:
+    0 13px 30px rgba(0,144,144,.30);
+}
+
+.generate:active{
+  transform:
+    translateY(0)
+    scale(.97);
 }
 
 .note{
@@ -904,15 +1806,16 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+
   line-height:normal;
 
   text-align:center;
 }
 
 
-/* ========================================
+/* =========================================================
    QR RESULT
-======================================== */
+========================================================= */
 
 .qr-result{
   display:none;
@@ -920,6 +1823,9 @@ footer{
 
 .qr-result.show{
   display:block;
+
+  animation:
+    fadeUp .35s ease both;
 }
 
 .qr-title{
@@ -932,6 +1838,7 @@ footer{
   color:var(--accent);
 
   font-size:8px;
+
   line-height:normal;
 
   font-weight:850;
@@ -943,27 +1850,47 @@ footer{
   margin:3px 0 0;
 
   font-size:16px;
+
   line-height:1.15;
 }
 
 
-/* ========================================
-   QR
-======================================== */
+/* =========================================================
+   QR BOX
+========================================================= */
 
 .qr-box{
   width:135px;
   height:135px;
 
   margin:0 auto 8px;
+
   padding:5px;
 
-  border:1px solid var(--line);
-  border-radius:9px;
+  border:
+    1px solid rgba(0,144,144,.15);
+
+  border-radius:10px;
 
   background:#fff;
 
   flex:none;
+
+  box-shadow:
+    0 8px 24px rgba(0,40,40,.08);
+
+  transition:
+    transform .3s ease,
+    box-shadow .3s ease;
+}
+
+.qr-box:hover{
+  transform:
+    translateY(-3px)
+    scale(1.02);
+
+  box-shadow:
+    0 14px 32px rgba(0,144,144,.13);
 }
 
 .qr-box img{
@@ -976,9 +1903,9 @@ footer{
 }
 
 
-/* ========================================
+/* =========================================================
    PAYMENT STATUS
-======================================== */
+========================================================= */
 
 .payment-status{
   margin-bottom:8px;
@@ -986,41 +1913,86 @@ footer{
   color:var(--accent);
 
   font-size:10px;
+
   line-height:normal;
 
   font-weight:750;
 
   text-align:center;
+
+  transition:
+    transform .25s ease,
+    color .25s ease;
+}
+
+.payment-status:not(.paid):not(.expired){
+  animation:
+    waitingPulse 1.8s ease-in-out infinite;
+}
+
+.payment-status.paid{
+  animation:
+    successPop .45s ease both;
+}
+
+.payment-status.expired{
+  animation:
+    shake .35s ease both;
 }
 
 
-/* ========================================
+/* =========================================================
    PAYMENT INFO
-======================================== */
+========================================================= */
 
 .payment-info{
   width:100%;
 
   overflow:hidden;
 
-  border:1px solid var(--line);
+  border:
+    1px solid var(--line);
 
   border-radius:8px;
+
+  transition:
+    border-color .25s ease,
+    box-shadow .25s ease;
+}
+
+.payment-info:hover{
+  border-color:
+    rgba(0,144,144,.24);
+
+  box-shadow:
+    0 7px 22px rgba(0,144,144,.07);
 }
 
 .info-row{
   display:flex;
+
   align-items:center;
+
   justify-content:space-between;
 
   gap:8px;
 
   padding:6px 8px;
 
-  border-bottom:1px solid var(--line);
+  border-bottom:
+    1px solid var(--line);
 
   font-size:9px;
+
   line-height:1.2;
+
+  transition:
+    background .2s ease;
+}
+
+.info-row:hover{
+  background:
+    rgba(0,144,144,.035);
 }
 
 .info-row:last-child{
@@ -1033,6 +2005,7 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+
   line-height:normal;
 
   white-space:nowrap;
@@ -1040,11 +2013,13 @@ footer{
 
 .info-value{
   min-width:0;
+
   max-width:62%;
 
   color:var(--text);
 
   font-size:9px;
+
   line-height:normal;
 
   font-weight:750;
@@ -1062,903 +2037,19 @@ footer{
   border:0;
 
   background:var(--accent-soft);
+
   color:var(--accent-dark);
 
   border-radius:4px;
 
   font-size:7px;
+
   line-height:normal;
 
   font-weight:800;
 
   cursor:pointer;
-}
 
-
-/* ========================================
-   TIMER
-======================================== */
-
-.timer{
-  margin:7px 0;
-
-  color:var(--muted);
-
-  font-size:9px;
-  line-height:normal;
-
-  text-align:center;
-}
-
-.timer strong{
-  color:var(--accent);
-}
-
-
-/* ========================================
-   NÚT TẠO MÃ MỚI
-======================================== */
-
-.new-code{
-  width:100%;
-  height:34px;
-
-  border:1px solid var(--line);
-
-  background:#fff;
-  color:var(--text);
-
-  border-radius:8px;
-
-  font-size:10px;
-  line-height:normal;
-
-  font-weight:800;
-
-  cursor:pointer;
-}
-
-
-@media (min-width:601px){
-
-  /* Nội dung Mục tiêu sử dụng */
-  .fund-goal ul,
-  .fund-goal li{
-    font-size:10px;
-    line-height:1.4;
-  }
-
-  /* Hạn dự án - ngang các chữ khác */
-  .deadline{
-    font-size:12px !important;
-    line-height:1.4;
-  }
-
-  .deadline strong{
-    font-size:12px !important;
-  }
-
-/* =========================================================
-   ✨ DENRINDZ — CUTE / MODERN UI EFFECTS
-   Không thay đổi layout hoặc kích thước gốc
-========================================================= */
-
-
-/* =========================================================
-   1. NỀN TRANG — ÁNH SÁNG MỀM
-========================================================= */
-
-body{
-  position:relative;
-  isolation:isolate;
-}
-
-body::before,
-body::after{
-  content:"";
-
-  position:fixed;
-
-  z-index:-1;
-
-  pointer-events:none;
-
-  border-radius:50%;
-
-  filter:blur(8px);
-
-  opacity:.7;
-}
-
-body::before{
-  width:360px;
-  height:360px;
-
-  top:-150px;
-  left:-130px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0,144,144,.16) 0%,
-      rgba(0,144,144,.07) 35%,
-      transparent 72%
-    );
-
-  animation:
-    floatingBlob 10s ease-in-out infinite;
-}
-
-body::after{
-  width:420px;
-  height:420px;
-
-  right:-180px;
-  bottom:-180px;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0,144,144,.12) 0%,
-      rgba(0,144,144,.04) 38%,
-      transparent 72%
-    );
-
-  animation:
-    floatingBlobReverse 13s ease-in-out infinite;
-}
-
-
-/* =========================================================
-   2. HEADER
-========================================================= */
-
-header{
-  animation:
-    fadeDown .7s cubic-bezier(.2,.8,.2,1) both;
-}
-
-.logo{
-  transition:
-    transform .3s ease,
-    color .3s ease;
-}
-
-.logo:hover{
-  transform:translateY(-2px);
-}
-
-.logo-dot{
-  position:relative;
-
-  animation:
-    cutePulse 2.5s ease-in-out infinite;
-}
-
-.logo-dot::after{
-  content:"";
-
-  position:absolute;
-
-  inset:-5px;
-
-  border-radius:50%;
-
-  border:1px solid rgba(0,144,144,.18);
-
-  animation:
-    dotRing 2.5s ease-out infinite;
-}
-
-
-/* =========================================================
-   3. KHUNG CHÍNH
-========================================================= */
-
-.fund-overview{
-  position:relative;
-
-  transition:
-    transform .35s cubic-bezier(.2,.8,.2,1),
-    box-shadow .35s ease,
-    border-color .35s ease;
-}
-
-.fund-overview::before{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:15%;
-
-  width:70%;
-  height:1px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(0,144,144,.35),
-      transparent
-    );
-
-  opacity:.8;
-}
-
-.fund-overview:hover{
-  box-shadow:
-    0 24px 70px rgba(0,40,40,.12);
-}
-
-
-/* =========================================================
-   4. EYEBROW
-========================================================= */
-
-.eyebrow{
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-    0 5px 18px rgba(0,144,144,.08);
-
-  transition:
-    transform .25s ease,
-    box-shadow .25s ease;
-}
-
-.eyebrow:hover{
-  transform:translateY(-2px);
-
-  box-shadow:
-    0 8px 24px rgba(0,144,144,.15);
-}
-
-.eyebrow::after{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:-120%;
-
-  width:65%;
-  height:100%;
-
-  background:
-    linear-gradient(
-      105deg,
-      transparent,
-      rgba(255,255,255,.7),
-      transparent
-    );
-
-  transform:skewX(-20deg);
-
-  animation:
-    softShine 4.5s ease-in-out infinite;
-}
-
-
-/* =========================================================
-   5. TIÊU ĐỀ
-========================================================= */
-
-h1{
-  animation:
-    titleAppear .8s cubic-bezier(.2,.8,.2,1) both;
-
-  text-shadow:
-    0 2px 18px rgba(0,144,144,.04);
-}
-
-
-/* =========================================================
-   6. DESCRIPTION
-========================================================= */
-
-.fund-overview .hero p{
-  animation:
-    fadeUp .8s .12s ease both;
-}
-
-
-/* =========================================================
-   7. MỤC TIÊU SỬ DỤNG
-========================================================= */
-
-.fund-overview .fund-goal{
-  position:relative;
-
-  overflow:hidden;
-
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1),
-    box-shadow .3s ease,
-    border-color .3s ease;
-}
-
-.fund-overview .fund-goal::before{
-  content:"";
-
-  position:absolute;
-
-  width:130px;
-  height:130px;
-
-  top:-75px;
-  right:-55px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0,144,144,.13),
-      transparent 70%
-    );
-
-  pointer-events:none;
-}
-
-.fund-overview .fund-goal:hover{
-  transform:translateY(-3px);
-
-  border-color:
-    rgba(0,144,144,.25);
-
-  box-shadow:
-    0 12px 32px rgba(0,144,144,.08);
-}
-
-.fund-goal-title{
-  transition:
-    color .25s ease;
-}
-
-.fund-goal-title i{
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1);
-}
-
-.fund-goal:hover .fund-goal-title i{
-  transform:
-    rotate(-8deg)
-    scale(1.12);
-}
-
-.fund-goal li{
-  transition:
-    transform .22s ease,
-    color .22s ease;
-}
-
-.fund-goal li:hover{
-  transform:translateX(4px);
-
-  color:var(--text);
-}
-
-
-/* =========================================================
-   8. PROGRESS CARD
-========================================================= */
-
-.fund-overview .progress-card{
-  position:relative;
-
-  overflow:hidden;
-
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1),
-    box-shadow .3s ease,
-    border-color .3s ease;
-}
-
-.fund-overview .progress-card::after{
-  content:"";
-
-  position:absolute;
-
-  width:150px;
-  height:150px;
-
-  right:-85px;
-  bottom:-100px;
-
-  border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      rgba(0,144,144,.08),
-      transparent 70%
-    );
-
-  pointer-events:none;
-}
-
-.fund-overview .progress-card:hover{
-  transform:translateY(-3px);
-
-  border-color:
-    rgba(0,144,144,.22);
-
-  box-shadow:
-    0 12px 35px rgba(0,40,40,.07);
-}
-
-
-/* =========================================================
-   9. PROGRESS BAR
-========================================================= */
-
-.progress{
-  position:relative;
-
-  box-shadow:
-    inset 0 1px 2px rgba(0,0,0,.04);
-}
-
-.progress-bar{
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-    0 0 14px rgba(0,144,144,.24);
-}
-
-.progress-bar::after{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:-100%;
-
-  width:65%;
-  height:100%;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      rgba(255,255,255,.55),
-      transparent
-    );
-
-  animation:
-    progressGlow 3s ease-in-out infinite;
-}
-
-
-/* =========================================================
-   10. HẠN DỰ ÁN
-========================================================= */
-
-.deadline{
-  transition:
-    color .25s ease;
-}
-
-.deadline strong{
-  transition:
-    color .25s ease;
-}
-
-.deadline:hover{
-  color:#526060;
-}
-
-.deadline:hover strong{
-  color:var(--accent);
-}
-
-
-/* =========================================================
-   11. DONATE SECTION
-========================================================= */
-
-.fund-overview .donate-section{
-  animation:
-    fadeUp .8s .2s ease both;
-}
-
-.donate-section h2{
-  transition:
-    transform .25s ease,
-    color .25s ease;
-}
-
-.donate-section:hover h2{
-  transform:translateY(-2px);
-
-  color:var(--accent);
-}
-
-
-/* =========================================================
-   12. NÚT DONATE
-========================================================= */
-
-.donate-btn{
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-    0 8px 22px rgba(0,144,144,.20);
-
-  transition:
-    transform .25s cubic-bezier(.2,.8,.2,1),
-    box-shadow .25s ease,
-    background .25s ease;
-}
-
-.donate-btn::before{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:-120%;
-
-  width:70%;
-  height:100%;
-
-  background:
-    linear-gradient(
-      105deg,
-      transparent,
-      rgba(255,255,255,.4),
-      transparent
-    );
-
-  transform:skewX(-20deg);
-
-  transition:left .6s ease;
-}
-
-.donate-btn:hover::before{
-  left:140%;
-}
-
-.donate-btn:hover{
-  transform:translateY(-3px);
-
-  box-shadow:
-    0 13px 30px rgba(0,144,144,.28);
-}
-
-.donate-btn:active{
-  transform:
-    translateY(0)
-    scale(.97);
-}
-
-
-/* =========================================================
-   13. SUPPORTERS
-========================================================= */
-
-.supporters{
-  transition:
-    transform .35s cubic-bezier(.2,.8,.2,1),
-    box-shadow .35s ease;
-}
-
-.supporters:hover{
-  box-shadow:
-    0 24px 70px rgba(0,40,40,.11);
-}
-
-.supporter{
-  transition:
-    background .25s ease,
-    padding-left .25s ease,
-    padding-right .25s ease;
-}
-
-.supporter:hover{
-  padding-left:6px;
-  padding-right:6px;
-
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0,144,144,.035),
-      transparent
-    );
-}
-
-.avatar{
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1),
-    box-shadow .3s ease;
-}
-
-.supporter:hover .avatar{
-  transform:
-    scale(1.08)
-    rotate(-4deg);
-
-  box-shadow:
-    0 6px 17px rgba(0,144,144,.13);
-}
-
-.amount{
-  transition:
-    transform .25s ease;
-}
-
-.supporter:hover .amount{
-  transform:translateX(-2px);
-}
-
-
-/* =========================================================
-   14. LIVE INDICATOR
-========================================================= */
-
-.live i{
-  box-shadow:
-    0 0 0 0 rgba(57,169,107,.35);
-
-  animation:
-    livePulse 2s infinite;
-}
-
-
-/* =========================================================
-   15. MODAL BACKDROP
-========================================================= */
-
-.modal.show{
-  animation:
-    modalFade .25s ease both;
-}
-
-
-/* =========================================================
-   16. MODAL BOX
-========================================================= */
-
-.modal-box{
-  animation:
-    modalPop .38s cubic-bezier(.2,.8,.2,1) both;
-
-  box-shadow:
-    0 25px 70px rgba(0,0,0,.18);
-}
-
-
-/* =========================================================
-   17. CLOSE BUTTON
-========================================================= */
-
-.close{
-  transition:
-    transform .22s ease,
-    background .22s ease,
-    color .22s ease;
-}
-
-.close:hover{
-  transform:
-    rotate(8deg)
-    scale(1.06);
-
-  background:var(--accent-soft);
-
-  color:var(--accent-dark);
-}
-
-.close:active{
-  transform:scale(.92);
-}
-
-
-/* =========================================================
-   18. INPUT
-========================================================= */
-
-.field input{
-  transition:
-    border-color .22s ease,
-    box-shadow .22s ease,
-    transform .22s ease;
-}
-
-.field input:hover{
-  border-color:
-    rgba(0,144,144,.32);
-}
-
-.field input:focus{
-  transform:translateY(-1px);
-
-  box-shadow:
-    0 0 0 3px rgba(0,144,144,.10),
-    0 7px 18px rgba(0,144,144,.05);
-}
-
-
-/* =========================================================
-   19. QUICK AMOUNT BUTTONS
-========================================================= */
-
-.quick button{
-  transition:
-    transform .2s ease,
-    border-color .2s ease,
-    background .2s ease,
-    color .2s ease,
-    box-shadow .2s ease;
-}
-
-.quick button:hover{
-  transform:translateY(-2px);
-
-  background:#fff;
-
-  border-color:var(--accent);
-
-  color:var(--accent);
-
-  box-shadow:
-    0 6px 16px rgba(0,144,144,.10);
-}
-
-.quick button:active{
-  transform:
-    translateY(0)
-    scale(.95);
-}
-
-
-/* =========================================================
-   20. GENERATE BUTTON
-========================================================= */
-
-.generate{
-  position:relative;
-
-  overflow:hidden;
-
-  box-shadow:
-    0 8px 20px rgba(0,144,144,.20);
-
-  transition:
-    transform .22s ease,
-    box-shadow .22s ease,
-    background .22s ease;
-}
-
-.generate::after{
-  content:"";
-
-  position:absolute;
-
-  top:0;
-  left:-120%;
-
-  width:65%;
-  height:100%;
-
-  background:
-    linear-gradient(
-      105deg,
-      transparent,
-      rgba(255,255,255,.4),
-      transparent
-    );
-
-  transform:skewX(-20deg);
-
-  transition:left .55s ease;
-}
-
-.generate:hover::after{
-  left:140%;
-}
-
-.generate:hover{
-  transform:translateY(-2px);
-
-  box-shadow:
-    0 12px 28px rgba(0,144,144,.27);
-}
-
-.generate:active{
-  transform:
-    translateY(0)
-    scale(.98);
-}
-
-
-/* =========================================================
-   21. QR
-========================================================= */
-
-.qr-box{
-  transition:
-    transform .3s cubic-bezier(.2,.8,.2,1),
-    box-shadow .3s ease;
-}
-
-.qr-box:hover{
-  transform:
-    translateY(-3px)
-    scale(1.015);
-
-  box-shadow:
-    0 12px 28px rgba(0,40,40,.11);
-}
-
-
-/* =========================================================
-   22. PAYMENT STATUS
-========================================================= */
-
-.payment-status{
-  transition:
-    color .25s ease,
-    transform .25s ease;
-}
-
-.payment-status:not(.paid):not(.expired){
-  animation:
-    waitingPulse 2s ease-in-out infinite;
-}
-
-.payment-status.paid{
-  animation:
-    successPop .45s cubic-bezier(.2,.8,.2,1) both;
-}
-
-.payment-status.expired{
-  animation:
-    expiredShake .35s ease both;
-}
-
-
-/* =========================================================
-   23. PAYMENT INFO
-========================================================= */
-
-.payment-info{
-  transition:
-    border-color .25s ease,
-    box-shadow .25s ease;
-}
-
-.payment-info:hover{
-  border-color:
-    rgba(0,144,144,.25);
-
-  box-shadow:
-    0 7px 22px rgba(0,144,144,.07);
-}
-
-.info-row{
-  transition:
-    background .2s ease;
-}
-
-.info-row:hover{
-  background:
-    rgba(0,144,144,.035);
-}
-
-
-/* =========================================================
-   24. COPY BUTTON
-========================================================= */
-
-.copy-btn{
   transition:
     transform .2s ease,
     background .2s ease;
@@ -1967,22 +2058,34 @@ h1{
 .copy-btn:hover{
   transform:
     translateY(-1px)
-    scale(1.03);
+    scale(1.05);
 
-  background:#d5efec;
+  background:#d2efec;
 }
 
 .copy-btn:active{
-  transform:scale(.92);
+  transform:scale(.9);
 }
 
 
 /* =========================================================
-   25. TIMER
+   TIMER
 ========================================================= */
 
+.timer{
+  margin:7px 0;
+
+  color:var(--muted);
+
+  font-size:9px;
+
+  line-height:normal;
+
+  text-align:center;
+}
+
 .timer strong{
-  display:inline-block;
+  color:var(--accent);
 
   animation:
     timerPulse 1.5s ease-in-out infinite;
@@ -1990,15 +2093,37 @@ h1{
 
 
 /* =========================================================
-   26. NÚT TẠO MÃ MỚI
+   NEW CODE
 ========================================================= */
 
 .new-code{
+  width:100%;
+
+  height:34px;
+
+  border:
+    1px solid var(--line);
+
+  background:#fff;
+
+  color:var(--text);
+
+  border-radius:8px;
+
+  font-size:10px;
+
+  line-height:normal;
+
+  font-weight:800;
+
+  cursor:pointer;
+
   transition:
-    transform .22s ease,
-    border-color .22s ease,
-    background .22s ease,
-    box-shadow .22s ease;
+    transform .2s ease,
+    border-color .2s ease,
+    background .2s ease,
+    color .2s ease,
+    box-shadow .2s ease;
 }
 
 .new-code:hover{
@@ -2011,7 +2136,7 @@ h1{
   color:var(--accent-dark);
 
   box-shadow:
-    0 7px 18px rgba(0,144,144,.08);
+    0 7px 18px rgba(0,144,144,.10);
 }
 
 .new-code:active{
@@ -2020,87 +2145,241 @@ h1{
 
 
 /* =========================================================
-   27. FOOTER
+   DESKTOP
 ========================================================= */
 
-footer{
-  transition:
-    color .25s ease;
-}
+@media (min-width:601px){
 
-footer:hover{
-  color:var(--accent);
+  .fund-goal ul,
+  .fund-goal li{
+    font-size:10px;
+
+    line-height:1.4;
+  }
+
+  .deadline{
+    font-size:12px !important;
+
+    line-height:1.4;
+  }
+
+  .deadline strong{
+    font-size:12px !important;
+  }
 }
 
 
 /* =========================================================
-   28. ANIMATION KEYFRAMES
+   MOBILE
 ========================================================= */
 
-@keyframes floatingBlob{
+@media (max-width:600px){
+
+  body{
+    background:
+      radial-gradient(
+        circle at 15% 5%,
+        rgba(0,144,144,.12),
+        transparent 30%
+      ),
+
+      linear-gradient(
+        to bottom,
+        #dff4f2 0px,
+        #e8f7f5 70px,
+        #eff9f8 150px,
+        #f5f7f7 320px,
+        #f5f7f7 100%
+      );
+  }
+
+  body::before{
+    width:270px;
+    height:270px;
+
+    left:-150px;
+    top:-120px;
+  }
+
+  body::after{
+    width:280px;
+    height:280px;
+
+    right:-150px;
+    bottom:-130px;
+  }
+
+  header{
+    width:calc(100% - 24px);
+
+    margin-top:12px;
+
+    padding:14px 2px;
+  }
+
+  main{
+    width:calc(100% - 24px);
+  }
+
+  .fund-overview{
+    margin-top:16px;
+  }
+
+  .fund-overview .hero{
+    padding:32px 0 38px;
+  }
+
+  .fund-overview .fund-goal{
+    padding:20px;
+
+    border-radius:18px;
+  }
+
+  .fund-overview .progress-card{
+    padding:20px;
+
+    border-radius:18px;
+  }
+
+  .fund-overview .donate-section{
+    padding:25px 10px 8px;
+  }
+
+  .supporters{
+    padding:24px;
+
+    border-radius:24px;
+  }
+
+  .section-title{
+    align-items:center;
+
+    flex-direction:row;
+
+    gap:15px;
+  }
+
+  .progress-top{
+    align-items:flex-end;
+  }
+
+  .modal{
+    padding:10px;
+  }
+
+  .modal-box{
+    width:330px;
+
+    max-width:calc(100vw - 20px);
+  }
+
+  .fund-overview:hover,
+  .supporters:hover,
+  .fund-overview .fund-goal:hover,
+  .fund-overview .progress-card:hover{
+    transform:none;
+  }
+
+  .supporter:hover{
+    padding-left:0;
+    padding-right:0;
+  }
+
+  .donate-btn:hover,
+  .generate:hover{
+    transform:none;
+  }
+
+  .qr-box:hover{
+    transform:none;
+  }
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes backgroundFloat{
 
   0%,100%{
     transform:
-      translate3d(0,0,0)
+      translate(0,0)
       scale(1);
   }
 
   50%{
     transform:
-      translate3d(35px,25px,0)
+      translate(45px,35px)
+      scale(1.1);
+  }
+}
+
+@keyframes backgroundFloatReverse{
+
+  0%,100%{
+    transform:
+      translate(0,0)
+      scale(1);
+  }
+
+  50%{
+    transform:
+      translate(-40px,-30px)
       scale(1.08);
   }
 }
 
-@keyframes floatingBlobReverse{
-
-  0%,100%{
-    transform:
-      translate3d(0,0,0)
-      scale(1);
-  }
-
-  50%{
-    transform:
-      translate3d(-30px,-25px,0)
-      scale(1.06);
-  }
-}
-
-@keyframes cutePulse{
-
-  0%,100%{
-    transform:scale(1);
-  }
-
-  50%{
-    transform:scale(1.15);
-  }
-}
-
-@keyframes dotRing{
-
-  0%{
-    transform:scale(.8);
-    opacity:.8;
-  }
-
-  70%,100%{
-    transform:scale(1.8);
-    opacity:0;
-  }
-}
-
-@keyframes fadeDown{
+@keyframes headerIn{
 
   from{
     opacity:0;
-    transform:translateY(-12px);
+
+    transform:
+      translateY(-15px);
   }
 
   to{
     opacity:1;
-    transform:translateY(0);
+
+    transform:
+      translateY(0);
+  }
+}
+
+@keyframes cardIn{
+
+  from{
+    opacity:0;
+
+    transform:
+      translateY(18px)
+      scale(.985);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+}
+
+@keyframes heroIn{
+
+  from{
+    opacity:0;
+
+    transform:
+      translateY(10px);
+  }
+
+  to{
+    opacity:1;
+
+    transform:
+      translateY(0);
   }
 }
 
@@ -2108,64 +2387,102 @@ footer:hover{
 
   from{
     opacity:0;
-    transform:translateY(10px);
+
+    transform:
+      translateY(12px);
   }
 
   to{
     opacity:1;
-    transform:translateY(0);
+
+    transform:
+      translateY(0);
   }
 }
 
-@keyframes titleAppear{
+@keyframes logoPulse{
+
+  0%,100%{
+    box-shadow:
+      0 0 0 5px rgba(0,144,144,.10),
+      0 0 10px rgba(0,144,144,.15);
+  }
+
+  50%{
+    box-shadow:
+      0 0 0 7px rgba(0,144,144,.06),
+      0 0 25px rgba(0,144,144,.40);
+  }
+}
+
+@keyframes topGlow{
+
+  0%{
+    background-position:0% 50%;
+  }
+
+  100%{
+    background-position:200% 50%;
+  }
+}
+
+@keyframes eyebrowShine{
+
+  0%,45%{
+    left:-120%;
+  }
+
+  70%,100%{
+    left:140%;
+  }
+}
+
+@keyframes titleIn{
 
   from{
     opacity:0;
+
     transform:
-      translateY(12px)
-      scale(.98);
+      translateY(14px)
+      scale(.97);
   }
 
   to{
     opacity:1;
+
     transform:
       translateY(0)
       scale(1);
   }
 }
 
-@keyframes softShine{
+@keyframes titleGradient{
 
-  0%,55%{
-    left:-120%;
+  0%,100%{
+    background-position:0% 50%;
   }
 
-  75%,100%{
-    left:140%;
-  }
-}
-
-@keyframes progressGlow{
-
-  0%,45%{
-    left:-100%;
-  }
-
-  70%,100%{
-    left:130%;
+  50%{
+    background-position:100% 50%;
   }
 }
+
+
+/* =========================================================
+   KHÔNG CÒN progressGradient / progressShine CŨ
+   Vì ánh sáng đã dùng progressLightSmooth ở trên
+========================================================= */
 
 @keyframes livePulse{
 
   0%{
     box-shadow:
-      0 0 0 0 rgba(57,169,107,.4);
+      0 0 0 0 rgba(57,169,107,.45);
   }
 
   70%{
     box-shadow:
-      0 0 0 7px rgba(57,169,107,0);
+      0 0 0 8px rgba(57,169,107,0);
   }
 
   100%{
@@ -2189,13 +2506,15 @@ footer:hover{
 
   from{
     opacity:0;
+
     transform:
-      translateY(14px)
-      scale(.96);
+      translateY(20px)
+      scale(.94);
   }
 
   to{
     opacity:1;
+
     transform:
       translateY(0)
       scale(1);
@@ -2209,28 +2528,33 @@ footer:hover{
   }
 
   50%{
-    opacity:.65;
+    opacity:.55;
   }
 }
 
 @keyframes successPop{
 
   0%{
-    transform:scale(.95);
-    opacity:.5;
+    opacity:0;
+
+    transform:
+      scale(.9);
   }
 
   70%{
-    transform:scale(1.04);
+    transform:
+      scale(1.06);
   }
 
   100%{
-    transform:scale(1);
     opacity:1;
+
+    transform:
+      scale(1);
   }
 }
 
-@keyframes expiredShake{
+@keyframes shake{
 
   0%,100%{
     transform:translateX(0);
@@ -2252,61 +2576,13 @@ footer:hover{
   }
 
   50%{
-    transform:scale(1.04);
+    transform:scale(1.06);
   }
 }
 
 
 /* =========================================================
-   29. MOBILE — GIỮ HIỆU ỨNG NHẸ HƠN
-========================================================= */
-
-@media (max-width:600px){
-
-  body::before{
-    width:260px;
-    height:260px;
-
-    top:-110px;
-    left:-120px;
-  }
-
-  body::after{
-    width:280px;
-    height:280px;
-
-    right:-130px;
-    bottom:-120px;
-  }
-
-  .fund-overview:hover,
-  .supporters:hover{
-    box-shadow:var(--shadow);
-  }
-
-  .fund-overview .fund-goal:hover,
-  .fund-overview .progress-card:hover{
-    transform:none;
-  }
-
-  .supporter:hover{
-    padding-left:0;
-    padding-right:0;
-  }
-
-  .donate-btn:hover,
-  .generate:hover{
-    transform:none;
-  }
-
-  .qr-box:hover{
-    transform:none;
-  }
-}
-
-
-/* =========================================================
-   30. GIẢM CHUYỂN ĐỘNG NẾU THIẾT BỊ YÊU CẦU
+   REDUCE MOTION
 ========================================================= */
 
 @media (prefers-reduced-motion:reduce){
@@ -2315,9 +2591,11 @@ footer:hover{
   *::before,
   *::after{
     animation-duration:.01ms !important;
+
     animation-iteration-count:1 !important;
+
     transition-duration:.01ms !important;
+
     scroll-behavior:auto !important;
   }
-
 }
