@@ -1,1571 +1,1424 @@
-/*=========================================
-CẤUHÌNHDONATE
-=========================================*/
+/* =========================================
+   CẤU HÌNH DONATE
+========================================= */
 
-constBANK_ID="970422";
-constACCOUNT_NO="09637164106868";
-constBANK_NAME="MBBank";
+const BANK_ID = "970422";
+const ACCOUNT_NO = "09637164106868";
+const BANK_NAME = "MB Bank";
 
-constPROJECT_TARGET=1000000;
+const PROJECT_TARGET = 1000000;
 
-letreceived=0;
-letcurrentContent="";
-
-letcountdownInterval=null;
-letpaymentCheckInterval=null;
-letcountdownEndTime=null;
+let received = 0;
+let currentContent = "";
 
 
-/*=========================================
-API
-=========================================*/
+/* =========================================
+   TIMER
+========================================= */
 
-constAPI_BASE=
-"https://doante-api.tnt300709.workers.dev";
-
-constCHECK_API=
-`${API_BASE}/check`;
-
-constHISTORY_API=
-`${API_BASE}/history`;
+let countdownInterval = null;
+let paymentCheckInterval = null;
+let countdownEndTime = null;
 
 
-/*=========================================
-FORMATTIỀN
-=========================================*/
+/* =========================================
+   API
+========================================= */
 
-functionformatMoney(number){
+const API_BASE =
+    "https://doante-api.tnt300709.workers.dev";
 
-returnnewIntl.NumberFormat("vi-VN")
-.format(Number(number)||0)+"₫";
+const CHECK_API =
+    `${API_BASE}/check`;
 
-}
+const HISTORY_API =
+    `${API_BASE}/history`;
 
 
-/*=========================================
-LẤYDANHSÁCHLỊCHSỬ
-=========================================*/
+/* =========================================
+   FORMAT TIỀN
+========================================= */
 
-asyncfunctiongetHistory(){
+function formatMoney(number){
 
-constresponse=
-awaitfetch(HISTORY_API,{
-method:"GET",
-cache:"no-store"
-});
-
-if(!response.ok){
-
-thrownewError(
-`HTTP${response.status}`
-);
-
-}
-
-constdata=
-awaitresponse.json();
-
-if(Array.isArray(data)){
-returndata;
-}
-
-if(data&&Array.isArray(data.history)){
-returndata.history;
-}
-
-if(data&&Array.isArray(data.data)){
-returndata.data;
-}
-
-if(data&&Array.isArray(data.transactions)){
-returndata.transactions;
-}
-
-return[];
+    return new Intl.NumberFormat("vi-VN")
+        .format(number) + " ₫";
 
 }
 
 
-/*=========================================
-LẤYTHỜIGIANGIAODỊCH
-=========================================*/
+/* =========================================
+   ESCAPE HTML
+========================================= */
 
-functiongetDonationTime(item){
+function escapeHTML(value){
 
-if(!item){
-returnnull;
-}
-
-constpossibleTimes=[
-
-item.time,
-item.timestamp,
-item.datetime,
-item.date,
-item.createdAt,
-item.created_at,
-item.transactionTime,
-item.transaction_time,
-item.paymentTime,
-item.payment_time
-
-];
-
-
-for(constvalueofpossibleTimes){
-
-if(
-value===undefined||
-value===null||
-value===""
-){
-
-continue;
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
-/*Timestampdạngsố*/
+/* =========================================
+   LẤY THỜI GIAN DONATE
+========================================= */
 
-if(
-typeofvalue==="number"||
-/^\d+$/.test(String(value))
-){
+function getDonationTime(item){
 
-letnumber=
-Number(value);
+    /*
+       Ưu tiên các trường thời gian thường gặp
+    */
 
-/*Unixtimestampgiây*/
-
-if(number<100000000000){
-
-number*=1000;
-
-}
-
-constdate=
-newDate(number);
-
-if(!isNaN(date.getTime())){
-
-returndate;
-
-}
-
-}
+    const value =
+        item.time ??
+        item.createdAt ??
+        item.created_at ??
+        item.timestamp ??
+        item.datetime ??
+        item.date ??
+        item.created;
 
 
-/*Chuỗingàygiờ*/
+    if(
+        value === undefined ||
+        value === null ||
+        value === ""
+    ){
 
-constdate=
-newDate(value);
+        return 0;
 
-if(!isNaN(date.getTime())){
-
-returndate;
-
-}
-
-}
+    }
 
 
-returnnull;
+    /*
+       Nếu API trả timestamp dạng số
+    */
 
-}
+    if(typeof value === "number"){
 
+        /*
+           10 chữ số = giây
+           13 chữ số = milliseconds
+        */
 
-/*=========================================
-THỜIGIANTƯƠNGĐỐI
-=========================================*/
+        if(value < 10000000000){
 
-functionrelativeTime(date){
+            return value * 1000;
 
-if(!date){
+        }
 
-return"vừaxong";
+        return value;
 
-}
-
-
-constnow=
-Date.now();
-
-consttime=
-date.getTime();
+    }
 
 
-letdiff=
-Math.floor(
-(now-time)/1000
-);
+    /*
+       Nếu timestamp là chuỗi số
+    */
+
+    if(
+        typeof value === "string" &&
+        /^\d+$/.test(value.trim())
+    ){
+
+        const number =
+            Number(value.trim());
 
 
-/*
-NếuAPItrảtimestamphơilệch
-trongtươnglaithìvẫncho
-hiểnthị"vừaxong".
-*/
+        if(number < 10000000000){
 
-if(diff<60){
+            return number * 1000;
 
-return"vừaxong";
+        }
 
-}
+        return number;
+
+    }
 
 
-constminutes=
-Math.floor(diff/60);
+    /*
+       Nếu API trả ISO date hoặc
+       chuỗi ngày giờ bình thường
+    */
+
+    const parsed =
+        new Date(value).getTime();
 
 
-if(minutes<60){
+    if(Number.isNaN(parsed)){
 
-return`${minutes}phúttrước`;
+        return 0;
 
-}
-
-
-consthours=
-Math.floor(minutes/60);
+    }
 
 
-if(hours<24){
-
-return`${hours}giờtrước`;
+    return parsed;
 
 }
 
 
-constdays=
-Math.floor(hours/24);
+/* =========================================
+   HIỂN THỊ THỜI GIAN
+========================================= */
+
+function formatDonationTime(item){
+
+    const timestamp =
+        getDonationTime(item);
 
 
-return`${days}ngàytrước`;
+    /*
+       Nếu API thật sự không có thời gian
+       thì không bịa ngày giờ.
+    */
 
-}
+    if(!timestamp){
 
+        return "Thời gian không có dữ liệu";
 
-/*=========================================
-LẤYTÊNNGƯỜIỦNGHỘ
-=========================================*/
-
-functiongetDonorName(item){
-
-if(!item){
-return"Ẩndanh";
-}
+    }
 
 
-constpossibleNames=[
-
-item.name,
-item.donorName,
-item.donor_name,
-item.username,
-item.user,
-item.displayName,
-item.display_name
-
-];
+    const date =
+        new Date(timestamp);
 
 
-for(constnameofpossibleNames){
+    if(Number.isNaN(date.getTime())){
 
-if(
-name!==undefined&&
-name!==null&&
-String(name).trim()!==""
-){
+        return "Thời gian không hợp lệ";
 
-returnString(name).trim();
-
-}
-
-}
+    }
 
 
-return"Ẩndanh";
+    return date.toLocaleString(
+        "vi-VN",
+        {
+            timeZone:"Asia/Ho_Chi_Minh",
+            day:"2-digit",
+            month:"2-digit",
+            year:"numeric",
+            hour:"2-digit",
+            minute:"2-digit",
+            second:"2-digit",
+            hour12:false
+        }
+    );
 
 }
 
 
-/*=========================================
-AVATAR
-=========================================*/
+/* =========================================
+   PROGRESS
+========================================= */
 
-functiongetAvatar(name){
+function renderProgress(){
 
-consttext=
-String(name||"A")
-.trim()
-.charAt(0)
-.toUpperCase();
-
-
-returntext||"A";
-
-}
+    const percent =
+        Math.min(
+            (received / PROJECT_TARGET) * 100,
+            100
+        );
 
 
-/*=========================================
-SẮPXẾPLỊCHSỬ
-=========================================*/
+    const receivedElement =
+        document.getElementById("received");
 
-functionsortHistory(history){
+    const remainingElement =
+        document.getElementById("remaining");
 
-return[...history].sort(
-(a,b)=>{
+    const percentElement =
+        document.getElementById("percent");
 
-constdateA=
-getDonationTime(a);
-
-constdateB=
-getDonationTime(b);
+    const progressBar =
+        document.getElementById("progressBar");
 
 
-if(dateA&&dateB){
+    if(receivedElement){
 
-return(
-dateB.getTime()-
-dateA.getTime()
-);
+        receivedElement.textContent =
+            formatMoney(received);
 
-}
+    }
 
 
-if(dateB){
+    if(remainingElement){
 
-return-1;
+        remainingElement.textContent =
+            formatMoney(
+                Math.max(
+                    PROJECT_TARGET - received,
+                    0
+                )
+            );
 
-}
-
-
-if(dateA){
-
-return1;
-
-}
-
-
-return0;
-
-}
-);
-
-}
+    }
 
 
-/*=========================================
-HIỂNTHỊLỊCHSỬ
-=========================================*/
+    if(percentElement){
 
-functionrenderHistory(history){
+        percentElement.textContent =
+            percent
+                .toFixed(1)
+                .replace(".",",") +
+            "%";
 
-constlist=
-document.getElementById(
-"supporterList"
-);
+    }
 
 
-if(!list){
+    if(progressBar){
 
-return;
+        progressBar.style.width =
+            percent + "%";
+
+    }
 
 }
 
 
-/*
-Chỉlấy5giaodịchmớinhất.
-*/
+/* =========================================
+   LỊCH SỬ DONATE
+   CHỈ 5 NGƯỜI GẦN NHẤT
+========================================= */
 
-constlatest=
-sortHistory(history)
-.slice(0,5);
+function renderHistory(history){
 
-
-if(latest.length===0){
-
-list.innerHTML=`
-<divclass="supporter">
-<divclass="avatar">♡</div>
-
-<divclass="supporter-info">
-<divclass="supporter-name">
-Chưacóngườiủnghộ
-</div>
-
-<divclass="supporter-time">
-Hãylàngườiđầutiên!
-</div>
-</div>
-
-<divclass="amount">
-—
-</div>
-</div>
-`;
-
-return;
-
-}
+    const supporterList =
+        document.getElementById(
+            "supporterList"
+        );
 
 
-list.innerHTML=
-latest.map(item=>{
+    if(!supporterList){
 
-constname=
-getDonorName(item);
+        return;
 
-constamount=
-Number(item.amount)||0;
-
-constdate=
-getDonationTime(item);
-
-consttime=
-relativeTime(date);
-
-constavatar=
-getAvatar(name);
+    }
 
 
-/*
-CỐTÌNHKHÔNGRENDER:
-item.code
-item.transactionCode
-item.transaction_id
-...
+    if(!Array.isArray(history)){
 
-Vìlịchsửchỉđượcphéphiện:
-tên+thờigian+sốtiền.
-*/
+        return;
 
-return`
-<divclass="supporter">
-
-<divclass="avatar">
-${escapeHTML(avatar)}
-</div>
-
-<divclass="supporter-info">
-
-<divclass="supporter-name">
-${escapeHTML(name)}
-</div>
-
-<divclass="supporter-time">
-${escapeHTML(time)}
-</div>
-
-</div>
-
-<divclass="amount">
-${formatMoney(amount)}
-</div>
-
-</div>
-`;
-
-}).join("");
-
-}
+    }
 
 
-/*=========================================
-CHỐNGHTMLINJECTION
-=========================================*/
+    /*
+       Chỉ lấy giao dịch donate DXM.
+       Sau đó sắp xếp mới nhất trước.
+       Cuối cùng chỉ lấy 5 người.
+    */
 
-functionescapeHTML(value){
+    const donations =
+        history
+            .filter(item => {
 
-returnString(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
+                const code =
+                    String(
+                        item.code || ""
+                    )
+                    .toUpperCase();
 
-}
+                return code.startsWith("DXM");
 
+            })
+            .sort((a,b) => {
 
-/*=========================================
-CẬPNHẬTPROGRESS+HISTORY
-=========================================*/
+                return (
+                    getDonationTime(b) -
+                    getDonationTime(a)
+                );
 
-asyncfunctionupdateProgress(){
-
-try{
-
-consthistory=
-awaitgetHistory();
-
-
-/*
-HIỂNTHỊLỊCHSỬ
-*/
-
-renderHistory(history);
+            })
+            .slice(0,5);
 
 
-/*
-TÍNHTỔNGTIỀN
-*/
+    /* =====================================
+       KHÔNG CÓ LỊCH SỬ
+    ===================================== */
 
-lettotal=null;
+    if(donations.length === 0){
+
+        supporterList.innerHTML = `
+
+            <div class="supporter">
+
+                <div class="avatar">
+                    …
+                </div>
+
+                <div class="supporter-info">
+
+                    <div class="supporter-name">
+                        Chưa có lượt donate
+                    </div>
+
+                    <div class="supporter-time">
+                        Hãy là người đầu tiên ủng hộ
+                    </div>
+
+                </div>
+
+                <div class="amount">
+                    —
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
 
-/*
-NếuAPIcótotalthìưutiêntotal.
-*/
+    /* =====================================
+       XÓA DANH SÁCH CŨ
+    ===================================== */
 
-try{
-
-constresponse=
-awaitfetch(
-HISTORY_API,
-{
-method:"GET",
-cache:"no-store"
-}
-);
+    supporterList.innerHTML = "";
 
 
-if(response.ok){
+    /* =====================================
+       HIỂN THỊ 5 DONATE GẦN NHẤT
+    ===================================== */
 
-constdata=
-awaitresponse.json();
+    donations.forEach(item => {
+
+        const name =
+            item.name ||
+            item.donor ||
+            item.donorName ||
+            "Ẩn danh";
 
 
-if(
-data&&
-data.total!==undefined&&
-data.total!==null&&
-Number.isFinite(
-Number(data.total)
-)
-){
+        const amount =
+            Number(item.amount) || 0;
 
-total=
-Number(data.total);
 
-}
+        const timeText =
+            formatDonationTime(item);
 
-}
 
-}catch(error){
+        const firstLetter =
+            String(name)
+                .trim()
+                .charAt(0)
+                .toUpperCase() || "D";
 
-console.warn(
-"Khôngđọcđượctotal:",
-error
-);
+
+        const supporter =
+            document.createElement("div");
+
+
+        supporter.className =
+            "supporter";
+
+
+        /*
+           KHÔNG HIỂN THỊ:
+           - mã DXM
+           - code giao dịch
+        */
+
+        supporter.innerHTML = `
+
+            <div class="avatar">
+                ${escapeHTML(firstLetter)}
+            </div>
+
+            <div class="supporter-info">
+
+                <div class="supporter-name">
+                    ${escapeHTML(name)}
+                </div>
+
+                <div class="supporter-time">
+                    ${escapeHTML(timeText)}
+                </div>
+
+            </div>
+
+            <div class="amount">
+                +${formatMoney(amount)}
+            </div>
+
+        `;
+
+
+        supporterList.appendChild(
+            supporter
+        );
+
+    });
 
 }
 
 
-/*
-NếuAPIkhôngcótotal,
-tínhtừlịchsử.
-*/
+/* =========================================
+   CẬP NHẬT PROGRESS + HISTORY
+========================================= */
 
-if(total===null){
+async function updateProgress(){
 
-total=
-history
-.reduce(
-(sum,item)=>{
+    try{
 
-constamount=
-Number(
-item.amount
-)||0;
-
-returnsum+amount;
-
-},
-0
-);
-
-}
+        const response =
+            await fetch(
+                HISTORY_API,
+                {
+                    method:"GET",
+                    cache:"no-store"
+                }
+            );
 
 
-/*
-QUANTRỌNG:
-Khôngchotổngtiềntụtvề0
-chỉvìAPIlỗi/trảdữliệu
-tạmthờithiếu.
-*/
+        if(!response.ok){
 
-if(
-Number.isFinite(total)&&
-total>=received
-){
+            throw new Error(
+                `HTTP ${response.status}`
+            );
 
-received=
-total;
-
-}elseif(
-Number.isFinite(total)&&
-received===0
-){
-
-received=
-total;
-
-}
+        }
 
 
-}catch(error){
-
-console.warn(
-"Khônglấyđượclịchsửdonate:",
-error
-);
-
-}
+        const data =
+            await response.json();
 
 
-/*
-HIỂNTHỊPROGRESS
-*/
-
-constpercent=
-Math.min(
-(received/PROJECT_TARGET)*100,
-100
-);
+        let serverTotal = 0;
 
 
-constreceivedElement=
-document.getElementById(
-"received"
-);
+        /* =====================================
+           LẤY TỔNG TỪ API
+        ===================================== */
 
-constremainingElement=
-document.getElementById(
-"remaining"
-);
+        if(
+            data &&
+            data.total !== undefined &&
+            data.total !== null &&
+            Number.isFinite(
+                Number(data.total)
+            )
+        ){
 
-constpercentElement=
-document.getElementById(
-"percent"
-);
+            serverTotal =
+                Number(data.total);
 
-constprogressBar=
-document.getElementById(
-"progressBar"
-);
+        }
+        else if(
+            data &&
+            Array.isArray(data.history)
+        ){
+
+            serverTotal =
+                data.history
+                    .filter(item =>
+                        String(
+                            item.code || ""
+                        )
+                        .toUpperCase()
+                        .startsWith("DXM")
+                    )
+                    .reduce(
+                        (sum,item) =>
+                            sum +
+                            (
+                                Number(
+                                    item.amount
+                                ) || 0
+                            ),
+                        0
+                    );
+
+        }
 
 
-if(receivedElement){
+        /*
+           Không cho dữ liệu API cũ
+           làm tổng tiền bị tụt.
+        */
 
-receivedElement.textContent=
-formatMoney(received);
-
-}
-
-
-if(remainingElement){
-
-remainingElement.textContent=
-formatMoney(
-Math.max(
-PROJECT_TARGET-received,
-0
-)
-);
-
-}
+        received =
+            Math.max(
+                received,
+                Number(serverTotal) || 0
+            );
 
 
-if(percentElement){
+        /* =====================================
+           CẬP NHẬT LỊCH SỬ
+        ===================================== */
 
-percentElement.textContent=
-percent
-.toFixed(1)
-.replace(".",",")+
-"%";
+        if(
+            data &&
+            Array.isArray(data.history)
+        ){
+
+            renderHistory(
+                data.history
+            );
+
+        }
+
+    }
+    catch(error){
+
+        console.warn(
+            "Không lấy được lịch sử donate:",
+            error
+        );
+
+    }
+
+
+    renderProgress();
 
 }
 
 
-if(progressBar){
-
-progressBar.style.width=
-percent+"%";
-
-}
-
-}
-
-
-/*=========================================
-TỰĐỘNGCẬPNHẬT
-=========================================*/
+/* =========================================
+   LOAD BAN ĐẦU
+========================================= */
 
 updateProgress();
 
 
-setInterval(
-updateProgress,
-15000
-);
+/* =========================================
+   MỞ MODAL
+========================================= */
+
+function openModal(){
+
+    const modal =
+        document.getElementById("modal");
 
 
-/*=========================================
-MỞMODAL
-=========================================*/
+    if(modal){
 
-functionopenModal(){
+        modal.classList.add("show");
 
-constmodal=
-document.getElementById("modal");
-
-
-if(modal){
-
-modal.classList.add("show");
-
-}
+    }
 
 }
 
 
-/*=========================================
-ĐÓNGMODAL
-=========================================*/
+/* =========================================
+   ĐÓNG MODAL
+========================================= */
 
-functioncloseModal(){
+function closeModal(){
 
-constmodal=
-document.getElementById("modal");
-
-
-if(modal){
-
-modal.classList.remove("show");
-
-}
-
-}
+    const modal =
+        document.getElementById("modal");
 
 
-/*=========================================
-CLICKRANGOÀIMODAL
-=========================================*/
+    if(modal){
 
-functionoutsideClose(event){
+        modal.classList.remove("show");
 
-if(
-event.target&&
-event.target.id==="modal"
-){
-
-closeModal();
-
-}
+    }
 
 }
 
 
-/*=========================================
-CHỌNNHANHSỐTIỀN
-=========================================*/
+/* =========================================
+   CLICK NGOÀI MODAL
+========================================= */
 
-functionsetAmount(amount){
+function outsideClose(event){
 
-constinput=
-document.getElementById(
-"donationAmount"
-);
+    if(event.target.id === "modal"){
 
+        closeModal();
 
-if(!input){
-
-return;
+    }
 
 }
 
 
-input.value=
-Number(amount)
-.toLocaleString("vi-VN");
+/* =========================================
+   CHỌN NHANH SỐ TIỀN
+========================================= */
+
+function setAmount(amount){
+
+    const input =
+        document.getElementById(
+            "donationAmount"
+        );
+
+
+    if(!input){
+
+        return;
+
+    }
+
+
+    input.value =
+        Number(amount).toLocaleString(
+            "vi-VN"
+        );
 
 }
 
 
-/*=========================================
-FORMATINPUT
-=========================================*/
+/* =========================================
+   FORMAT INPUT
+========================================= */
 
-constdonationInput=
-document.getElementById(
-"donationAmount"
-);
+const donationInput =
+    document.getElementById(
+        "donationAmount"
+    );
 
 
 if(donationInput){
 
-donationInput.addEventListener(
-"input",
-function(){
+    donationInput.addEventListener(
+        "input",
+        function(){
 
-letvalue=
-this.value.replace(
-/\D/g,
-""
-);
-
-
-if(!value){
-
-this.value="";
-
-return;
-
-}
+            const value =
+                this.value.replace(
+                    /\D/g,
+                    ""
+                );
 
 
-this.value=
-Number(value)
-.toLocaleString("vi-VN");
+            if(!value){
 
-}
-);
+                this.value = "";
 
-}
+                return;
 
-
-/*=========================================
-TẠOQR
-=========================================*/
-
-functiongenerateQR(){
-
-constnameElement=
-document.getElementById(
-"donorName"
-);
-
-constamountElement=
-document.getElementById(
-"donationAmount"
-);
+            }
 
 
-if(!nameElement||!amountElement){
+            this.value =
+                Number(value).toLocaleString(
+                    "vi-VN"
+                );
 
-return;
+        }
+    );
 
 }
 
 
-constname=
-nameElement.value.trim();
+/* =========================================
+   TẠO QR
+========================================= */
+
+function generateQR(){
+
+    const nameElement =
+        document.getElementById(
+            "donorName"
+        );
 
 
-constamount=
-Number(
-amountElement.value
-.replace(/\./g,"")
-.replace(/,/g,"")
-);
+    const amountElement =
+        document.getElementById(
+            "donationAmount"
+        );
 
 
-if(!name){
+    if(
+        !nameElement ||
+        !amountElement
+    ){
 
-alert(
-"Vuilòngnhậptênhiểnthị."
-);
+        return;
 
-return;
+    }
+
+
+    const name =
+        nameElement.value.trim();
+
+
+    const amount =
+        Number(
+            amountElement.value
+                .replace(/\./g,"")
+                .replace(/,/g,"")
+        );
+
+
+    /* =====================================
+       KIỂM TRA TÊN
+    ===================================== */
+
+    if(!name){
+
+        alert(
+            "Vui lòng nhập tên hiển thị."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       KIỂM TRA TIỀN
+    ===================================== */
+
+    if(
+        !amount ||
+        amount < 10000
+    ){
+
+        alert(
+            "Số tiền tối thiểu là 10.000đ."
+        );
+
+        return;
+
+    }
+
+
+    /* =====================================
+       DỪNG CŨ
+    ===================================== */
+
+    clearInterval(
+        countdownInterval
+    );
+
+    clearInterval(
+        paymentCheckInterval
+    );
+
+
+    countdownInterval = null;
+    paymentCheckInterval = null;
+    countdownEndTime = null;
+
+
+    /* =====================================
+       TẠO MÃ
+    ===================================== */
+
+    const randomCode =
+        Math.floor(
+            100000 +
+            Math.random() * 900000
+        );
+
+
+    currentContent =
+        "DXM-" + randomCode;
+
+
+    /* =====================================
+       THÔNG TIN QR
+    ===================================== */
+
+    const qrAmount =
+        document.getElementById(
+            "qrAmount"
+        );
+
+    const qrName =
+        document.getElementById(
+            "qrName"
+        );
+
+    const qrContent =
+        document.getElementById(
+            "qrContent"
+        );
+
+    const qrStk =
+        document.getElementById(
+            "qrStk"
+        );
+
+    const qrTime =
+        document.getElementById(
+            "qrTime"
+        );
+
+
+    if(qrAmount){
+
+        qrAmount.textContent =
+            formatMoney(amount);
+
+    }
+
+
+    if(qrName){
+
+        qrName.textContent =
+            name;
+
+    }
+
+
+    if(qrContent){
+
+        qrContent.textContent =
+            currentContent;
+
+    }
+
+
+    if(qrStk){
+
+        qrStk.textContent =
+            ACCOUNT_NO;
+
+    }
+
+
+    if(qrTime){
+
+        qrTime.textContent =
+            new Date()
+                .toLocaleString(
+                    "vi-VN",
+                    {
+                        timeZone:
+                            "Asia/Ho_Chi_Minh"
+                    }
+                );
+
+    }
+
+
+    /* =====================================
+       VIETQR
+    ===================================== */
+
+    const qrURL =
+        "https://img.vietqr.io/image/" +
+        BANK_ID +
+        "-" +
+        ACCOUNT_NO +
+        "-qr_only.png" +
+        "?amount=" +
+        encodeURIComponent(amount) +
+        "&addInfo=" +
+        encodeURIComponent(
+            currentContent
+        );
+
+
+    const qrImage =
+        document.getElementById(
+            "qrImage"
+        );
+
+
+    if(qrImage){
+
+        qrImage.src =
+            qrURL;
+
+    }
+
+
+    /* =====================================
+       RESET STATUS
+    ===================================== */
+
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
+
+
+    if(status){
+
+        status.classList.remove(
+            "paid",
+            "expired"
+        );
+
+
+        status.textContent =
+            "● Đang chờ chuyển khoản…";
+
+    }
+
+
+    /* =====================================
+       HIỆN QR
+    ===================================== */
+
+    const formArea =
+        document.getElementById(
+            "formArea"
+        );
+
+    const qrResult =
+        document.getElementById(
+            "qrResult"
+        );
+
+
+    if(formArea){
+
+        formArea.style.display =
+            "none";
+
+    }
+
+
+    if(qrResult){
+
+        qrResult.classList.add(
+            "show"
+        );
+
+    }
+
+
+    startTimer();
+
+
+    checkPayment(
+        amount,
+        name,
+        currentContent
+    );
 
 }
 
 
-if(
-!amount||
-amount<10000
+/* =========================================
+   COPY STK
+========================================= */
+
+function copyStk(){
+
+    navigator.clipboard
+        .writeText(ACCOUNT_NO)
+        .then(() => {
+
+            const button =
+                document.querySelector(
+                    ".copy-btn"
+                );
+
+
+            if(!button){
+
+                return;
+
+            }
+
+
+            const oldText =
+                button.textContent;
+
+
+            button.textContent =
+                "Đã sao chép";
+
+
+            setTimeout(() => {
+
+                button.textContent =
+                    oldText;
+
+            },1500);
+
+        });
+
+}
+
+
+/* =========================================
+   KIỂM TRA THANH TOÁN
+========================================= */
+
+function checkPayment(
+    amount,
+    name,
+    code
 ){
 
-alert(
-"Sốtiềntốithiểulà10.000đ."
-);
-
-return;
-
-}
+    clearInterval(
+        paymentCheckInterval
+    );
 
 
-clearInterval(
-countdownInterval
-);
+    const check =
+        async () => {
 
-clearInterval(
-paymentCheckInterval
-);
+            try{
 
+                const response =
+                    await fetch(
+                        CHECK_API,
+                        {
+                            method:"POST",
 
-countdownInterval=null;
-paymentCheckInterval=null;
-countdownEndTime=null;
+                            headers:{
+                                "Content-Type":
+                                    "application/json"
+                            },
 
-
-constrandomCode=
-Math.floor(
-100000+
-Math.random()*900000
-);
-
-
-currentContent=
-"DXM-"+randomCode;
-
-
-constqrAmount=
-document.getElementById(
-"qrAmount"
-);
-
-constqrName=
-document.getElementById(
-"qrName"
-);
-
-constqrContent=
-document.getElementById(
-"qrContent"
-);
-
-constqrStk=
-document.getElementById(
-"qrStk"
-);
-
-constqrTime=
-document.getElementById(
-"qrTime"
-);
+                            body:
+                                JSON.stringify({
+                                    code:code,
+                                    amount:amount,
+                                    name:name,
+                                    message:code
+                                })
+                        }
+                    );
 
 
-if(qrAmount){
+                if(!response.ok){
 
-qrAmount.textContent=
-formatMoney(amount);
+                    return;
 
-}
-
-
-if(qrName){
-
-qrName.textContent=
-name;
-
-}
+                }
 
 
-if(qrContent){
-
-qrContent.textContent=
-currentContent;
-
-}
+                const data =
+                    await response.json();
 
 
-if(qrStk){
+                if(
+                    data &&
+                    data.ok === true &&
+                    data.paid === true
+                ){
 
-qrStk.textContent=
-ACCOUNT_NO;
+                    clearInterval(
+                        paymentCheckInterval
+                    );
 
-}
-
-
-if(qrTime){
-
-qrTime.textContent=
-newDate()
-.toLocaleString("vi-VN");
-
-}
+                    paymentCheckInterval =
+                        null;
 
 
-constqrURL=
-"https://img.vietqr.io/image/"+
-BANK_ID+
-"-"+
-ACCOUNT_NO+
-"-qr_only.png"+
-"?amount="+
-encodeURIComponent(amount)+
-"&addInfo="+
-encodeURIComponent(
-currentContent
-);
+                    clearInterval(
+                        countdownInterval
+                    );
+
+                    countdownInterval =
+                        null;
 
 
-constqrImage=
-document.getElementById(
-"qrImage"
-);
+                    const status =
+                        document.getElementById(
+                            "paymentStatus"
+                        );
 
 
-if(qrImage){
+                    if(status){
 
-qrImage.src=
-qrURL;
-
-}
+                        status.textContent =
+                            `✓ Đã nhận ${formatMoney(amount)} — cảm ơn bạn!`;
 
 
-conststatus=
-document.getElementById(
-"paymentStatus"
-);
+                        status.classList.remove(
+                            "expired"
+                        );
 
 
-if(status){
+                        status.classList.add(
+                            "paid"
+                        );
 
-status.classList.remove(
-"paid",
-"expired"
-);
-
-status.textContent=
-"●Đangchờchuyểnkhoản…";
-
-}
+                    }
 
 
-constformArea=
-document.getElementById(
-"formArea"
-);
+                    /*
+                       Cộng tiền ngay trên giao diện.
+                    */
 
-constqrResult=
-document.getElementById(
-"qrResult"
-);
+                    received =
+                        Math.max(
+                            received,
+                            0
+                        ) + amount;
 
 
-if(formArea){
+                    renderProgress();
 
-formArea.style.display=
-"none";
+
+                    /*
+                       Đợi server cập nhật rồi
+                       lấy lại lịch sử.
+                    */
+
+                    setTimeout(() => {
+
+                        updateProgress();
+
+                    },5000);
+
+
+                    setTimeout(() => {
+
+                        updateProgress();
+
+                    },8000);
+
+                }
+
+            }
+            catch(error){
+
+                console.warn(
+                    "Payment check error:",
+                    error
+                );
+
+            }
+
+        };
+
+
+    check();
+
+
+    paymentCheckInterval =
+        setInterval(
+            check,
+            3000
+        );
 
 }
 
 
-if(qrResult){
+/* =========================================
+   TIMER
+========================================= */
 
-qrResult.classList.add(
-"show"
-);
+function startTimer(){
 
-}
-
-
-startTimer();
-
-
-checkPayment(
-amount,
-name,
-currentContent
-);
-
-}
+    clearInterval(
+        countdownInterval
+    );
 
 
-/*=========================================
-COPYSỐTÀIKHOẢN
-=========================================*/
-
-functioncopyStk(){
-
-navigator.clipboard
-.writeText(ACCOUNT_NO)
-.then(()=>{
-
-constbutton=
-document.querySelector(
-".copy-btn"
-);
+    countdownInterval = null;
 
 
-if(!button){
-
-return;
-
-}
+    const TEN_MINUTES =
+        10 * 60 * 1000;
 
 
-constoldText=
-button.textContent;
+    countdownEndTime =
+        Date.now() +
+        TEN_MINUTES;
 
 
-button.textContent=
-"Đãsaochép";
+    const timer =
+        document.getElementById(
+            "timer"
+        );
 
 
-setTimeout(()=>{
-
-button.textContent=
-oldText;
-
-},1500);
-
-});
-
-}
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
 
 
-/*=========================================
-KIỂMTRATHANHTOÁN
-=========================================*/
+    function updateCountdown(){
 
-functioncheckPayment(
-amount,
-name,
-code
-){
+        if(!countdownEndTime){
 
-clearInterval(
-paymentCheckInterval
-);
+            return;
+
+        }
 
 
-constcheck=
-async()=>{
-
-try{
-
-constresponse=
-awaitfetch(
-CHECK_API,
-{
-method:"POST",
-
-headers:{
-"Content-Type":
-"application/json"
-},
-
-body:
-JSON.stringify({
-code:code,
-amount:amount,
-name:name,
-message:code
-})
-}
-);
+        const remaining =
+            Math.max(
+                0,
+                countdownEndTime -
+                Date.now()
+            );
 
 
-if(!response.ok){
-
-return;
-
-}
-
-
-constdata=
-awaitresponse.json();
+        const totalSeconds =
+            Math.ceil(
+                remaining / 1000
+            );
 
 
-if(
-data&&
-data.ok===true&&
-data.paid===true
-){
-
-clearInterval(
-paymentCheckInterval
-);
-
-paymentCheckInterval=null;
+        const minutes =
+            Math.floor(
+                totalSeconds / 60
+            );
 
 
-clearInterval(
-countdownInterval
-);
-
-countdownInterval=null;
+        const seconds =
+            totalSeconds % 60;
 
 
-conststatus=
-document.getElementById(
-"paymentStatus"
-);
+        const displayMinutes =
+            String(minutes)
+                .padStart(2,"0");
 
 
-if(status){
+        const displaySeconds =
+            String(seconds)
+                .padStart(2,"0");
 
-status.textContent=
-`✓Đãnhận${formatMoney(amount)}—cảmơnbạn!`;
 
-status.classList.remove(
-"expired"
-);
+        if(timer){
 
-status.classList.add(
-"paid"
-);
+            timer.textContent =
+                `${displayMinutes}:${displaySeconds}`;
+
+        }
+
+
+        if(remaining <= 0){
+
+            clearInterval(
+                countdownInterval
+            );
+
+            countdownInterval = null;
+
+            countdownEndTime = null;
+
+
+            clearInterval(
+                paymentCheckInterval
+            );
+
+            paymentCheckInterval = null;
+
+
+            if(timer){
+
+                timer.textContent =
+                    "Hết hạn";
+
+            }
+
+
+            if(status){
+
+                status.classList.remove(
+                    "paid"
+                );
+
+                status.classList.add(
+                    "expired"
+                );
+
+
+                status.textContent =
+                    "Mã đã hết hạn.";
+
+            }
+
+        }
+
+    }
+
+
+    updateCountdown();
+
+
+    countdownInterval =
+        setInterval(
+            updateCountdown,
+            250
+        );
 
 }
 
 
-/*
-Ngaykhithanhtoánthànhcông,
-cộngtiềnngayởgiaodiện.
+/* =========================================
+   TẠO MÃ MỚI
+========================================= */
 
-KhôngchờAPIhistorycậpnhật
-đểtránhhiệntượngsốtiềntụt.
-*/
+function newCode(){
 
-received=
-Math.max(
-received,
-0
-)+amount;
+    clearInterval(
+        countdownInterval
+    );
 
+    clearInterval(
+        paymentCheckInterval
+    );
 
-/*
-Cậpnhậtgiaodiệnngay.
-*/
 
-updateProgressDisplay();
+    countdownInterval = null;
+    paymentCheckInterval = null;
+    countdownEndTime = null;
 
 
-/*
-Sauđólấydữliệuthật
-từserver.
-*/
+    const qrResult =
+        document.getElementById(
+            "qrResult"
+        );
 
-setTimeout(()=>{
 
-updateProgress();
+    if(qrResult){
 
-},1500);
+        qrResult.classList.remove(
+            "show"
+        );
 
-}
+    }
 
-}catch(error){
 
-console.warn(
-"Paymentcheckerror:",
-error
-);
+    const formArea =
+        document.getElementById(
+            "formArea"
+        );
 
-}
 
-};
+    if(formArea){
 
+        formArea.style.display =
+            "";
 
-check();
+    }
 
 
-paymentCheckInterval=
-setInterval(
-check,
-3000
-);
+    const status =
+        document.getElementById(
+            "paymentStatus"
+        );
 
-}
 
+    if(status){
 
-/*=========================================
-CHỈCẬPNHẬTGIAODIỆNPROGRESS
-=========================================*/
+        status.classList.remove(
+            "paid",
+            "expired"
+        );
 
-functionupdateProgressDisplay(){
 
-constpercent=
-Math.min(
-(received/PROJECT_TARGET)*100,
-100
-);
+        status.textContent =
+            "● Đang chờ chuyển khoản…";
 
+    }
 
-constreceivedElement=
-document.getElementById(
-"received"
-);
 
-constremainingElement=
-document.getElementById(
-"remaining"
-);
+    const timer =
+        document.getElementById(
+            "timer"
+        );
 
-constpercentElement=
-document.getElementById(
-"percent"
-);
 
-constprogressBar=
-document.getElementById(
-"progressBar"
-);
+    if(timer){
 
+        timer.textContent =
+            "10:00";
 
-if(receivedElement){
-
-receivedElement.textContent=
-formatMoney(received);
-
-}
-
-
-if(remainingElement){
-
-remainingElement.textContent=
-formatMoney(
-Math.max(
-PROJECT_TARGET-received,
-0
-)
-);
-
-}
-
-
-if(percentElement){
-
-percentElement.textContent=
-percent
-.toFixed(1)
-.replace(".",",")+
-"%";
-
-}
-
-
-if(progressBar){
-
-progressBar.style.width=
-percent+"%";
-
-}
-
-}
-
-
-/*=========================================
-TIMER
-=========================================*/
-
-functionstartTimer(){
-
-clearInterval(
-countdownInterval
-);
-
-
-countdownInterval=null;
-
-
-constTEN_MINUTES=
-10*60*1000;
-
-
-countdownEndTime=
-Date.now()+
-TEN_MINUTES;
-
-
-consttimer=
-document.getElementById(
-"timer"
-);
-
-conststatus=
-document.getElementById(
-"paymentStatus"
-);
-
-
-functionupdateCountdown(){
-
-if(!countdownEndTime){
-
-return;
-
-}
-
-
-constnow=
-Date.now();
-
-
-constremaining=
-Math.max(
-0,
-countdownEndTime-now
-);
-
-
-consttotalSeconds=
-Math.ceil(
-remaining/1000
-);
-
-
-constminutes=
-Math.floor(
-totalSeconds/60
-);
-
-
-constseconds=
-totalSeconds%60;
-
-
-if(timer){
-
-timer.textContent=
-String(minutes)
-.padStart(2,"0")+
-":"+
-String(seconds)
-.padStart(2,"0");
-
-}
-
-
-if(remaining<=0){
-
-clearInterval(
-countdownInterval
-);
-
-countdownInterval=null;
-
-
-countdownEndTime=null;
-
-
-clearInterval(
-paymentCheckInterval
-);
-
-paymentCheckInterval=null;
-
-
-if(timer){
-
-timer.textContent=
-"Hếthạn";
-
-}
-
-
-if(status){
-
-status.classList.remove(
-"paid"
-);
-
-status.classList.add(
-"expired"
-);
-
-status.textContent=
-"Mãđãhếthạn.";
-
-}
-
-}
-
-}
-
-
-updateCountdown();
-
-
-countdownInterval=
-setInterval(
-updateCountdown,
-250
-);
-
-}
-
-
-/*=========================================
-TẠOMÃMỚI
-=========================================*/
-
-functionnewCode(){
-
-clearInterval(
-countdownInterval
-);
-
-clearInterval(
-paymentCheckInterval
-);
-
-
-countdownInterval=null;
-paymentCheckInterval=null;
-countdownEndTime=null;
-
-
-constqrResult=
-document.getElementById(
-"qrResult"
-);
-
-
-if(qrResult){
-
-qrResult.classList.remove(
-"show"
-);
-
-}
-
-
-constformArea=
-document.getElementById(
-"formArea"
-);
-
-
-if(formArea){
-
-formArea.style.display=
-"";
-
-}
-
-
-conststatus=
-document.getElementById(
-"paymentStatus"
-);
-
-
-if(status){
-
-status.classList.remove(
-"paid",
-"expired"
-);
-
-status.textContent=
-"●Đangchờchuyểnkhoản…";
-
-}
-
-
-consttimer=
-document.getElementById(
-"timer"
-);
-
-
-if(timer){
-
-timer.textContent=
-"10:00";
-
-}
+    }
 
 }
