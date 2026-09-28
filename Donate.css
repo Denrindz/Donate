@@ -718,5 +718,96 @@ HTML nhớ đặt theo đúng thứ tự này:
 <section class="progress-card">
   ...
 </section>
+/* =========================
+   FUND OVERVIEW
+   KHUNG BỰ
+========================= */
 
-Và không đặt fund-goal bên trong progress-card hoặc donate-section.
+.fund-overview{
+  width:100%;
+
+  margin:0 0 22px;
+  padding:22px;
+
+  background:rgba(255,255,255,.9);
+
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+
+  box-shadow:var(--shadow);
+}
+
+
+/* =========================
+   2 KHUNG NHỎ
+========================= */
+
+.fund-overview .fund-goal,
+.fund-overview .progress-card{
+  width:100%;
+
+  margin:0;
+
+  background:rgba(255,255,255,.75);
+
+  border:1px solid var(--line);
+
+  border-radius:18px;
+
+  box-shadow:
+    0 8px 25px rgba(0,40,40,.05);
+}
+
+
+/* =========================
+   MỤC TIÊU
+========================= */
+
+.fund-overview .fund-goal{
+  padding:22px;
+}
+
+
+/* =========================
+   TIẾN ĐỘ
+========================= */
+
+.fund-overview .progress-card{
+  margin-top:16px;
+  padding:22px;
+}
+
+
+/* =========================
+   ỦNG HỘ
+========================= */
+
+.fund-overview .donate-section{
+  margin:16px 0 0;
+
+  padding:22px 10px 8px;
+
+  background:transparent;
+
+  border:0;
+
+  border-radius:0;
+
+  box-shadow:none;
+
+  text-align:center;
+}
+
+.fund-overview .donate-section h2{
+  margin:0;
+
+  font-size:25px;
+}
+
+.fund-overview .donate-section p{
+  margin:9px auto 18px;
+
+  max-width:600px;
+
+  font-size:13px;
+}
