@@ -3,133 +3,450 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Denrindz và MilanVu — Trạm Quyên Góp</title>
-  <meta
-    name="description"
-    content="Ủng hộ Denrindz & MilanVu — Trạm quyên góp"
-  >
-  <link rel="stylesheet" href="./Donate.css">
+
+  <title>Quỹ Donate — Denrindz × MilanVu</title>
+
+  <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <div class="bg-glow glow-1"></div>
-  <div class="bg-glow glow-2"></div>
-  <main class="container">
+
+  <header>
+    <div class="logo">
+      <span class="logo-dot"></span>
+      <span>Denrindz × MilanVu</span>
+    </div>
+
+    <div class="header-tag">
+      Trạm quyên góp công cộng
+    </div>
+  </header>
+
+  <main>
+
     <section class="hero">
-      <div class="logo">D</div>
-      <h1>Denrindz và MilanVu</h1>
-      <p class="subtitle">Trạm Quyên Góp</p>
-      <p class="description">
-        Tiếp sức cho Denrindz &amp; MilanVu bằng một khoản ủng hộ nhỏ.
-        Mỗi sự ủng hộ đều là một động lực rất lớn.
+      <div class="eyebrow">
+        QUỸ DONATE DENRINDZ × MILANVU
+      </div>
+
+      <h1>
+        Tiếp sức cho<br>
+        dự án trở lại.
+      </h1>
+
+      <p>
+        Hai đứa, một căn phòng nhỏ và một đống ước mơ chưa kịp sạc pin.
+        Mọi đồng ủng hộ — to hay bé — đều được cảm ơn hai lần:
+        một lần bằng lời, một lần bằng hành động.
       </p>
     </section>
-    <section class="donation-card">
-      <div class="card-header">
-        <div>
-          <span class="eyebrow">MỤC TIÊU</span>
-          <h2>Ủng hộ ngay</h2>
+
+    <section class="progress-card">
+
+      <div class="progress-top">
+
+        <div class="received">
+          <span>ĐÃ NHẬN ĐƯỢC</span>
+          <span id="received">0 ₫</span>
         </div>
-        <span class="target">1.000.000₫</span>
-      </div>
-      <div class="progress-wrapper">
-        <div class="progress-info">
-          <span id="receivedAmount">0₫</span>
-          <span>1.000.000₫</span>
+
+        <div class="percent" id="percent">
+          0%
         </div>
-        <div class="progress">
-          <div id="progressBar" class="progress-bar"></div>
+
+      </div>
+
+      <div class="progress">
+        <div class="progress-bar" id="progressBar"></div>
+      </div>
+
+      <div class="progress-bottom">
+        <span>
+          Còn
+          <strong id="remaining">1.000.000 ₫</strong>
+        </span>
+
+        <span>
+          Mục tiêu
+          <strong>1.000.000 ₫</strong>
+        </span>
+      </div>
+
+      <div class="deadline">
+        <span>
+          Hạn dự án:
+          <strong>Không giới hạn</strong>
+        </span>
+
+        <span>
+          Giờ Việt Nam
+        </span>
+      </div>
+
+    </section>
+
+    <section class="supporters">
+
+      <div class="section-title">
+
+        <h2>Lời cảm ơn</h2>
+
+        <div class="live">
+          <i></i>
+          Cập nhật tự động
         </div>
+
       </div>
-      <div class="quick-title">Chọn số tiền</div>
-      <div class="quick-amounts">
-        <button class="amount-btn" data-amount="20000">20K</button>
-        <button class="amount-btn" data-amount="50000">50K</button>
-        <button class="amount-btn" data-amount="200000">200K</button>
-        <button class="amount-btn" data-amount="500000">500K</button>
+
+      <div id="supporterList">
+
+        <div class="supporter">
+
+          <div class="avatar">
+            …
+          </div>
+
+          <div class="supporter-info">
+
+            <div class="supporter-name">
+              Đang tải...
+            </div>
+
+            <div class="supporter-time">
+              Đang lấy lịch sử ủng hộ
+            </div>
+
+          </div>
+
+          <div class="amount">
+            —
+          </div>
+
+        </div>
+
       </div>
-      <label for="amount">Số tiền muốn ủng hộ</label>
-      <div class="amount-input">
-        <input
-          id="amount"
-          type="number"
-          min="10000"
-          step="1000"
-          placeholder="Nhập số tiền..."
-        >
-        <span>₫</span>
-      </div>
-      <button id="donateBtn" class="donate-btn">
+
+    </section>
+
+    <section class="donate-section">
+
+      <h2>
+        Ủng hộ dự án
+      </h2>
+
+      <p>
+        Chỉ cần tên và số tiền, hệ thống sẽ tạo mã VietQR
+        chuyển khoản trực tiếp đến tài khoản MB Bank của Denrindz.
+      </p>
+
+      <button class="donate-btn" onclick="openModal()">
         Ủng hộ ngay
       </button>
-      <p class="minimum">
-        Số tiền tối thiểu: 10.000₫
-      </p>
+
     </section>
-    <section id="qrSection" class="qr-card hidden">
-      <div class="qr-header">
-        <div>
-          <span class="eyebrow">THANH TOÁN</span>
-          <h2>Quét mã để ủng hộ</h2>
-        </div>
-        <button id="closeQr" class="close-btn">×</button>
-      </div>
-      <div class="qr-wrapper">
-        <img id="qrImage" src="" alt="Mã QR quyên góp">
-      </div>
-      <div class="bank-info">
-        <div class="info-row">
-          <span>Ngân hàng</span>
-          <strong>MB Bank</strong>
-        </div>
-        <div class="info-row">
-          <span>Số tài khoản</span>
-          <div class="copy-value">
-            <strong id="accountNumber">09637164106868</strong>
-            <button id="copyAccount">Sao chép</button>
-          </div>
-        </div>
-        <div class="info-row">
-          <span>Số tiền</span>
-          <strong id="qrAmount">0₫</strong>
-        </div>
-        <div class="info-row">
-          <span>Nội dung</span>
-          <div class="copy-value">
-            <strong id="transferContent">DENRINDZ</strong>
-            <button id="copyContent">Sao chép</button>
-          </div>
-        </div>
-      </div>
-      <div class="notice">
-        <span>⌁</span>
-        Mã QR có hiệu lực trong khoảng 10 phút.
-      </div>
-      <button id="checkPayment" class="check-btn">
-        Tôi đã chuyển khoản
-      </button>
-      <p id="paymentStatus" class="payment-status"></p>
-    </section>
-    <section class="history-section">
-      <div class="section-heading">
-        <div>
-          <span class="eyebrow">LỊCH SỬ</span>
-          <h2>5 người ủng hộ gần nhất</h2>
-        </div>
-        <button id="refreshHistory" class="refresh-btn">
-          ↻
-        </button>
-      </div>
-      <div id="historyList" class="history-list">
-        <div class="loading">
-          Đang tải lịch sử...
-        </div>
-      </div>
-    </section>
+
     <footer>
-      <span>© 2026 Denrindz &amp; MilanVu</span>
-      <span>Made with <b>♥</b></span>
+      © 2026 Denrindz × MilanVu · Cảm ơn bạn đã ghé qua.
     </footer>
+
   </main>
-  <script src="./script.js"></script>
+
+
+  <!-- MODAL DONATE -->
+
+  <div
+    class="modal"
+    id="modal"
+    onclick="outsideClose(event)"
+  >
+
+    <div class="modal-box">
+
+      <div class="modal-head">
+
+        <div>
+
+          <div class="modal-label">
+            ỦNG HỘ DỰ ÁN
+          </div>
+
+          <h2>
+            Tiếp sức cho Denrindz & MilanVu
+          </h2>
+
+        </div>
+
+        <button
+          class="close"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- FORM -->
+
+      <div id="formArea">
+
+        <div class="field">
+
+          <label>
+            TÊN HIỂN THỊ
+          </label>
+
+          <input
+            id="donorName"
+            type="text"
+            maxlength="40"
+            placeholder="Tên của bạn"
+          >
+
+        </div>
+
+
+        <div class="field">
+
+          <label>
+            SỐ TIỀN ỦNG HỘ
+          </label>
+
+          <div class="money">
+
+            <input
+              id="donationAmount"
+              type="number"
+              min="10000"
+              step="1000"
+              placeholder="10.000"
+            >
+
+            <span class="currency">
+              VND
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="quick">
+
+          <button onclick="setAmount(20000)">
+            20K
+          </button>
+
+          <button onclick="setAmount(50000)">
+            50K
+          </button>
+
+          <button onclick="setAmount(200000)">
+            200K
+          </button>
+
+          <button onclick="setAmount(500000)">
+            500K
+          </button>
+
+        </div>
+
+
+        <div
+          class="error"
+          id="error"
+        ></div>
+
+
+        <button
+          class="generate"
+          onclick="generateQR()"
+        >
+          Tạo mã ủng hộ
+        </button>
+
+
+        <div class="note">
+          Thanh toán qua ngân hàng · Không cần đăng nhập
+        </div>
+
+      </div>
+
+
+      <!-- QR RESULT -->
+
+      <div
+        class="qr-result"
+        id="qrResult"
+      >
+
+        <div class="qr-title">
+
+          <div class="small">
+            MÃ ỦNG HỘ ĐÃ SẴN SÀNG
+          </div>
+
+          <h3>
+            Quét mã để chuyển khoản
+          </h3>
+
+        </div>
+
+
+        <div
+          class="qr-box"
+          id="qrBox"
+        >
+
+          <img
+            id="qrImage"
+            alt="QR chuyển khoản MB Bank"
+          >
+
+        </div>
+
+
+        <div
+          class="payment-status"
+          id="paymentStatus"
+        >
+          ● Đang chờ chuyển khoản…
+        </div>
+
+
+        <div class="payment-info">
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Số tiền
+            </span>
+
+            <span
+              class="info-value"
+              id="qrAmount"
+            >
+              —
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Người ủng hộ
+            </span>
+
+            <span
+              class="info-value"
+              id="qrName"
+            >
+              —
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Ngân hàng
+            </span>
+
+            <span class="info-value">
+              MB Bank
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Số tài khoản
+            </span>
+
+            <span class="info-value">
+
+              <span id="qrStk">
+                09637164106868
+              </span>
+
+              <button
+                class="copy-btn"
+                onclick="copyStk()"
+              >
+                Copy
+              </button>
+
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Nội dung chuyển khoản
+            </span>
+
+            <span
+              class="info-value"
+              id="qrContent"
+            >
+              —
+            </span>
+
+          </div>
+
+
+          <div class="info-row">
+
+            <span class="info-label">
+              Thời gian tạo
+            </span>
+
+            <span
+              class="info-value"
+              id="qrTime"
+            >
+              —
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="timer">
+
+          Mã còn hiệu lực
+
+          <strong id="timer">
+            10:00
+          </strong>
+
+        </div>
+
+
+        <button
+          class="new-code"
+          onclick="newCode()"
+        >
+          Tạo mã mới
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- JS sẽ thêm sau -->
+  <script src="script.js"></script>
+
 </body>
 </html>
