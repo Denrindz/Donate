@@ -30,7 +30,6 @@ body{
 
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 
-  /* GRADIENT XANH NHẠT Ở ĐẦU TRANG */
   background:
     linear-gradient(
       to bottom,
@@ -659,6 +658,9 @@ footer{
 
 .money input{
   padding-right:60px;
+
+  /* SỐ TIỀN NHẬP ĐẬM HƠN */
+  font-weight:700;
 }
 
 .currency{
@@ -675,18 +677,31 @@ footer{
   font-weight:800;
 }
 
+
+/* ========================================
+   SỐ TIỀN NHANH
+   LUÔN 4 NÚT TRÊN 1 HÀNG
+======================================== */
+
 .quick{
   display:grid;
 
-  grid-template-columns:repeat(4,1fr);
+  /* 4 CỘT Ở MỌI KÍCH THƯỚC */
+  grid-template-columns:repeat(4,minmax(0,1fr));
 
   gap:8px;
+
+  width:100%;
 
   margin-bottom:13px;
 }
 
 .quick button{
+  width:100%;
+  min-width:0;
   height:38px;
+
+  padding:0 4px;
 
   border:1px solid var(--line);
 
@@ -700,12 +715,25 @@ footer{
   font-weight:750;
 
   cursor:pointer;
+
+  /* Không cho chữ xuống dòng */
+  white-space:nowrap;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+
+  transition:.2s ease;
 }
 
 .quick button:hover{
   border-color:var(--accent);
   color:var(--accent);
 }
+
+
+/* ========================================
+   ERROR
+======================================== */
 
 .error{
   min-height:18px;
@@ -716,6 +744,11 @@ footer{
 
   font-size:12px;
 }
+
+
+/* ========================================
+   GENERATE
+======================================== */
 
 .generate{
   width:100%;
@@ -1006,8 +1039,18 @@ footer{
     border-radius:18px;
   }
 
+  /*
+    KHÔNG CHUYỂN QUICK SANG 2 HÀNG.
+    Vẫn giữ 4 nút trên 1 hàng.
+  */
   .quick{
-    grid-template-columns:repeat(2,1fr);
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .quick button{
+    font-size:11px;
+    padding:0 2px;
   }
 
   .info-row{
