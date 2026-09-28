@@ -49,7 +49,7 @@ function formatMoney(number){
 
 
 /* =========================================
-   CẬP NHẬT GIAO DIỆN TIẾN ĐỘ
+   CẬP NHẬT PROGRESS
 ========================================= */
 
 function renderProgress(){
@@ -117,10 +117,40 @@ function renderProgress(){
 
 
 /* =========================================
-   HIỂN THỊ LỊCH SỬ DONATE
+   ESCAPE HTML
+========================================= */
+
+function escapeHTML(value){
+
+    return String(value)
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
+
+}
+
+
+/* =========================================
+   LỊCH SỬ DONATE
+   CHỈ HIỂN THỊ 5 NGƯỜI GẦN NHẤT
 ========================================= */
 
 function renderHistory(history){
+
+    const supporterList =
+        document.getElementById(
+            "supporterList"
+        );
+
+
+    if(!supporterList){
+
+        return;
+
+    }
+
 
     if(!Array.isArray(history)){
 
@@ -129,10 +159,10 @@ function renderHistory(history){
     }
 
 
-    /*
-       Chỉ lấy các giao dịch donate
-       có mã DXM
-    */
+    /* =====================================
+       LỌC + SẮP XẾP
+       MỚI NHẤT -> CŨ NHẤT
+    ===================================== */
 
     const donations =
         history
@@ -169,92 +199,8 @@ function renderHistory(history){
 
                 return dateB - dateA;
 
-            });
-
-
-    /*
-       Tìm khu vực lịch sử nếu HTML
-       đã có sẵn
-    */
-
-    let historyContainer =
-        document.getElementById(
-            "donationHistory"
-        );
-
-
-    /*
-       Nếu HTML chưa có khu vực lịch sử,
-       tự tạo để không cần sửa HTML
-    */
-
-    if(!historyContainer){
-
-        historyContainer =
-            document.createElement("div");
-
-        historyContainer.id =
-            "donationHistory";
-
-
-        /*
-           Chèn sau progressBar
-        */
-
-        const progressBar =
-            document.getElementById(
-                "progressBar"
-            );
-
-
-        if(progressBar){
-
-            const parent =
-                progressBar.parentElement;
-
-            if(parent){
-
-                parent.after(
-                    historyContainer
-                );
-
-            }
-
-        }else{
-
-            document.body.appendChild(
-                historyContainer
-            );
-
-        }
-
-    }
-
-
-    /* =====================================
-       XÓA NỘI DUNG CŨ
-    ===================================== */
-
-    historyContainer.innerHTML = "";
-
-
-    /* =====================================
-       TIÊU ĐỀ
-    ===================================== */
-
-    const title =
-        document.createElement("h3");
-
-    title.textContent =
-        "Lịch sử donate";
-
-    title.className =
-        "donation-history-title";
-
-
-    historyContainer.appendChild(
-        title
-    );
+            })
+            .slice(0,5);
 
 
     /* =====================================
@@ -263,18 +209,33 @@ function renderHistory(history){
 
     if(donations.length === 0){
 
-        const empty =
-            document.createElement("div");
+        supporterList.innerHTML = `
 
-        empty.className =
-            "donation-history-empty";
+            <div class="supporter">
 
-        empty.textContent =
-            "Chưa có lượt donate nào.";
+                <div class="avatar">
+                    …
+                </div>
 
-        historyContainer.appendChild(
-            empty
-        );
+                <div class="supporter-info">
+
+                    <div class="supporter-name">
+                        Chưa có lượt donate
+                    </div>
+
+                    <div class="supporter-time">
+                        Hãy là người đầu tiên ủng hộ
+                    </div>
+
+                </div>
+
+                <div class="amount">
+                    —
+                </div>
+
+            </div>
+
+        `;
 
         return;
 
@@ -282,24 +243,17 @@ function renderHistory(history){
 
 
     /* =====================================
-       DANH SÁCH
+       XÓA DANH SÁCH CŨ
     ===================================== */
 
-    const list =
-        document.createElement("div");
+    supporterList.innerHTML = "";
 
-    list.className =
-        "donation-history-list";
 
+    /* =====================================
+       HIỂN THỊ 5 DONATE GẦN NHẤT
+    ===================================== */
 
     donations.forEach(item => {
-
-        const row =
-            document.createElement("div");
-
-        row.className =
-            "donation-history-item";
-
 
         const name =
             item.name ||
@@ -318,14 +272,14 @@ function renderHistory(history){
             "DXM";
 
 
-        let dateValue =
+        const dateValue =
             item.time ||
             item.createdAt ||
             item.created_at ||
             item.date;
 
 
-        let dateText =
+        let timeText =
             "Không rõ thời gian";
 
 
@@ -339,14 +293,14 @@ function renderHistory(history){
                 date.getTime()
             )){
 
-                dateText =
+                timeText =
                     date.toLocaleString(
                         "vi-VN"
                     );
 
             }else{
 
-                dateText =
+                timeText =
                     String(dateValue);
 
             }
@@ -354,61 +308,59 @@ function renderHistory(history){
         }
 
 
-        row.innerHTML = `
+        const firstLetter =
+            String(name)
+                .trim()
+                .charAt(0)
+                .toUpperCase() || "D";
 
-            <div class="donation-history-info">
 
-                <div class="donation-history-name">
+        const supporter =
+            document.createElement("div");
+
+
+        supporter.className =
+            "supporter";
+
+
+        supporter.innerHTML = `
+
+            <div class="avatar">
+                ${escapeHTML(firstLetter)}
+            </div>
+
+            <div class="supporter-info">
+
+                <div class="supporter-name">
                     ${escapeHTML(name)}
                 </div>
 
-                <div class="donation-history-meta">
-                    ${escapeHTML(code)}
+                <div class="supporter-time">
+                    ${escapeHTML(timeText)}
                     ·
-                    ${escapeHTML(dateText)}
+                    ${escapeHTML(code)}
                 </div>
 
             </div>
 
-            <div class="donation-history-amount">
+            <div class="amount">
                 +${formatMoney(amount)}
             </div>
 
         `;
 
 
-        list.appendChild(
-            row
+        supporterList.appendChild(
+            supporter
         );
 
     });
 
-
-    historyContainer.appendChild(
-        list
-    );
-
 }
 
 
 /* =========================================
-   CHỐNG HTML INJECTION
-========================================= */
-
-function escapeHTML(value){
-
-    return String(value)
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-/* =========================================
-   PROGRESS + HISTORY
+   LẤY PROGRESS + HISTORY
 ========================================= */
 
 async function updateProgress(){
@@ -442,7 +394,7 @@ async function updateProgress(){
 
 
         /* =====================================
-           LẤY TOTAL TỪ API
+           LẤY TỔNG TIỀN
         ===================================== */
 
         if(
@@ -486,18 +438,16 @@ async function updateProgress(){
 
 
         /*
-           QUAN TRỌNG:
+           KHÔNG CHO API CŨ LÀM TỤT PROGRESS
 
-           Không cho API cũ ghi đè
-           tổng tiền hiện tại xuống.
+           Nếu web đang có:
+           200.000
 
-           Ví dụ:
-           trước = 100.000
-           donate mới = 50.000
-           received = 150.000
+           nhưng API tạm thời trả:
+           100.000
 
-           API lúc đó trả 100.000
-           => vẫn giữ 150.000
+           thì vẫn giữ:
+           200.000
         */
 
         received =
@@ -508,7 +458,7 @@ async function updateProgress(){
 
 
         /* =====================================
-           HIỂN THỊ LỊCH SỬ
+           CẬP NHẬT LỊCH SỬ
         ===================================== */
 
         if(
@@ -534,13 +484,17 @@ async function updateProgress(){
 
 
     /* =====================================
-       CẬP NHẬT THANH TIẾN ĐỘ
+       HIỂN THỊ PROGRESS
     ===================================== */
 
     renderProgress();
 
 }
 
+
+/* =========================================
+   LOAD DỮ LIỆU BAN ĐẦU
+========================================= */
 
 updateProgress();
 
@@ -917,14 +871,14 @@ function generateQR(){
 
 
     /* =====================================
-       BẮT ĐẦU ĐẾM NGƯỢC
+       BẮT ĐẦU TIMER
     ===================================== */
 
     startTimer();
 
 
     /* =====================================
-       BẮT ĐẦU KIỂM TRA THANH TOÁN
+       KIỂM TRA THANH TOÁN
     ===================================== */
 
     checkPayment(
@@ -1087,17 +1041,8 @@ function checkPayment(
 
 
                     /* =================================
-                       SỬA LỖI THANH TIẾN ĐỘ BỊ TỤT
+                       CẬP NHẬT PROGRESS NGAY
                     ================================= */
-
-                    /*
-                       Cộng ngay số tiền vừa nhận
-                       vào tổng hiện tại.
-
-                       Không gọi updateProgress()
-                       ngay lập tức để API cũ không
-                       ghi đè số tiền vừa cộng.
-                    */
 
                     received =
                         Math.max(
@@ -1109,20 +1054,27 @@ function checkPayment(
                     renderProgress();
 
 
-                    /*
-                       Sau vài giây lấy lại lịch sử
-                       mới nhất từ server.
-
-                       Hàm updateProgress() dùng
-                       Math.max() nên dữ liệu cũ
-                       sẽ không làm thanh tiến độ tụt.
-                    */
+                    /* =================================
+                       ĐỢI SERVER CẬP NHẬT
+                    ================================= */
 
                     setTimeout(() => {
 
                         updateProgress();
 
                     },5000);
+
+
+                    /* =================================
+                       CẬP NHẬT LỊCH SỬ
+                       SAU KHI SERVER GHI NHẬN
+                    ================================= */
+
+                    setTimeout(() => {
+
+                        updateProgress();
+
+                    },8000);
 
                 }
 
@@ -1201,7 +1153,7 @@ function startTimer(){
             Date.now();
 
 
-        let remaining =
+        const remaining =
             Math.max(
                 0,
                 countdownEndTime - now
@@ -1241,6 +1193,10 @@ function startTimer(){
 
         }
 
+
+        /* =================================
+           HẾT HẠN
+        ================================= */
 
         if(remaining <= 0){
 
@@ -1293,8 +1249,12 @@ function startTimer(){
     }
 
 
+    /* Hiển thị ngay */
+
     updateCountdown();
 
+
+    /* Cập nhật mỗi 250ms */
 
     countdownInterval =
         setInterval(
@@ -1310,6 +1270,10 @@ function startTimer(){
 ========================================= */
 
 function newCode(){
+
+    /* =====================================
+       DỪNG TIMER
+    ===================================== */
 
     clearInterval(
         countdownInterval
@@ -1330,6 +1294,10 @@ function newCode(){
         null;
 
 
+    /* =====================================
+       ẨN QR
+    ===================================== */
+
     const qrResult =
         document.getElementById(
             "qrResult"
@@ -1345,6 +1313,10 @@ function newCode(){
     }
 
 
+    /* =====================================
+       HIỆN LẠI FORM
+    ===================================== */
+
     const formArea =
         document.getElementById(
             "formArea"
@@ -1358,6 +1330,10 @@ function newCode(){
 
     }
 
+
+    /* =====================================
+       RESET STATUS
+    ===================================== */
 
     const status =
         document.getElementById(
@@ -1378,6 +1354,10 @@ function newCode(){
 
     }
 
+
+    /* =====================================
+       RESET TIMER
+    ===================================== */
 
     const timer =
         document.getElementById(
