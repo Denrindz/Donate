@@ -217,19 +217,24 @@ h1{
   letter-spacing:-1px;
 }
 
+/* =========================
+   PERCENT BOX
+========================= */
+
 .percent{
-  min-width:72px;
+  width:78px;
   height:42px;
 
   display:flex;
   align-items:center;
   justify-content:center;
 
-  padding:0 14px;
+  flex-shrink:0;
 
-  background:var(--accent);
-  color:#fff;
+  background:#009090;
+  color:#ffffff;
 
+  border:1px solid #009090;
   border-radius:12px;
 
   font-size:16px;
@@ -238,8 +243,7 @@ h1{
   line-height:1;
   text-align:center;
 
-  box-shadow:
-    0 6px 16px rgba(0,144,144,.18);
+  box-shadow:0 6px 18px rgba(0,144,144,.22);
 }
 
 .progress{
