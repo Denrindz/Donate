@@ -1,18 +1,14 @@
 :root{
-  --paper:#F2ECDF;
-  --paper2:#FBF7EE;
-  --ink:#17140E;
-  --muted:#6F6753;
-
-  --accent:#008080;
-  --accent-d:#006666;
-
-  --gold:#008080;
-  --gold-d:#006666;
-
-  --green:#3E8E5A;
-
-  --border:2px solid var(--ink);
+  --bg:#f5f5f3;
+  --surface:#ffffff;
+  --surface-soft:#f8f8f7;
+  --text:#171717;
+  --muted:#777;
+  --line:#e8e8e5;
+  --accent:#008f8f;
+  --accent-dark:#007676;
+  --success:#16845a;
+  --danger:#d94a3d;
 }
 
 *{
@@ -23,86 +19,100 @@
 
 html{
   scroll-behavior:smooth;
-  background:#10ADAD;
+  background:var(--bg);
 }
 
 body{
   min-height:100vh;
-  background:#10ADAD;
-  color:var(--ink);
-  font-family:'Bricolage Grotesque',sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Display",
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
   -webkit-font-smoothing:antialiased;
   overflow-x:hidden;
   -webkit-tap-highlight-color:transparent;
 }
 
+button,
+input{
+  font:inherit;
+}
+
+button{
+  color:inherit;
+  touch-action:manipulation;
+}
+
 ::selection{
-  background:var(--accent);
-  color:var(--paper2);
+  background:#d7eeee;
+  color:#111;
 }
 
 [hidden]{
   display:none!important;
 }
 
-button{
-  font:inherit;
-  color:inherit;
-  touch-action:manipulation;
-}
 
-/* ============================================
-   KHUNG TRANG
-   ============================================ */
-
-.page-frame{
-  position:relative;
-  width:calc(100% - 24px);
-  max-width:1200px;
-  min-height:calc(100vh - 24px);
-
-  margin:12px auto;
-
-  background:var(--paper2);
-
-  border:none;
-  border-radius:26px;
-
-  overflow:hidden;
-
-  box-shadow:none;
-}
-
-/* ============================================
-   HẠT GIẤY
-   ============================================ */
+/* =========================================================
+   NỀN
+========================================================= */
 
 .noise{
   position:fixed;
   inset:0;
   z-index:950;
   pointer-events:none;
+  opacity:.018;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+}
 
-  opacity:.035;
 
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+/* =========================================================
+   KHUNG CHÍNH
+========================================================= */
+
+.page-frame{
+  position:relative;
+
+  width:min(1120px,calc(100% - 28px));
+  min-height:calc(100vh - 28px);
+
+  margin:14px auto;
+
+  background:var(--surface);
+
+  border:1px solid var(--line);
+  border-radius:28px;
+
+  overflow:hidden;
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.045);
 }
 
 .wrap{
   width:100%;
-  max-width:1060px;
+  max-width:980px;
 
-  margin:0 auto;
-  padding-left:clamp(16px,4vw,32px);
-  padding-right:clamp(16px,4vw,32px);
+  margin:auto;
+
+  padding-left:clamp(20px,4vw,34px);
+  padding-right:clamp(20px,4vw,34px);
 }
 
-/* ============================================
-   THANH ĐẦU TRANG
-   ============================================ */
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .topbar{
-  border-bottom:1px solid rgba(23,20,14,.16);
+  border-bottom:1px solid var(--line);
 }
 
 .topbar .wrap{
@@ -110,40 +120,41 @@ button{
   align-items:center;
   justify-content:space-between;
 
-  padding-top:14px;
-  padding-bottom:14px;
+  min-height:64px;
 }
 
 .brand{
-  font-weight:800;
-  font-size:14px;
-  letter-spacing:.02em;
-  text-transform:uppercase;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:-.2px;
+  color:#222;
 }
 
 .brand span{
   color:var(--accent);
+  margin:0 3px;
 }
 
-/* ============================================
-   BĂNG CHỮ CHẠY
-   ============================================ */
+
+/* =========================================================
+   MARQUEE
+========================================================= */
 
 .marquee{
   width:100%;
   overflow:hidden;
 
-  background:var(--ink);
-  color:var(--paper2);
+  background:#fafafa;
+  color:#777;
 
-  border-bottom:1px solid var(--ink);
+  border-bottom:1px solid var(--line);
 }
 
 .mq-track{
   display:flex;
   width:max-content;
 
-  animation:mq 30s linear infinite;
+  animation:mq 34s linear infinite;
 }
 
 .mq-track span{
@@ -152,15 +163,15 @@ button{
 
   padding:9px 0;
 
-  font-family:'Space Mono',monospace;
-  font-size:10px;
-  letter-spacing:.14em;
+  font-size:9px;
+  font-weight:600;
+
+  letter-spacing:.13em;
   text-transform:uppercase;
 }
 
 .mq-track b{
   color:var(--accent);
-  font-weight:700;
   padding:0 16px;
 }
 
@@ -171,11 +182,10 @@ button{
 }
 
 .marquee.foot{
-  background:var(--accent);
-  color:var(--ink);
+  background:#111;
+  color:#aaa;
 
-  border-top:1px solid var(--ink);
-  border-bottom:none;
+  border:none;
 }
 
 .marquee.foot .mq-track{
@@ -183,57 +193,61 @@ button{
 }
 
 .marquee.foot .mq-track b{
-  color:var(--paper2);
+  color:#fff;
 }
 
-/* ============================================
+
+/* =========================================================
    HERO
-   ============================================ */
+========================================================= */
 
 .hero{
   position:relative;
 
-  padding-top:clamp(52px,8vw,92px);
-  padding-bottom:clamp(50px,7vw,76px);
+  padding-top:clamp(72px,10vw,120px);
+  padding-bottom:clamp(80px,10vw,120px);
+
+  text-align:center;
 }
 
 .overline{
   display:flex;
   align-items:center;
-  gap:12px;
+  justify-content:center;
+  gap:9px;
 
-  font-family:'Space Mono',monospace;
   font-size:10px;
-  letter-spacing:.18em;
+  font-weight:600;
+
+  letter-spacing:.14em;
   text-transform:uppercase;
 
-  color:var(--muted);
+  color:#929292;
 }
 
-.overline::before{
-  content:'';
+.overline::before,
+.overline::after{
+  content:"";
 
-  width:34px;
-  height:2px;
+  width:24px;
+  height:1px;
 
-  flex:none;
-
-  background:var(--accent);
+  background:#d7d7d7;
 }
 
 .hero-title{
   position:relative;
-  z-index:1;
+  z-index:2;
 
   margin-top:18px;
 
-  font-size:clamp(50px,10.5vw,132px);
-  line-height:.9;
+  font-size:clamp(54px,9vw,108px);
+  line-height:.92;
 
   font-weight:800;
-  letter-spacing:-.055em;
+  letter-spacing:-.065em;
 
-  text-transform:uppercase;
+  color:#111;
 }
 
 .hero-title .line{
@@ -243,72 +257,69 @@ button{
 .amp{
   display:inline-block;
 
-  margin-right:.1em;
+  margin-right:.08em;
 
   color:var(--accent);
 
-  font-size:.42em;
+  font-size:.36em;
   font-weight:600;
 
-  font-style:italic;
-  text-transform:none;
-  letter-spacing:0;
+  font-style:normal;
+  letter-spacing:-.02em;
 
-  transform:rotate(-6deg) translateY(-.28em);
+  transform:translateY(-.3em);
 }
 
 .hero-sub{
-  max-width:560px;
+  max-width:570px;
 
-  margin-top:24px;
+  margin:26px auto 0;
 
-  font-size:clamp(14px,1.7vw,17px);
-  line-height:1.6;
+  font-size:15px;
+  line-height:1.65;
 
-  font-weight:500;
+  font-weight:400;
 
-  color:#3E392D;
+  color:#707070;
 }
 
-/* ============================================
+
+/* =========================================================
    CAPYBARA
-   ============================================ */
+========================================================= */
 
 .capbox{
   position:absolute;
 
-  z-index:2;
+  z-index:3;
 
-  right:clamp(4px,6vw,90px);
-  top:-14px;
+  right:clamp(25px,9vw,130px);
+  top:22px;
 
-  width:clamp(104px,15vw,172px);
+  width:clamp(80px,11vw,125px);
 
   aspect-ratio:140/124;
 
-  animation:bob 4.5s ease-in-out infinite;
+  animation:bob 5s ease-in-out infinite;
 }
 
 @keyframes bob{
   50%{
-    transform:translateY(-10px) rotate(2deg);
+    transform:translateY(-7px) rotate(1.5deg);
   }
 }
 
 .capy{
   display:block;
-
   width:100%;
   height:100%;
-
   overflow:visible;
 }
 
 .eye{
   transform-box:fill-box;
   transform-origin:center;
-
-  animation:blink 4.2s infinite;
+  animation:blink 4.5s infinite;
 }
 
 @keyframes blink{
@@ -328,23 +339,17 @@ button{
 .yuzu{
   transform-box:fill-box;
   transform-origin:50% 100%;
-
-  animation:yuzu 4.5s ease-in-out infinite;
+  animation:yuzu 5s ease-in-out infinite;
 }
 
 @keyframes yuzu{
   25%{
-    transform:rotate(-7deg);
+    transform:rotate(-5deg);
   }
 
   75%{
-    transform:rotate(6deg);
+    transform:rotate(5deg);
   }
-}
-
-.pond{
-  transform-box:fill-box;
-  transform-origin:center;
 }
 
 .pond.p2{
@@ -353,177 +358,171 @@ button{
 
 @keyframes ripple{
   50%{
-    transform:scaleX(1.18);
+    transform:scaleX(1.12);
     opacity:.12;
   }
 }
 
-/* ============================================
-   NÚT ỦNG HỘ
-   ============================================ */
+
+/* =========================================================
+   CTA
+========================================================= */
 
 .hero-cta{
   display:flex;
   flex-direction:column;
-  align-items:flex-start;
-  gap:14px;
+  align-items:center;
+  gap:11px;
 
-  margin-top:32px;
+  margin-top:34px;
 }
 
 .cta{
   display:inline-flex;
   align-items:center;
   justify-content:center;
-  gap:14px;
+  gap:13px;
 
-  padding:18px 26px;
+  min-width:205px;
 
-  background:var(--ink);
-  color:var(--paper2);
+  padding:15px 20px;
 
-  border:1px solid var(--ink);
+  border:0;
+  border-radius:13px;
 
-  box-shadow:6px 6px 0 var(--accent);
+  background:#111;
+  color:#fff;
 
-  font-weight:800;
-  font-size:clamp(17px,2.4vw,22px);
+  font-size:15px;
+  font-weight:700;
 
-  letter-spacing:.01em;
-  text-transform:uppercase;
+  letter-spacing:-.1px;
 
   cursor:pointer;
 
+  box-shadow:
+    0 8px 22px rgba(0,0,0,.13);
+
   transition:
-    transform .18s,
-    box-shadow .18s,
-    background .18s,
-    color .18s;
+    transform .18s ease,
+    background .18s ease,
+    box-shadow .18s ease;
 }
 
 .cta svg{
-  width:25px;
-  height:25px;
+  width:18px;
+  height:18px;
 
-  flex:none;
-
-  transition:transform .18s;
+  transition:transform .2s ease;
 }
 
 .cta:hover{
-  transform:translate(-3px,-3px);
-
-  box-shadow:9px 9px 0 var(--ink);
-
   background:var(--accent);
-  color:var(--ink);
+
+  transform:translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(0,128,128,.2);
 }
 
 .cta:hover svg{
-  transform:translateX(6px);
+  transform:translateX(4px);
 }
 
 .cta:active{
-  transform:translate(2px,2px);
-
-  box-shadow:2px 2px 0 var(--ink);
+  transform:scale(.98);
 }
 
 .cta-note{
-  font-family:'Space Mono',monospace;
   font-size:10px;
+  font-weight:500;
 
-  letter-spacing:.1em;
-  text-transform:uppercase;
+  color:#9a9a9a;
 
-  color:var(--muted);
+  letter-spacing:.02em;
 }
 
-/* ============================================
-   LỜI CẢM ƠN
-   ============================================ */
+
+/* =========================================================
+   THANKS
+========================================================= */
 
 .thanks-section{
-  width:min(760px,calc(100% - 48px));
+  width:min(680px,calc(100% - 40px));
 
-  margin:54px auto 72px;
+  margin:0 auto 90px;
 }
 
 .thanks-card{
   background:#fff;
 
-  border-radius:24px;
+  border:1px solid var(--line);
+  border-radius:22px;
 
-  padding:30px 28px 10px;
+  padding:30px 28px 8px;
 
-  box-shadow:0 8px 30px rgba(23,20,14,.055);
+  box-shadow:
+    0 10px 35px rgba(0,0,0,.035);
 }
 
 .thanks-head{
-  padding:0 12px 28px;
+  padding:0 4px 25px;
 }
 
 .thanks-label{
   display:block;
 
-  margin-bottom:14px;
+  margin-bottom:10px;
 
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:10px;
-  font-weight:700;
-
-  letter-spacing:.16em;
-  text-transform:uppercase;
-
-  color:#777267;
-}
-
-.thanks-head h2{
-  margin:0;
-
-  font-family:'Bricolage Grotesque',sans-serif;
-
-  font-size:clamp(28px,5vw,38px);
-  line-height:1.05;
-
-  font-weight:800;
-
-  letter-spacing:-.045em;
-
-  color:var(--ink);
-}
-
-.thanks-head p{
-  margin-top:11px;
-
-  font-family:'Bricolage Grotesque',sans-serif;
-
-  font-size:13px;
-  line-height:1.5;
-
-  color:#8A8578;
-}
-
-/* ============================================
-   DANH SÁCH ỦNG HỘ
-   ============================================ */
-
-.supporters{
-  border-top:1px solid #DEDCD6;
-}
-
-.supporters-title{
-  padding:12px 8px;
-
-  border-bottom:1px solid #DEDCD6;
-
-  font-family:'Space Mono',monospace;
   font-size:9px;
   font-weight:700;
 
+  letter-spacing:.15em;
+  text-transform:uppercase;
+
+  color:#999;
+}
+
+.thanks-head h2{
+  font-size:clamp(27px,5vw,36px);
+  line-height:1.08;
+
+  font-weight:750;
+
+  letter-spacing:-.055em;
+
+  color:#161616;
+}
+
+.thanks-head p{
+  margin-top:9px;
+
+  font-size:13px;
+  line-height:1.55;
+
+  color:#8b8b8b;
+}
+
+
+/* =========================================================
+   SUPPORTERS
+========================================================= */
+
+.supporters{
+  border-top:1px solid var(--line);
+}
+
+.supporters-title{
+  padding:13px 5px;
+
+  border-bottom:1px solid var(--line);
+
+  font-size:9px;
+  font-weight:650;
+
   letter-spacing:.12em;
 
-  color:#8A8578;
+  color:#999;
 }
 
 .supporters-list{
@@ -534,24 +533,23 @@ button{
 }
 
 .supporters-list:empty{
-  min-height:96px;
+  min-height:90px;
 
   align-items:center;
   justify-content:center;
 }
 
 .supporters-list:empty::before{
-  content:'Chưa có giao dịch nào';
+  content:"Chưa có giao dịch nào";
 
-  font-family:'Bricolage Grotesque',sans-serif;
   font-size:12px;
-
-  color:#99958D;
+  color:#aaa;
 }
 
-/* ============================================
-   TỪNG NGƯỜI ỦNG HỘ
-   ============================================ */
+
+/* =========================================================
+   SUPPORTER ROW
+========================================================= */
 
 .supporter-row{
   width:100%;
@@ -559,20 +557,20 @@ button{
   display:flex;
   align-items:center;
 
-  min-height:72px;
+  min-height:70px;
 
-  padding:14px 8px;
+  padding:12px 5px;
 
-  border-bottom:1px solid #DEDCD6;
+  border-bottom:1px solid var(--line);
 }
 
 .supporter-row:last-child{
-  border-bottom:none;
+  border-bottom:0;
 }
 
 .supporter-avatar{
-  width:44px;
-  height:44px;
+  width:42px;
+  height:42px;
 
   flex:none;
 
@@ -580,16 +578,16 @@ button{
   align-items:center;
   justify-content:center;
 
-  margin-right:14px;
+  margin-right:12px;
 
-  border-radius:14px;
+  border-radius:13px;
 
-  background:#F2ECDF;
-  color:var(--ink);
+  background:#f0f0ee;
 
-  font-family:'Bricolage Grotesque',sans-serif;
-  font-size:17px;
-  font-weight:800;
+  color:#222;
+
+  font-size:15px;
+  font-weight:700;
 }
 
 .supporter-left{
@@ -605,26 +603,22 @@ button{
 .supporter-name{
   overflow:hidden;
 
-  font-family:'Bricolage Grotesque',sans-serif;
-
   font-size:15px;
-  font-weight:700;
+  font-weight:600;
 
   line-height:1.2;
 
   white-space:nowrap;
   text-overflow:ellipsis;
 
-  color:var(--ink);
+  color:#222;
 }
 
 .supporter-meta{
-  font-family:'Space Mono',monospace;
+  font-size:11px;
+  font-weight:400;
 
-  font-size:9px;
-  line-height:1.3;
-
-  color:#99958D;
+  color:#aaa;
 }
 
 .supporter-amount{
@@ -632,22 +626,21 @@ button{
 
   margin-left:12px;
 
-  font-family:'Space Mono',monospace;
-
-  font-size:12px;
-  font-weight:700;
+  font-size:14px;
+  font-weight:650;
 
   color:var(--accent);
 
   white-space:nowrap;
 }
 
-/* ============================================
-   CHÂN TRANG
-   ============================================ */
+
+/* =========================================================
+   FOOTER
+========================================================= */
 
 .credit{
-  border-top:1px solid rgba(23,20,14,.14);
+  border-top:1px solid var(--line);
 }
 
 .credit .wrap{
@@ -655,24 +648,16 @@ button{
   align-items:center;
   justify-content:space-between;
 
-  padding-top:15px;
-  padding-bottom:15px;
-
-  font-family:'Bricolage Grotesque',sans-serif;
+  min-height:58px;
 
   font-size:10px;
-  font-weight:400;
-
-  color:var(--muted);
+  color:#999;
 }
 
-.credit .wrap span{
-  margin:0;
-}
 
-/* ============================================
+/* =========================================================
    POPUP
-   ============================================ */
+========================================================= */
 
 .overlay{
   position:fixed;
@@ -685,14 +670,14 @@ button{
 
   padding:20px;
 
-  background:rgba(23,20,14,.45);
+  background:rgba(0,0,0,.42);
 
-  backdrop-filter:blur(5px);
-  -webkit-backdrop-filter:blur(5px);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 
   opacity:0;
 
-  transition:opacity .25s;
+  transition:opacity .22s ease;
 }
 
 .overlay.show{
@@ -702,108 +687,111 @@ button{
 .popup{
   position:relative;
 
-  width:min(480px,100%);
+  width:min(460px,100%);
 
   max-height:calc(100vh - 40px);
   max-height:calc(100dvh - 40px);
 
   overflow:auto;
-  -webkit-overflow-scrolling:touch;
 
-  padding:30px 28px 22px;
+  padding:30px;
 
   background:#fff;
 
-  border-radius:20px;
+  border:1px solid rgba(0,0,0,.07);
+  border-radius:22px;
 
-  box-shadow:0 24px 60px rgba(23,20,14,.3);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,.2);
 
-  font-family:'Be Vietnam Pro',sans-serif;
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Helvetica Neue",
+    Arial,
+    sans-serif;
 
-  transform:translateY(26px) scale(.96);
+  transform:translateY(18px) scale(.97);
 
   transition:
-    transform .35s cubic-bezier(.2,1.2,.3,1),
-    opacity .3s;
+    transform .3s cubic-bezier(.2,.8,.2,1),
+    opacity .25s;
 }
 
 .overlay.show .popup{
   transform:none;
 }
 
-/* ============================================
-   ĐÓNG POPUP
-   ============================================ */
+
+/* =========================================================
+   CLOSE
+========================================================= */
 
 .p-close{
   position:absolute;
 
-  top:16px;
-  right:16px;
+  top:14px;
+  right:14px;
 
-  width:40px;
-  height:40px;
+  width:36px;
+  height:36px;
 
   display:grid;
   place-items:center;
 
+  border:1px solid var(--line);
   border-radius:50%;
 
   background:#fff;
 
-  border:1.5px solid #E5DFD0;
-
   cursor:pointer;
 
-  color:var(--ink);
-
-  transition:
-    transform .2s,
-    border-color .2s;
+  transition:.18s;
 }
 
 .p-close:hover{
+  background:#f4f4f4;
   transform:rotate(90deg);
-
-  border-color:var(--ink);
 }
 
 .p-close svg{
-  width:15px;
-  height:15px;
+  width:14px;
+  height:14px;
 }
 
-/* ============================================
-   FORM
-   ============================================ */
+
+/* =========================================================
+   POPUP FORM
+========================================================= */
 
 .p-over{
-  font-size:11px;
+  font-size:10px;
   font-weight:700;
 
-  letter-spacing:.18em;
+  letter-spacing:.14em;
   text-transform:uppercase;
 
-  color:#8A8574;
+  color:#999;
 }
 
 .p-title{
-  margin-top:10px;
+  margin-top:9px;
 
-  font-size:clamp(21px,5.5vw,27px);
-  font-weight:800;
-
-  letter-spacing:-.02em;
+  font-size:25px;
   line-height:1.15;
+
+  font-weight:750;
+  letter-spacing:-.035em;
 }
 
 .p-desc{
   margin-top:8px;
 
-  font-size:13.5px;
+  font-size:13px;
   line-height:1.55;
 
-  color:#6F6A5C;
+  color:#777;
 }
 
 .p-label{
@@ -811,118 +799,119 @@ button{
 
   margin:18px 0 7px;
 
-  font-size:13px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:650;
 
-  color:var(--ink);
+  color:#333;
 }
 
 .p-label small{
-  font-weight:600;
-
-  color:#9A9483;
+  font-weight:400;
+  color:#aaa;
 }
 
 .p-input{
   width:100%;
-  height:50px;
+  height:49px;
 
-  padding:0 16px;
+  padding:0 14px;
+
+  border:1px solid #dededb;
+  border-radius:11px;
 
   background:#fff;
 
-  border:1.5px solid #E5DFD0;
-  border-radius:12px;
-
   outline:none;
 
-  font:inherit;
-  font-size:14.5px;
+  color:#222;
 
-  color:var(--ink);
+  font-size:14px;
 
-  transition:border-color .15s;
+  transition:
+    border-color .15s,
+    box-shadow .15s;
 }
 
 .p-input::placeholder{
-  color:#B9B2A0;
+  color:#b6b6b6;
 }
 
 .p-input:focus{
-  border-color:var(--ink);
+  border-color:#999;
+
+  box-shadow:
+    0 0 0 3px rgba(0,0,0,.045);
 }
 
-/* ============================================
-   SỐ TIỀN
-   ============================================ */
+
+/* =========================================================
+   AMOUNT
+========================================================= */
 
 .p-amount{
   position:relative;
 }
 
 .p-amount .p-input{
-  padding-right:58px;
+  padding-right:55px;
 
-  font-size:17px;
-  font-weight:800;
+  font-size:16px;
+  font-weight:700;
 }
 
 .p-vnd{
   position:absolute;
 
   top:50%;
-  right:16px;
+  right:15px;
 
   transform:translateY(-50%);
 
-  font-size:13px;
-  font-weight:700;
+  font-size:11px;
+  font-weight:650;
 
-  letter-spacing:.04em;
-
-  color:#9A9483;
+  color:#999;
 }
 
 .p-amount.err .p-input{
-  border-color:#D23B14;
-
+  border-color:var(--danger);
   animation:shake .4s;
 }
 
 @keyframes shake{
-  20%{transform:translateX(-7px)}
-  40%{transform:translateX(6px)}
-  60%{transform:translateX(-4px)}
+  20%{transform:translateX(-5px)}
+  40%{transform:translateX(5px)}
+  60%{transform:translateX(-3px)}
   80%{transform:translateX(3px)}
 }
 
-/* ============================================
-   MỨC TIỀN NHANH
-   ============================================ */
+
+/* =========================================================
+   CHIPS
+========================================================= */
 
 .p-chips{
   display:grid;
 
   grid-template-columns:repeat(4,1fr);
 
-  gap:10px;
+  gap:8px;
 
-  margin-top:12px;
+  margin-top:10px;
 }
 
 .p-chips button{
-  height:44px;
+  height:42px;
 
-  border:1.5px solid transparent;
-  border-radius:11px;
+  border:1px solid #e5e5e2;
+  border-radius:10px;
 
-  background:#F1EDE1;
+  background:#f7f7f5;
 
-  font:inherit;
-  font-size:13px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:650;
 
-  color:#4A4536;
+  color:#555;
 
   cursor:pointer;
 
@@ -930,64 +919,65 @@ button{
 }
 
 .p-chips button:hover{
-  background:#E8E3D3;
+  background:#eeeeeb;
 }
 
 .p-chips button.on{
-  background:var(--ink);
+  border-color:#111;
+
+  background:#111;
   color:#fff;
 }
 
-/* ============================================
-   THÔNG BÁO / LỖI
-   ============================================ */
+
+/* =========================================================
+   NOTICE / ERROR
+========================================================= */
 
 .p-err{
-  margin-top:12px;
+  margin-top:10px;
 
-  font-size:12.5px;
+  font-size:12px;
   font-weight:600;
 
-  color:#D23B14;
+  color:var(--danger);
 }
 
 .p-notice{
-  margin-top:14px;
+  margin-top:13px;
 
-  padding:11px 14px;
+  padding:10px 12px;
 
-  border-radius:12px;
+  border:1px solid #cce7db;
+  border-radius:10px;
 
-  background:#EEF4F0;
+  background:#f1faf5;
 
-  border:1.5px dashed #BCD8C6;
-
-  font-size:12.5px;
+  font-size:12px;
   font-weight:600;
 
-  color:#3E8E5A;
+  color:var(--success);
 }
 
-/* ============================================
-   NÚT TẠO QR
-   ============================================ */
+
+/* =========================================================
+   SUBMIT
+========================================================= */
 
 .p-submit{
   width:100%;
-  height:54px;
+  height:51px;
 
   margin-top:16px;
 
-  border:none;
-  border-radius:14px;
+  border:0;
+  border-radius:12px;
 
-  background:var(--gold);
+  background:#111;
   color:#fff;
 
-  font:inherit;
-
-  font-size:16px;
-  font-weight:800;
+  font-size:14px;
+  font-weight:700;
 
   cursor:pointer;
 
@@ -998,117 +988,106 @@ button{
 }
 
 .p-submit:hover:not(:disabled){
-  background:var(--accent-d);
+  background:var(--accent);
+
+  box-shadow:
+    0 8px 20px rgba(0,128,128,.18);
 
   transform:translateY(-1px);
-
-  box-shadow:0 6px 16px rgba(0,128,128,.35);
 }
 
 .p-submit:active:not(:disabled){
-  transform:translateY(0);
-
-  box-shadow:none;
+  transform:scale(.99);
 }
 
 .p-submit:disabled{
-  background:#E5DFD0;
-  color:#9A9483;
-
+  background:#e8e8e5;
+  color:#aaa;
   cursor:not-allowed;
 }
 
 .p-note{
-  margin-top:12px;
+  margin-top:10px;
 
   text-align:center;
 
-  font-size:11.5px;
-
-  color:#9A9483;
+  font-size:10px;
+  color:#aaa;
 }
 
-/* ============================================
-   NÚT HUỶ
-   ============================================ */
+
+/* =========================================================
+   CANCEL
+========================================================= */
 
 .p-cancel{
   width:100%;
-  height:48px;
+  height:46px;
 
-  margin-top:10px;
+  margin-top:9px;
 
-  border-radius:14px;
+  border:1px solid #e2e2df;
+  border-radius:12px;
 
   background:#fff;
 
-  border:1.5px solid #E5DFD0;
+  color:#777;
 
-  color:#6F6A5C;
-
-  font:inherit;
-
-  font-size:14px;
-  font-weight:700;
+  font-size:13px;
+  font-weight:600;
 
   cursor:pointer;
 
-  transition:
-    background .15s,
-    color .15s,
-    border-color .15s;
+  transition:.15s;
 }
 
 .p-cancel:hover{
-  border-color:#D23B14;
-  color:#D23B14;
+  border-color:#d94a3d;
+  color:#d94a3d;
 }
 
 .p-cancel.armed{
-  background:#D23B14;
-  border-color:#D23B14;
-
+  background:#d94a3d;
+  border-color:#d94a3d;
   color:#fff;
-
-  animation:shake .4s;
 }
 
-/* ============================================
-   TRẠNG THÁI
-   ============================================ */
+
+/* =========================================================
+   STATUS
+========================================================= */
 
 .p-status{
   display:flex;
   align-items:center;
 
-  gap:11px;
+  gap:10px;
 
   margin-top:14px;
 
-  padding:12px 14px;
+  padding:11px 13px;
 
-  border-radius:12px;
+  border:1px solid #eadfb9;
+  border-radius:11px;
 
-  background:#FDF6E3;
+  background:#fffaf0;
 
-  border:1.5px dashed #E8D9A0;
-
-  font-size:13px;
+  font-size:12px;
   font-weight:600;
 
-  color:#8A6A1F;
+  color:#8a6d22;
 }
 
 .p-status .spin{
-  width:16px;
-  height:16px;
+  width:15px;
+  height:15px;
 
   flex:none;
 
-  border-radius:50%;
+  border:2px solid rgba(138,109,34,.2);
+  border-top-color:#8a6d22;
 
-  border:2.5px solid rgba(138,106,31,.25);
-  border-top-color:#8A6A1F;
+  border-radius:50%;
 
   animation:rot .8s linear infinite;
 }
@@ -1120,74 +1099,36 @@ button{
 }
 
 .p-status.ok{
-  background:#EDF6F0;
-
-  border-color:#BCD8C6;
-
-  color:var(--green);
-}
-
-.p-status.ok .spin{
-  width:auto;
-  height:auto;
-
-  border:none;
-
-  animation:none;
-}
-
-.p-status.ok .spin::before{
-  content:'';
-
-  display:block;
-
-  width:9px;
-  height:14px;
-
-  border:solid var(--green);
-
-  border-width:0 3px 3px 0;
-
-  transform:rotate(45deg) translateY(-2px);
+  background:#f0faf5;
+  border-color:#cce7db;
+  color:var(--success);
 }
 
 .p-status.dead{
-  background:#FCEFEC;
-
-  border-color:#F0C4BA;
-
-  color:#D23B14;
+  background:#fff2f0;
+  border-color:#f1cbc6;
+  color:var(--danger);
 }
 
-.p-status.dead .spin{
-  width:auto;
-  height:auto;
 
-  border:none;
-
-  background:none;
-
-  animation:none;
-}
-
-/* ============================================
+/* =========================================================
    QR
-   ============================================ */
+========================================================= */
 
 .p-qr{
-  position:relative;
-
   width:max-content;
 
   margin:18px auto 0;
 
-  padding:10px;
+  padding:9px;
 
   background:#fff;
 
-  border:1.5px solid #E5DFD0;
-
+  border:1px solid #e5e5e2;
   border-radius:14px;
+
+  box-shadow:
+    0 6px 20px rgba(0,0,0,.035);
 }
 
 #qrImage{
@@ -1198,11 +1139,11 @@ button{
 
   object-fit:contain;
 
-  border-radius:8px;
+  border-radius:7px;
 }
 
 .p-qr.expired::after{
-  content:'ĐÃ HẾT HẠN';
+  content:"ĐÃ HẾT HẠN";
 
   position:absolute;
   inset:0;
@@ -1210,25 +1151,26 @@ button{
   display:grid;
   place-items:center;
 
-  background:rgba(255,255,255,.78);
+  background:rgba(255,255,255,.82);
 
-  border-radius:12px;
+  border-radius:13px;
 
-  font:800 17px/1 'Be Vietnam Pro',sans-serif;
+  font-size:15px;
+  font-weight:800;
 
-  letter-spacing:.14em;
+  letter-spacing:.1em;
 
-  color:#D23B14;
+  color:var(--danger);
 
-  transform:rotate(-10deg);
+  transform:rotate(-8deg);
 }
 
 .p-qr.paid{
-  border-color:var(--green);
+  border-color:var(--success);
 }
 
 .p-qr.paid::after{
-  content:'ĐÃ NHẬN TIỀN';
+  content:"ĐÃ NHẬN TIỀN";
 
   position:absolute;
   inset:0;
@@ -1236,27 +1178,18 @@ button{
   display:grid;
   place-items:center;
 
-  background:rgba(238,246,240,.82);
+  background:rgba(240,250,245,.86);
 
-  border-radius:12px;
+  border-radius:13px;
 
-  font:800 16px/1 'Be Vietnam Pro',sans-serif;
+  font-size:15px;
+  font-weight:800;
 
-  letter-spacing:.12em;
+  letter-spacing:.08em;
 
-  color:var(--green);
+  color:var(--success);
 
-  transform:rotate(-9deg);
-
-  animation:stampIn .35s cubic-bezier(.2,1.6,.4,1);
-}
-
-@keyframes stampIn{
-  from{
-    transform:rotate(-9deg) scale(2.1);
-
-    opacity:0;
-  }
+  transform:rotate(-7deg);
 }
 
 .p-qr-note{
@@ -1264,47 +1197,47 @@ button{
 
   text-align:center;
 
-  font-size:11px;
+  font-size:10px;
 
-  color:#9A9483;
+  color:#aaa;
 }
 
 .p-qr-note b{
-  color:#6F6A5C;
+  color:#666;
 }
 
-/* ============================================
-   THÔNG TIN CHUYỂN KHOẢN
-   ============================================ */
+
+/* =========================================================
+   BANK INFO
+========================================================= */
 
 .p-rows{
-  margin-top:16px;
+  margin-top:15px;
 
   padding-top:4px;
 
-  border-top:1.5px dashed #E5DFD0;
+  border-top:1px dashed #e1e1de;
 }
 
 .p-row{
   display:flex;
-
   align-items:baseline;
   justify-content:space-between;
 
-  gap:12px;
+  gap:14px;
 
-  padding:9px 0;
+  padding:8px 0;
 
-  font-size:13px;
+  font-size:12px;
 
-  color:#6F6A5C;
+  color:#888;
 }
 
 .p-row b{
-  color:var(--ink);
+  color:#222;
 
-  font-size:13.5px;
-  font-weight:800;
+  font-size:12px;
+  font-weight:700;
 
   text-align:right;
 
@@ -1312,54 +1245,47 @@ button{
 }
 
 .stk-num{
-  font-family:'Space Mono',monospace;
-
-  letter-spacing:.04em;
+  font-variant-numeric:tabular-nums;
 }
 
 .copy{
   display:inline-flex;
   align-items:center;
 
-  margin-left:8px;
+  margin-left:7px;
 
-  padding:4px 10px;
+  padding:4px 8px;
 
-  border:1.5px solid #E5DFD0;
-  border-radius:8px;
+  border:1px solid #ddd;
+  border-radius:7px;
 
   background:#fff;
 
-  font:700 10.5px/1 'Be Vietnam Pro',sans-serif;
+  font-size:10px;
+  font-weight:650;
 
-  letter-spacing:.06em;
-
-  color:#6F6A5C;
+  color:#777;
 
   cursor:pointer;
-
-  vertical-align:middle;
-
-  transition:.15s;
 }
 
 .copy:hover{
-  border-color:var(--ink);
-  color:var(--ink);
+  border-color:#111;
+  color:#111;
 }
 
 .copy.ok{
-  border-color:var(--green);
-  color:var(--green);
+  border-color:var(--success);
+  color:var(--success);
 }
 
-/* ============================================
-   HIỆU ỨNG
-   ============================================ */
+
+/* =========================================================
+   ANIMATION
+========================================================= */
 
 #fx{
   position:fixed;
-
   inset:0;
 
   z-index:600;
@@ -1370,9 +1296,9 @@ button{
 .rise{
   opacity:0;
 
-  transform:translateY(20px);
+  transform:translateY(14px);
 
-  animation:rise .7s cubic-bezier(.2,.8,.2,1) forwards;
+  animation:rise .65s cubic-bezier(.2,.8,.2,1) forwards;
 
   animation-delay:var(--d,0s);
 }
@@ -1385,13 +1311,14 @@ button{
 }
 
 :focus-visible{
-  outline:3px solid var(--accent);
-  outline-offset:2px;
+  outline:2px solid var(--accent);
+  outline-offset:3px;
 }
 
-/* ============================================
-   GIẢM CHUYỂN ĐỘNG
-   ============================================ */
+
+/* =========================================================
+   REDUCED MOTION
+========================================================= */
 
 @media (prefers-reduced-motion:reduce){
 
@@ -1405,32 +1332,28 @@ button{
 
   .rise{
     opacity:1;
-
     transform:none;
-
-    transition:none;
+    animation:none;
   }
 }
 
-/* ============================================
+
+/* =========================================================
    MOBILE
-   ============================================ */
+========================================================= */
 
 @media (max-width:640px){
 
   .page-frame{
-    width:calc(100% - 16px);
+    width:calc(100% - 12px);
+    min-height:calc(100vh - 12px);
+    margin:6px auto;
 
-    min-height:calc(100vh - 16px);
-
-    margin:8px auto;
-
-    border-radius:19px;
+    border-radius:20px;
   }
 
   .topbar .wrap{
-    padding-top:12px;
-    padding-bottom:12px;
+    min-height:55px;
   }
 
   .brand{
@@ -1438,86 +1361,72 @@ button{
   }
 
   .capbox{
-    width:92px;
+    width:76px;
 
-    top:0;
-    right:2px;
+    top:19px;
+    right:18px;
   }
 
   .hero{
-    padding-top:48px;
-    padding-bottom:48px;
+    padding-top:65px;
+    padding-bottom:70px;
+  }
+
+  .overline{
+    font-size:8px;
   }
 
   .hero-title{
-    font-size:clamp(46px,13vw,76px);
+    font-size:clamp(47px,14vw,72px);
 
-    margin-top:16px;
+    margin-top:15px;
+
+    letter-spacing:-.07em;
   }
 
   .hero-sub{
-    margin-top:20px;
+    max-width:410px;
 
-    font-size:14px;
+    margin-top:21px;
+
+    padding:0 9px;
+
+    font-size:13.5px;
+    line-height:1.65;
   }
 
   .hero-cta{
-    width:100%;
-
-    align-items:stretch;
-
     margin-top:28px;
   }
 
   .cta{
-    width:calc(100% - 24px)!important;
+    width:min(270px,100%);
 
-    margin-left:12px;
-    margin-right:12px;
+    min-width:0;
 
-    padding:17px 20px!important;
+    padding:15px 18px;
 
-    justify-content:space-between;
-
-    font-size:17px;
-  }
-
-  .cta-note{
-    width:100%;
-
-    margin:0;
-
-    text-align:center;
-
-    font-size:9px;
-
-    letter-spacing:.08em;
-  }
-
-  .hero-title,
-  .hero-sub{
-    margin-left:12px;
-    margin-right:12px;
+    font-size:15px;
   }
 
   .thanks-section{
-    width:calc(100% - 32px);
+    width:calc(100% - 28px);
 
-    margin:50px auto 54px;
+    margin-bottom:65px;
   }
 
   .thanks-card{
-    border-radius:22px;
+    padding:25px 17px 7px;
 
-    padding:26px 18px 8px;
+    border-radius:19px;
   }
 
   .thanks-head{
-    padding:0 9px 24px;
+    padding:0 4px 22px;
   }
 
   .thanks-head h2{
-    font-size:30px;
+    font-size:29px;
   }
 
   .thanks-head p{
@@ -1525,186 +1434,14 @@ button{
   }
 
   .supporter-row{
-    min-height:70px;
-
-    padding:13px 5px;
-  }
-
-  .supporter-avatar{
-    width:42px;
-    height:42px;
-
-    margin-right:12px;
-
-    border-radius:13px;
-
-    font-size:16px;
-  }
-
-  .supporter-name{
-    font-size:14px;
-  }
-
-  .supporter-meta{
-    font-size:8px;
-  }
-
-  .supporter-amount{
-    margin-left:8px;
-
-    font-size:11px;
-  }
-
-  .credit .wrap{
-    padding:14px 16px;
-
-    font-size:9px;
-
-    gap:12px;
-  }
-
-  .credit .wrap span{
-    text-align:right;
-  }
-
-  #qrImage{
-    width:174px;
-    height:174px;
-  }
-}
-
-/* ============================================
-   POPUP MOBILE
-   ============================================ */
-
-@media (max-width:520px){
-
-  .overlay{
-    padding:12px;
-
-    align-items:end;
-  }
-
-  .popup{
-    width:calc(100% - 24px);
-
-    max-height:calc(100vh - 24px);
-    max-height:calc(100dvh - 24px);
-
-    padding:26px 20px calc(18px + env(safe-area-inset-bottom,0px));
-
-    border-radius:20px;
-
-    transform:translateY(60px);
-
-    opacity:.5;
-  }
-
-  .overlay.show .popup{
-    transform:none;
-
-    opacity:1;
-  }
-
-  .popup::before{
-    content:'';
-
-    position:absolute;
-
-    top:8px;
-    left:50%;
-
-    width:44px;
-    height:4px;
-
-    transform:translateX(-50%);
-
-    border-radius:2px;
-
-    background:#E5DFD0;
-  }
-
-  .p-close{
-    top:12px;
-    right:12px;
-  }
-
-  .p-input{
-    height:48px;
-
-    font-size:16px;
-  }
-
-  .p-amount .p-input{
-    font-size:17px;
-  }
-
-  .p-chips{
-    gap:8px;
-  }
-
-  .p-chips button{
-    font-size:12px;
-  }
-
-  .p-row{
-    flex-wrap:wrap;
-
-    row-gap:3px;
-  }
-
-  .p-row b{
-    margin-left:auto;
-
-    max-width:100%;
-  }
-}
-
-/* ============================================
-   IPHONE RẤT NHỎ
-   ============================================ */
-
-@media (max-width:400px){
-
-  .page-frame{
-    width:calc(100% - 12px);
-
-    min-height:calc(100vh - 12px);
-
-    margin:6px auto;
-
-    border-radius:16px;
-  }
-
-  .hero-title{
-    font-size:44px;
-  }
-
-  .thanks-section{
-    width:calc(100% - 24px);
-  }
-
-  .thanks-card{
-    border-radius:20px;
-
-    padding-left:14px;
-    padding-right:14px;
-  }
-
-  .thanks-head{
-    padding-left:7px;
-    padding-right:7px;
-  }
-
-  .thanks-head h2{
-    font-size:28px;
+    min-height:67px;
   }
 
   .supporter-avatar{
     width:40px;
     height:40px;
 
-    margin-right:10px;
+    margin-right:11px;
 
     border-radius:12px;
   }
@@ -1713,23 +1450,157 @@ button{
     font-size:14px;
   }
 
-  .supporter-amount{
+  .supporter-meta{
     font-size:10px;
+  }
+
+  .supporter-amount{
+    font-size:13px;
+  }
+
+  .credit .wrap{
+    min-height:52px;
+
+    padding-top:12px;
+    padding-bottom:12px;
+
+    font-size:9px;
+
+    gap:10px;
+  }
+}
+
+
+/* =========================================================
+   POPUP MOBILE
+========================================================= */
+
+@media (max-width:520px){
+
+  .overlay{
+    padding:10px;
+
+    align-items:end;
+  }
+
+  .popup{
+    width:100%;
+
+    max-height:calc(100dvh - 20px);
+
+    padding:27px 19px calc(17px + env(safe-area-inset-bottom));
+
+    border-radius:21px;
+
+    transform:translateY(45px);
+  }
+
+  .overlay.show .popup{
+    transform:none;
+  }
+
+  .popup::before{
+    content:"";
+
+    position:absolute;
+
+    top:8px;
+    left:50%;
+
+    width:38px;
+    height:4px;
+
+    transform:translateX(-50%);
+
+    border-radius:3px;
+
+    background:#dededb;
+  }
+
+  .p-close{
+    top:12px;
+    right:12px;
+
+    width:34px;
+    height:34px;
+  }
+
+  .p-title{
+    font-size:23px;
+  }
+
+  .p-input{
+    height:48px;
+
+    font-size:16px;
+  }
+
+  .p-chips{
+    gap:7px;
+  }
+
+  .p-chips button{
+    height:41px;
+  }
+
+  .p-row{
+    flex-wrap:wrap;
+    row-gap:3px;
+  }
+
+  .p-row b{
+    margin-left:auto;
+    max-width:100%;
+  }
+}
+
+
+/* =========================================================
+   IPHONE NHỎ
+========================================================= */
+
+@media (max-width:390px){
+
+  .hero-title{
+    font-size:43px;
+  }
+
+  .thanks-section{
+    width:calc(100% - 22px);
+  }
+
+  .thanks-card{
+    padding-left:13px;
+    padding-right:13px;
+  }
+
+  .supporter-avatar{
+    width:38px;
+    height:38px;
+    margin-right:9px;
+  }
+
+  .supporter-name{
+    font-size:13.5px;
+  }
+
+  .supporter-amount{
+    font-size:12px;
   }
 
   .credit .wrap{
     flex-direction:column;
-
     align-items:flex-start;
   }
+}
 
-  .credit .wrap span{
-    text-align:left;
-  }
-/* ===== LỊCH SỬ ỦNG HỘ ===== */
+
+/* =========================================================
+   GIỮ FONT LỊCH SỬ ỦNG HỘ
+========================================================= */
 
 #supportersList,
-#supportersList * {
+#supportersList *{
   font-family:
     -apple-system,
     BlinkMacSystemFont,
@@ -1740,21 +1611,24 @@ button{
     sans-serif !important;
 }
 
-#supportersList .supporter-name {
-  font-size: 16px !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.3px !important;
+#supportersList .supporter-name{
+  font-size:16px !important;
+  font-weight:600 !important;
+  letter-spacing:-.3px !important;
 }
 
-#supportersList .supporter-time {
-  font-size: 12px !important;
-  font-weight: 400 !important;
-  letter-spacing: -0.1px !important;
+#supportersList .supporter-time{
+  font-size:12px !important;
+  font-weight:400 !important;
+  letter-spacing:-.1px !important;
 }
 
-#supportersList .supporter-amount {
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  letter-spacing: -0.25px !important;
+#supportersList .supporter-amount{
+  font-size:15px !important;
+  font-weight:600 !important;
+  letter-spacing:-.25px !important;
 }
+/* ẨN 2 DẢI CHỮ CHẠY */
+.marquee{
+  display:none !important;
 }
