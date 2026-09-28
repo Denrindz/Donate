@@ -260,11 +260,12 @@ function generateQR(){
             .trim();
 
     const amount =
-        Number(
-            document
-                .getElementById("donationAmount")
-                .value
-        );
+    Number(
+        document
+            .getElementById("donationAmount")
+            .value
+            .replace(/\./g, "")
+    );
 
     if(!name){
 
