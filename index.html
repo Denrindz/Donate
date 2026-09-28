@@ -708,218 +708,101 @@
 
     <div id="pSuccess" hidden>
 
-      <p class="p-over">
-        Mã ủng hộ của bạn
-      </p>
+  <p class="p-over">
+    MÃ ỦNG HỘ ĐÃ SẴN SÀNG
+  </p>
 
+  <h2 class="p-title">
+    Quét mã để hoàn tất
+  </h2>
 
-      <h2 class="p-title">
-        Quét mã để chuyển khoản
-      </h2>
+  <p class="p-desc">
+    Hệ thống sẽ tự xác nhận ngay khi TPBank ghi nhận giao dịch.
+  </p>
 
+  <div class="p-payment">
 
-      <p class="p-desc">
-        Mở app ngân hàng → quét mã → xác nhận.
-        Hệ thống tự kiểm tra khi tiền về.
-      </p>
-
-
-      <!-- QR MB BANK -->
-
-      <div
-        class="p-qr"
-        id="qrBox"
+    <div class="p-qr" id="qrBox">
+      <img
+        id="qrImage"
+        src=""
+        alt="QR chuyển khoản"
       >
+    </div>
 
-        <img
-          id="qrImage"
-          src=""
-          alt="QR chuyển khoản MB Bank"
-          width="174"
-          height="174"
-        >
+    <div class="p-payment-info">
 
-      </div>
-
-
-      <p
-        class="p-qr-note"
-        id="psNote"
-      >
-
-        Mã hết hạn sau
-
-        <b id="psCount">
-          10:00
-        </b>
-
-      </p>
-
-
-      <!-- TRẠNG THÁI -->
-
-      <div
-        class="p-status"
-        id="payStatus"
-      >
-
-        <span
-          class="spin"
-          aria-hidden="true"
-        ></span>
-
+      <div class="p-status" id="payStatus">
+        <span class="spin"></span>
 
         <span id="payStatusText">
-          Đang chờ chuyển khoản…
+          Đang chờ thanh toán
         </span>
-
       </div>
 
-
-      <!-- THÔNG TIN CHUYỂN KHOẢN -->
-
-      <div class="p-rows">
-
-
-        <div class="p-row">
-
-          <span>
-            Số tiền
-          </span>
-
-          <b id="psAmount">
-            0₫
-          </b>
-
-        </div>
-
-
-        <div class="p-row">
-
-          <span>
-            Người ủng hộ
-          </span>
-
-          <b id="psName"></b>
-
-        </div>
-
-
-        <div
-          class="p-row"
-          id="psMsgRow"
-          hidden
-        >
-
-          <span>
-            Lời nhắn
-          </span>
-
-          <b id="psMsg"></b>
-
-        </div>
-
-
-        <div class="p-row">
-
-          <span>
-            Số tài khoản
-          </span>
-
-          <b>
-
-            <span
-              class="stk-num"
-              id="psStk"
-            ></span>
-
-
-            <button
-              type="button"
-              class="copy"
-              id="copyStk"
-            >
-              Copy
-            </button>
-
-          </b>
-
-        </div>
-
-
-        <div
-          class="p-row"
-          id="psBankRow"
-        >
-
-          <span>
-            Ngân hàng
-          </span>
-
-          <b id="psBank">
-            MB Bank
-          </b>
-
-        </div>
-
-
-        <div class="p-row">
-
-          <span>
-            Thời gian chuyển khoản
-          </span>
-
-          <b id="psTime"></b>
-
-        </div>
-
-
-        <div class="p-row">
-
-          <span>
-            Nội dung chuyển khoản
-          </span>
-
-          <b id="psCode"></b>
-
-        </div>
-
+      <div class="p-row">
+        <span>SỐ TIỀN</span>
+        <b id="psAmount">0₫</b>
       </div>
 
+      <div class="p-row">
+        <span>NỘI DUNG CHUYỂN KHOẢN</span>
+        <b id="psCode">—</b>
+      </div>
 
-      <!-- NÚT TRẠNG THÁI -->
+      <div class="p-row">
+        <span>NGƯỜI NHẬN</span>
+        <b id="psName">—</b>
+      </div>
 
-      <button
-        type="button"
-        class="p-submit"
-        id="pDone"
-        disabled
-      >
-        Chưa nhận được tiền
-      </button>
-
-
-      <button
-        type="button"
-        class="p-submit"
-        id="pRetry"
-        hidden
-      >
-        Tạo mã mới
-      </button>
-
-
-      <button
-        type="button"
-        class="p-cancel"
-        id="pCancel"
-      >
-        Huỷ giao dịch
-      </button>
+      <div class="p-expire">
+        <span>Mã còn hiệu lực</span>
+        <b id="psCount">10:00</b>
+      </div>
 
     </div>
 
   </div>
+
+  <p class="p-note">
+    Vui lòng giữ nguyên số tiền và nội dung chuyển khoản.
+  </p>
+
+  <div hidden>
+    <span id="psStk"></span>
+    <span id="psBank">TPBank</span>
+    <span id="psTime"></span>
+
+    <div id="psMsgRow">
+      <span id="psMsg"></span>
+    </div>
+  </div>
+
+  <button
+    type="button"
+    class="p-submit"
+    id="pDone"
+    disabled
+  >
+    Chưa nhận được tiền
+  </button>
+
+  <button
+    type="button"
+    class="p-submit"
+    id="pRetry"
+    hidden
+  >
+    Tạo mã mới
+  </button>
+
+  <button
+    type="button"
+    class="p-cancel"
+    id="pCancel"
+  >
+    Huỷ giao dịch
+  </button>
 
 </div>
 
