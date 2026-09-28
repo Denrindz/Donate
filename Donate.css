@@ -1682,8 +1682,8 @@ button{
   flex-shrink: 0;
   padding: 12px 17px;
   border-radius: 15px;
-  background: #f5c52e;
-  color: #171715;
+  background: #009090;
+  color: #fff;
   font-size: 19px;
   font-weight: 800;
   letter-spacing: -0.03em;
@@ -1704,7 +1704,7 @@ button{
   width: 0%;
   height: 100%;
   border-radius: inherit;
-  background: #d4ad27;
+  background: #009090;
   transition: width 0.6s ease;
 }
 
