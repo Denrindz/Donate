@@ -64,24 +64,10 @@ function escapeHTML(value){
 
 
 /* =========================================
-   LẤY THỜI GIAN DONATE
+   CHUYỂN GIÁ TRỊ THỜI GIAN THÀNH TIMESTAMP
 ========================================= */
 
-function getDonationTime(item){
-
-    /*
-       Ưu tiên các trường thời gian thường gặp
-    */
-
-    const value =
-        item.time ??
-        item.createdAt ??
-        item.created_at ??
-        item.timestamp ??
-        item.datetime ??
-        item.date ??
-        item.created;
-
+function parseTimeValue(value){
 
     if(
         value === undefined ||
@@ -94,119 +80,333 @@ function getDonationTime(item){
     }
 
 
-    /*
-       Nếu API trả timestamp dạng số
-    */
+    /* Timestamp dạng number */
 
     if(typeof value === "number"){
 
-        /*
-           10 chữ số = giây
-           13 chữ số = milliseconds
-        */
-
-        if(value < 10000000000){
-
-            return value * 1000;
-
+        if(value <= 0){
+            return 0;
         }
 
-        return value;
+        return value < 10000000000
+            ? value * 1000
+            : value;
 
     }
 
 
-    /*
-       Nếu timestamp là chuỗi số
-    */
+    const text =
+        String(value).trim();
 
-    if(
-        typeof value === "string" &&
-        /^\d+$/.test(value.trim())
-    ){
+
+    if(!text){
+        return 0;
+    }
+
+
+    /* Timestamp dạng chuỗi số */
+
+    if(/^\d+$/.test(text)){
 
         const number =
-            Number(value.trim());
+            Number(text);
 
-
-        if(number < 10000000000){
-
-            return number * 1000;
-
+        if(number <= 0){
+            return 0;
         }
 
-        return number;
+        return number < 10000000000
+            ? number * 1000
+            : number;
 
     }
 
 
     /*
-       Nếu API trả ISO date hoặc
-       chuỗi ngày giờ bình thường
+       ISO / Date string
     */
 
-    const parsed =
-        new Date(value).getTime();
+    let timestamp =
+        Date.parse(text);
 
 
-    if(Number.isNaN(parsed)){
+    if(!Number.isNaN(timestamp)){
+        return timestamp;
+    }
 
-        return 0;
+
+    /*
+       Hỗ trợ dạng:
+       DD/MM/YYYY HH:mm:ss
+       DD/MM/YYYY HH:mm
+    */
+
+    const match =
+        text.match(
+            /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/
+        );
+
+
+    if(match){
+
+        const day =
+            Number(match[1]);
+
+        const month =
+            Number(match[2]);
+
+        const year =
+            Number(match[3]);
+
+        const hour =
+            Number(match[4] || 0);
+
+        const minute =
+            Number(match[5] || 0);
+
+        const second =
+            Number(match[6] || 0);
+
+
+        timestamp =
+            new Date(
+                year,
+                month - 1,
+                day,
+                hour,
+                minute,
+                second
+            ).getTime();
+
+
+        if(!Number.isNaN(timestamp)){
+            return timestamp;
+        }
 
     }
 
 
-    return parsed;
+    return 0;
 
 }
 
 
 /* =========================================
-   HIỂN THỊ THỜI GIAN
+   TÌM THỜI GIAN TRONG OBJECT
 ========================================= */
 
-function formatDonationTime(item){
+function findDonationTimestamp(item){
 
-    const timestamp =
-        getDonationTime(item);
+    if(!item || typeof item !== "object"){
+        return 0;
+    }
 
 
     /*
-       Nếu API thật sự không có thời gian
-       thì không bịa ngày giờ.
+       Những tên trường thời gian phổ biến.
+       KHÔNG bao gồm code giao dịch.
     */
+
+    const timeKeys = [
+
+        "time",
+        "timestamp",
+
+        "createdAt",
+        "created_at",
+        "created",
+
+        "date",
+        "datetime",
+        "dateTime",
+
+        "transactionTime",
+        "transaction_time",
+
+        "transactionDate",
+        "transaction_date",
+
+        "paidAt",
+        "paid_at",
+
+        "paymentTime",
+        "payment_time",
+
+        "transferTime",
+        "transfer_time",
+
+        "transferredAt",
+        "transferred_at",
+
+        "completedAt",
+        "completed_at",
+
+        "processedAt",
+        "processed_at",
+
+        "occurredAt",
+        "occurred_at"
+
+    ];
+
+
+    /*
+       Ưu tiên các field trực tiếp.
+    */
+
+    for(const key of timeKeys){
+
+        if(
+            Object.prototype.hasOwnProperty.call(
+                item,
+                key
+            )
+        ){
+
+            const timestamp =
+                parseTimeValue(
+                    item[key]
+                );
+
+
+            if(timestamp){
+                return timestamp;
+            }
+
+        }
+
+    }
+
+
+    /*
+       Một số API có object lồng bên trong:
+       transaction.createdAt
+       payment.time
+       data.timestamp...
+    */
+
+    const nestedKeys = [
+        "transaction",
+        "payment",
+        "transfer",
+        "bank",
+        "data",
+        "details",
+        "metadata"
+    ];
+
+
+    for(const key of nestedKeys){
+
+        if(
+            item[key] &&
+            typeof item[key] === "object"
+        ){
+
+            const timestamp =
+                findDonationTimestamp(
+                    item[key]
+                );
+
+
+            if(timestamp){
+                return timestamp;
+            }
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =========================================
+   THỜI GIAN TƯƠNG ĐỐI
+========================================= */
+
+function formatRelativeTime(timestamp){
 
     if(!timestamp){
 
-        return "Thời gian không có dữ liệu";
+        return "Vừa xong";
 
     }
 
 
-    const date =
-        new Date(timestamp);
+    const now =
+        Date.now();
 
 
-    if(Number.isNaN(date.getTime())){
+    let diff =
+        now - timestamp;
 
-        return "Thời gian không hợp lệ";
+
+    /*
+       Nếu server lệch vài giây/phút
+       thì không cho ra số âm.
+    */
+
+    if(diff < 0){
+        diff = 0;
+    }
+
+
+    const seconds =
+        Math.floor(
+            diff / 1000
+        );
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const hours =
+        Math.floor(
+            minutes / 60
+        );
+
+
+    const days =
+        Math.floor(
+            hours / 24
+        );
+
+
+    if(seconds < 10){
+
+        return "Vừa xong";
 
     }
 
 
-    return date.toLocaleString(
-        "vi-VN",
-        {
-            timeZone:"Asia/Ho_Chi_Minh",
-            day:"2-digit",
-            month:"2-digit",
-            year:"numeric",
-            hour:"2-digit",
-            minute:"2-digit",
-            second:"2-digit",
-            hour12:false
-        }
-    );
+    if(seconds < 60){
+
+        return `${seconds} giây trước`;
+
+    }
+
+
+    if(minutes < 60){
+
+        return `${minutes} phút trước`;
+
+    }
+
+
+    if(hours < 24){
+
+        return `${hours} giờ trước`;
+
+    }
+
+
+    return `${days} ngày trước`;
 
 }
 
@@ -281,7 +481,7 @@ function renderProgress(){
 
 /* =========================================
    LỊCH SỬ DONATE
-   CHỈ 5 NGƯỜI GẦN NHẤT
+   CHỈ HIỆN 5 NGƯỜI GẦN NHẤT
 ========================================= */
 
 function renderHistory(history){
@@ -293,23 +493,17 @@ function renderHistory(history){
 
 
     if(!supporterList){
-
         return;
-
     }
 
 
     if(!Array.isArray(history)){
-
         return;
-
     }
 
 
     /*
-       Chỉ lấy giao dịch donate DXM.
-       Sau đó sắp xếp mới nhất trước.
-       Cuối cùng chỉ lấy 5 người.
+       Lọc giao dịch donate.
     */
 
     const donations =
@@ -325,11 +519,23 @@ function renderHistory(history){
                 return code.startsWith("DXM");
 
             })
+            .map(item => {
+
+                return {
+
+                    original:item,
+
+                    timestamp:
+                        findDonationTimestamp(item)
+
+                };
+
+            })
             .sort((a,b) => {
 
                 return (
-                    getDonationTime(b) -
-                    getDonationTime(a)
+                    b.timestamp -
+                    a.timestamp
                 );
 
             })
@@ -375,33 +581,55 @@ function renderHistory(history){
     }
 
 
-    /* =====================================
-       XÓA DANH SÁCH CŨ
-    ===================================== */
-
     supporterList.innerHTML = "";
 
 
     /* =====================================
-       HIỂN THỊ 5 DONATE GẦN NHẤT
+       HIỂN THỊ
     ===================================== */
 
-    donations.forEach(item => {
+    donations.forEach(entry => {
+
+        const item =
+            entry.original;
+
+
+        /*
+           Tên người donate.
+        */
 
         const name =
             item.name ||
             item.donor ||
             item.donorName ||
+            item.displayName ||
+            item.username ||
             "Ẩn danh";
 
 
-        const amount =
-            Number(item.amount) || 0;
+        /*
+           Số tiền.
+        */
 
+        const amount =
+            Number(
+                item.amount
+            ) || 0;
+
+
+        /*
+           Thời gian tương đối.
+        */
 
         const timeText =
-            formatDonationTime(item);
+            formatRelativeTime(
+                entry.timestamp
+            );
 
+
+        /*
+           Chữ cái avatar.
+        */
 
         const firstLetter =
             String(name)
@@ -411,7 +639,9 @@ function renderHistory(history){
 
 
         const supporter =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
 
         supporter.className =
@@ -419,9 +649,9 @@ function renderHistory(history){
 
 
         /*
-           KHÔNG HIỂN THỊ:
-           - mã DXM
-           - code giao dịch
+           QUAN TRỌNG:
+           Không đưa item.code vào HTML.
+           Không đưa mã giao dịch vào lịch sử.
         */
 
         supporter.innerHTML = `
@@ -493,7 +723,7 @@ async function updateProgress(){
 
 
         /* =====================================
-           LẤY TỔNG TỪ API
+           TỔNG TIỀN
         ===================================== */
 
         if(
@@ -538,8 +768,8 @@ async function updateProgress(){
 
 
         /*
-           Không cho dữ liệu API cũ
-           làm tổng tiền bị tụt.
+           Không để API cũ làm tụt số tiền
+           đang hiển thị.
         */
 
         received =
@@ -550,7 +780,7 @@ async function updateProgress(){
 
 
         /* =====================================
-           CẬP NHẬT LỊCH SỬ
+           LỊCH SỬ
         ===================================== */
 
         if(
@@ -594,7 +824,9 @@ updateProgress();
 function openModal(){
 
     const modal =
-        document.getElementById("modal");
+        document.getElementById(
+            "modal"
+        );
 
 
     if(modal){
@@ -613,7 +845,9 @@ function openModal(){
 function closeModal(){
 
     const modal =
-        document.getElementById("modal");
+        document.getElementById(
+            "modal"
+        );
 
 
     if(modal){
@@ -641,7 +875,7 @@ function outsideClose(event){
 
 
 /* =========================================
-   CHỌN NHANH SỐ TIỀN
+   CHỌN NHANH TIỀN
 ========================================= */
 
 function setAmount(amount){
@@ -653,9 +887,7 @@ function setAmount(amount){
 
 
     if(!input){
-
         return;
-
     }
 
 
@@ -668,7 +900,7 @@ function setAmount(amount){
 
 
 /* =========================================
-   FORMAT INPUT
+   FORMAT INPUT TIỀN
 ========================================= */
 
 const donationInput =
@@ -721,7 +953,6 @@ function generateQR(){
             "donorName"
         );
 
-
     const amountElement =
         document.getElementById(
             "donationAmount"
@@ -750,10 +981,6 @@ function generateQR(){
         );
 
 
-    /* =====================================
-       KIỂM TRA TÊN
-    ===================================== */
-
     if(!name){
 
         alert(
@@ -764,10 +991,6 @@ function generateQR(){
 
     }
 
-
-    /* =====================================
-       KIỂM TRA TIỀN
-    ===================================== */
 
     if(
         !amount ||
@@ -782,10 +1005,6 @@ function generateQR(){
 
     }
 
-
-    /* =====================================
-       DỪNG CŨ
-    ===================================== */
 
     clearInterval(
         countdownInterval
@@ -802,7 +1021,9 @@ function generateQR(){
 
 
     /* =====================================
-       TẠO MÃ
+       MÃ GIAO DỊCH
+       Chỉ dùng cho API/QR,
+       KHÔNG HIỂN THỊ TRONG LỊCH SỬ.
     ===================================== */
 
     const randomCode =
@@ -815,10 +1036,6 @@ function generateQR(){
     currentContent =
         "DXM-" + randomCode;
 
-
-    /* =====================================
-       THÔNG TIN QR
-    ===================================== */
 
     const qrAmount =
         document.getElementById(
@@ -881,14 +1098,13 @@ function generateQR(){
     if(qrTime){
 
         qrTime.textContent =
-            new Date()
-                .toLocaleString(
-                    "vi-VN",
-                    {
-                        timeZone:
-                            "Asia/Ho_Chi_Minh"
-                    }
-                );
+            new Date().toLocaleString(
+                "vi-VN",
+                {
+                    timeZone:
+                        "Asia/Ho_Chi_Minh"
+                }
+            );
 
     }
 
@@ -926,7 +1142,7 @@ function generateQR(){
 
 
     /* =====================================
-       RESET STATUS
+       STATUS
     ===================================== */
 
     const status =
@@ -1010,9 +1226,7 @@ function copyStk(){
 
 
             if(!button){
-
                 return;
-
             }
 
 
@@ -1079,9 +1293,7 @@ function checkPayment(
 
 
                 if(!response.ok){
-
                     return;
-
                 }
 
 
@@ -1136,7 +1348,7 @@ function checkPayment(
 
 
                     /*
-                       Cộng tiền ngay trên giao diện.
+                       Cộng ngay vào tổng.
                     */
 
                     received =
@@ -1150,22 +1362,19 @@ function checkPayment(
 
 
                     /*
-                       Đợi server cập nhật rồi
-                       lấy lại lịch sử.
+                       Cho server thời gian ghi lịch sử.
                     */
 
-                    setTimeout(() => {
+                    setTimeout(
+                        updateProgress,
+                        5000
+                    );
 
-                        updateProgress();
 
-                    },5000);
-
-
-                    setTimeout(() => {
-
-                        updateProgress();
-
-                    },8000);
+                    setTimeout(
+                        updateProgress,
+                        8000
+                    );
 
                 }
 
@@ -1208,13 +1417,9 @@ function startTimer(){
     countdownInterval = null;
 
 
-    const TEN_MINUTES =
-        10 * 60 * 1000;
-
-
     countdownEndTime =
         Date.now() +
-        TEN_MINUTES;
+        (10 * 60 * 1000);
 
 
     const timer =
@@ -1232,9 +1437,7 @@ function startTimer(){
     function updateCountdown(){
 
         if(!countdownEndTime){
-
             return;
-
         }
 
 
@@ -1262,20 +1465,14 @@ function startTimer(){
             totalSeconds % 60;
 
 
-        const displayMinutes =
-            String(minutes)
-                .padStart(2,"0");
-
-
-        const displaySeconds =
-            String(seconds)
-                .padStart(2,"0");
-
-
         if(timer){
 
             timer.textContent =
-                `${displayMinutes}:${displaySeconds}`;
+                String(minutes)
+                    .padStart(2,"0") +
+                ":" +
+                String(seconds)
+                    .padStart(2,"0");
 
         }
 
