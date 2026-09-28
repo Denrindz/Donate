@@ -10,15 +10,11 @@
   --accent-soft:#e5f5f3;
   --danger:#c44;
   --shadow:0 18px 55px rgba(0,40,40,.09);
-  --radius:24px;
 }
 
-
-/* ========================================
-   RESET
-======================================== */
-
-*{
+*,
+*::before,
+*::after{
   box-sizing:border-box;
 }
 
@@ -27,14 +23,15 @@ html{
   max-width:100%;
   margin:0;
   padding:0;
-  scroll-behavior:smooth;
   overflow-x:hidden;
+  scroll-behavior:smooth;
 }
 
 body{
   position:relative;
   width:100%;
   max-width:100%;
+  min-width:0;
   min-height:100vh;
 
   margin:0;
@@ -42,7 +39,7 @@ body{
 
   overflow-x:hidden;
 
-  background:#f5f7f7;
+  background:var(--bg);
   color:var(--text);
 
   font-family:
@@ -52,70 +49,63 @@ body{
     Roboto,
     Arial,
     sans-serif;
-
-  isolation:isolate;
 }
 
 
 /* ========================================
-   GLOW XANH — NẰM PHÍA SAU TOÀN BỘ WEB
+   GLOW XANH
+   NẰM SAU TOÀN BỘ WEBSITE
 ======================================== */
 
 body::before{
   content:"";
 
-  position:absolute;
-  top:-170px;
+  position:fixed;
+  z-index:-2;
+
+  top:-220px;
   left:50%;
 
-  width:min(1050px,100vw);
-  height:650px;
+  width:900px;
+  height:520px;
 
   transform:translateX(-50%);
 
   pointer-events:none;
 
-  z-index:-1;
-
   background:
     radial-gradient(
       ellipse at center,
-      rgba(0,144,144,.22) 0%,
-      rgba(0,144,144,.15) 23%,
-      rgba(0,144,144,.08) 43%,
-      rgba(0,144,144,.035) 60%,
-      transparent 76%
+      rgba(0,144,144,.17) 0%,
+      rgba(0,144,144,.10) 28%,
+      rgba(0,144,144,.045) 52%,
+      transparent 72%
     );
 
-  filter:blur(8px);
+  filter:blur(20px);
 }
-
-
-/* ========================================
-   FADE NỀN
-======================================== */
 
 body::after{
   content:"";
 
-  position:absolute;
+  position:fixed;
+  z-index:-1;
+
   top:0;
   left:0;
 
   width:100%;
-  height:500px;
+  height:430px;
 
   pointer-events:none;
-
-  z-index:-1;
 
   background:
     linear-gradient(
       to bottom,
-      rgba(255,255,255,0) 0%,
-      rgba(255,255,255,.02) 35%,
-      rgba(245,247,247,.65) 78%,
-      #f5f7f7 100%
+      rgba(245,247,247,0) 0%,
+      rgba(245,247,247,.18) 42%,
+      rgba(245,247,247,.82) 82%,
+      var(--bg) 100%
     );
 }
 
@@ -128,6 +118,8 @@ header,
 main{
   position:relative;
   z-index:1;
+
+  min-width:0;
 }
 
 
@@ -137,7 +129,7 @@ main{
 
 header{
   width:min(900px,calc(100% - 32px));
-  max-width:100%;
+  max-width:calc(100% - 32px);
 
   margin:22px auto 0;
   padding:18px 4px;
@@ -145,12 +137,16 @@ header{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
+  overflow:hidden;
 }
 
 .logo{
   display:flex;
   align-items:center;
   gap:9px;
+
+  min-width:0;
 
   font-size:18px;
   font-weight:800;
@@ -183,9 +179,11 @@ header{
 
 main{
   width:min(900px,calc(100% - 32px));
-  max-width:100%;
+  max-width:calc(100% - 32px);
 
   margin:0 auto 50px;
+
+  overflow:hidden;
 }
 
 
@@ -200,7 +198,6 @@ main{
   max-width:100%;
 
   margin:20px 0 22px;
-
   padding:0 22px 22px;
 
   background:rgba(255,255,255,.97);
@@ -217,33 +214,31 @@ main{
 
 
 /* Glow bên trong card */
-
 .fund-overview::before{
   content:"";
 
   position:absolute;
-  top:0;
+  z-index:0;
+
+  top:-20px;
   left:50%;
 
   width:70%;
-  max-width:700px;
-  height:170px;
+  height:150px;
 
   transform:translateX(-50%);
 
   pointer-events:none;
 
-  z-index:0;
-
   background:
     radial-gradient(
       ellipse at center top,
-      rgba(0,144,144,.11),
-      rgba(0,144,144,.035) 45%,
-      transparent 75%
+      rgba(0,144,144,.085) 0%,
+      rgba(0,144,144,.035) 42%,
+      transparent 72%
     );
 
-  filter:blur(10px);
+  filter:blur(18px);
 }
 
 
@@ -253,13 +248,12 @@ main{
 
 .fund-overview .hero{
   position:relative;
-  z-index:1;
+  z-index:2;
 
   width:100%;
   max-width:100%;
 
   margin:0;
-
   padding:32px 0 38px;
 
   background:transparent;
@@ -270,12 +264,10 @@ main{
   box-shadow:none;
 }
 
-
-/* ========================================
-   EYEBROW
-======================================== */
-
 .eyebrow{
+  position:relative;
+  z-index:2;
+
   display:inline-flex;
   align-items:center;
 
@@ -289,17 +281,12 @@ main{
   font-size:11px;
   font-weight:800;
   letter-spacing:.7px;
-
-  box-shadow:
-    0 4px 18px rgba(0,144,144,.07);
 }
 
-
-/* ========================================
-   TITLE
-======================================== */
-
 h1{
+  position:relative;
+  z-index:2;
+
   margin:18px 0 14px;
 
   font-size:clamp(38px,6vw,66px);
@@ -310,12 +297,10 @@ h1{
   font-weight:850;
 }
 
-
-/* ========================================
-   DESCRIPTION
-======================================== */
-
 .fund-overview .hero p{
+  position:relative;
+  z-index:2;
+
   max-width:680px;
 
   margin:0;
@@ -333,7 +318,7 @@ h1{
 
 .fund-overview .fund-goal{
   position:relative;
-  z-index:1;
+  z-index:2;
 
   width:100%;
   max-width:100%;
@@ -384,7 +369,7 @@ h1{
 
 .fund-overview .progress-card{
   position:relative;
-  z-index:1;
+  z-index:2;
 
   width:100%;
   max-width:100%;
@@ -402,6 +387,7 @@ h1{
   display:flex;
   align-items:flex-end;
   justify-content:space-between;
+
   gap:20px;
 }
 
@@ -409,6 +395,8 @@ h1{
   display:flex;
   flex-direction:column;
   gap:5px;
+
+  min-width:0;
 }
 
 .received span:first-child{
@@ -427,6 +415,8 @@ h1{
 }
 
 .percent{
+  flex:0 0 auto;
+
   color:var(--accent);
 
   font-size:22px;
@@ -461,6 +451,7 @@ h1{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
 
   color:var(--muted);
@@ -494,7 +485,7 @@ h1{
 
 .fund-overview .donate-section{
   position:relative;
-  z-index:1;
+  z-index:2;
 
   width:100%;
   max-width:100%;
@@ -506,10 +497,6 @@ h1{
 
   border:0;
   border-top:1px solid var(--line);
-
-  border-radius:0;
-
-  box-shadow:none;
 
   text-align:center;
 }
@@ -581,12 +568,15 @@ h1{
   border-radius:24px;
 
   box-shadow:var(--shadow);
+
+  overflow:hidden;
 }
 
 .section-title{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:15px;
 
   margin-bottom:18px;
@@ -615,6 +605,8 @@ h1{
 
   display:block;
 
+  flex:0 0 7px;
+
   border-radius:50%;
 
   background:#39a96b;
@@ -623,7 +615,11 @@ h1{
 .supporter{
   display:flex;
   align-items:center;
+
   gap:12px;
+
+  width:100%;
+  max-width:100%;
 
   padding:13px 0;
 
@@ -668,6 +664,8 @@ h1{
 }
 
 .amount{
+  flex:0 0 auto;
+
   color:var(--accent);
 
   font-size:14px;
@@ -680,6 +678,9 @@ h1{
 ======================================== */
 
 footer{
+  width:100%;
+  max-width:100%;
+
   padding:5px 0 30px;
 
   color:var(--muted);
@@ -704,7 +705,12 @@ footer{
   align-items:center;
   justify-content:center;
 
+  width:100%;
+  height:100%;
+
   padding:20px;
+
+  overflow:hidden;
 
   background:rgba(10,20,20,.45);
 
@@ -779,15 +785,18 @@ footer{
 
 
 /* ========================================
-   FORM NHẬP THÔNG TIN
+   FORM
 ======================================== */
 
 .field{
+  width:100%;
   margin-bottom:18px;
 }
 
 .field label{
   display:block;
+
+  width:100%;
 
   margin:0 0 8px 2px;
 
@@ -801,10 +810,14 @@ footer{
 }
 
 .field input{
+  display:block;
+
   width:100%;
   max-width:100%;
 
   height:52px;
+
+  margin:0;
 
   padding:0 15px;
 
@@ -816,8 +829,14 @@ footer{
   background:#fbfdfc;
   color:var(--text);
 
+  font-family:inherit;
   font-size:15px;
   font-weight:600;
+
+  line-height:normal;
+
+  -webkit-appearance:none;
+  appearance:none;
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,.9),
@@ -832,7 +851,9 @@ footer{
 
 .field input::placeholder{
   color:#a1aaaa;
-  font-weight:500;
+  opacity:1;
+
+  line-height:normal;
 }
 
 .field input:hover{
@@ -866,17 +887,25 @@ footer{
   width:100%;
   max-width:100%;
 
-  border-radius:14px;
+  margin:0;
 }
 
 .money input{
+  display:block;
+
   width:100%;
+  max-width:100%;
 
   height:58px;
+
+  margin:0;
 
   padding:0 76px 0 17px;
 
   border:1.5px solid #d5e2df;
+  border-radius:14px;
+
+  outline:none;
 
   background:
     linear-gradient(
@@ -885,10 +914,24 @@ footer{
       #f9fcfb 100%
     );
 
+  color:var(--text);
+
+  font-family:inherit;
   font-size:19px;
   font-weight:800;
 
+  line-height:normal;
   letter-spacing:.2px;
+
+  -webkit-appearance:none;
+  appearance:none;
+}
+
+.money input::placeholder{
+  color:#a1aaaa;
+  opacity:1;
+
+  line-height:normal;
 }
 
 .money input:focus{
@@ -897,6 +940,18 @@ footer{
   box-shadow:
     0 0 0 4px rgba(0,144,144,.10),
     0 10px 28px rgba(0,144,144,.09);
+}
+
+
+/* bỏ spinner của input number nếu còn input cũ */
+.money input::-webkit-outer-spin-button,
+.money input::-webkit-inner-spin-button{
+  -webkit-appearance:none;
+  margin:0;
+}
+
+.money input[type="number"]{
+  -moz-appearance:textfield;
 }
 
 
@@ -936,8 +991,8 @@ footer{
 
 
 /* ========================================
-   MỨC TIỀN NHANH
-   LUÔN 4 NÚT / 1 HÀNG
+   SỐ TIỀN NHANH
+   LUÔN 1 HÀNG
 ======================================== */
 
 .quick{
@@ -952,30 +1007,40 @@ footer{
   gap:8px;
 
   margin:11px 0 15px;
+
+  overflow:hidden;
 }
 
 .quick button{
+  display:block;
+
   width:100%;
   min-width:0;
+  max-width:100%;
 
   height:40px;
 
-  padding:0 3px;
+  padding:0 2px;
 
   border:1px solid #dce6e4;
-
-  background:#f8faf9;
-
   border-radius:11px;
 
+  background:#f8faf9;
   color:#526060;
 
+  font-family:inherit;
   font-size:11px;
   font-weight:800;
 
+  line-height:40px;
+
   white-space:nowrap;
 
+  text-align:center;
+
   cursor:pointer;
+
+  overflow:hidden;
 
   transition:.2s ease;
 }
@@ -1006,7 +1071,7 @@ footer{
 
   margin:0 2px 5px;
 
-  color:#c44;
+  color:var(--danger);
 
   font-size:11px;
   font-weight:600;
@@ -1022,6 +1087,7 @@ footer{
   height:50px;
 
   border:0;
+  border-radius:13px;
 
   background:
     linear-gradient(
@@ -1032,8 +1098,7 @@ footer{
 
   color:#fff;
 
-  border-radius:13px;
-
+  font-family:inherit;
   font-size:13px;
   font-weight:850;
 
@@ -1106,7 +1171,7 @@ footer{
 
 
 /* ========================================
-   QR RESULT
+   QR
 ======================================== */
 
 .qr-result{
@@ -1173,6 +1238,9 @@ footer{
 }
 
 .payment-info{
+  width:100%;
+  max-width:100%;
+
   overflow:hidden;
 
   border:1px solid var(--line);
@@ -1270,32 +1338,35 @@ footer{
 @media(max-width:600px){
 
   body::before{
-    top:-100px;
+    position:fixed;
+
+    top:-120px;
 
     width:100vw;
-    height:470px;
+    height:430px;
 
     background:
       radial-gradient(
         ellipse at center,
-        rgba(0,144,144,.19) 0%,
-        rgba(0,144,144,.11) 27%,
-        rgba(0,144,144,.05) 50%,
-        transparent 76%
+        rgba(0,144,144,.14) 0%,
+        rgba(0,144,144,.075) 30%,
+        rgba(0,144,144,.025) 55%,
+        transparent 75%
       );
+
+    filter:blur(18px);
   }
 
   body::after{
+    position:fixed;
+
     width:100%;
-    height:390px;
+    height:380px;
   }
-
-
-  /* HEADER */
 
   header{
     width:calc(100% - 24px);
-    max-width:100%;
+    max-width:calc(100% - 24px);
 
     margin-top:12px;
     padding:14px 2px;
@@ -1305,16 +1376,10 @@ footer{
     display:none;
   }
 
-
-  /* MAIN */
-
   main{
     width:calc(100% - 24px);
-    max-width:100%;
+    max-width:calc(100% - 24px);
   }
-
-
-  /* CARD */
 
   .fund-overview{
     width:100%;
@@ -1329,16 +1394,11 @@ footer{
 
   .fund-overview::before{
     width:100%;
-    height:150px;
+    height:140px;
   }
-
-
-  /* HERO */
 
   .fund-overview .hero{
     width:100%;
-
-    margin:0;
 
     padding:24px 0 30px;
   }
@@ -1356,51 +1416,23 @@ footer{
     line-height:1.7;
   }
 
-
-  /* GOAL */
-
   .fund-overview .fund-goal{
-    width:100%;
-
     padding:17px;
 
     border-radius:16px;
   }
-
-
-  /* PROGRESS */
 
   .fund-overview .progress-card{
-    width:100%;
-
     padding:17px;
 
     border-radius:16px;
   }
 
-  .progress-top{
-    align-items:flex-start;
-  }
-
-  .progress-bottom{
-    font-size:11px;
-  }
-
-
-  /* DONATE */
-
   .fund-overview .donate-section{
-    width:100%;
-
     padding:23px 5px 6px;
   }
 
-
-  /* SUPPORTERS */
-
   .supporters{
-    width:100%;
-
     padding:19px;
 
     border-radius:20px;
@@ -1414,12 +1446,17 @@ footer{
     gap:8px;
   }
 
+  .progress-top{
+    align-items:flex-start;
+  }
 
-  /* MODAL */
+  .progress-bottom{
+    font-size:11px;
+  }
 
   .modal{
     width:100%;
-    max-width:100%;
+    height:100%;
 
     padding:12px;
   }
@@ -1433,23 +1470,16 @@ footer{
     border-radius:18px;
   }
 
-
-  /* ====================================
-     4 MỨC TIỀN — KHÔNG BAO GIỜ XUỐNG HÀNG
-  ==================================== */
-
+  /* 4 nút vẫn 1 hàng */
   .quick{
     display:grid;
 
     grid-template-columns:
       repeat(4,minmax(0,1fr));
 
+    gap:5px;
+
     width:100%;
-    max-width:100%;
-
-    gap:6px;
-
-    margin:11px 0 15px;
   }
 
   .quick button{
@@ -1458,15 +1488,12 @@ footer{
 
     height:40px;
 
-    padding:0 2px;
+    padding:0 1px;
 
     font-size:10px;
 
-    white-space:nowrap;
+    line-height:40px;
   }
-
-
-  /* INFO QR */
 
   .info-row{
     flex-direction:column;
@@ -1483,7 +1510,7 @@ footer{
 
 
 /* ========================================
-   MÀN HÌNH SIÊU NHỎ
+   IPHONE MÀN HÌNH RẤT NHỎ
 ======================================== */
 
 @media(max-width:360px){
@@ -1496,25 +1523,63 @@ footer{
     grid-template-columns:
       repeat(4,minmax(0,1fr));
 
-    gap:4px;
+    gap:3px;
   }
 
   .quick button{
     height:38px;
 
-    padding:0 1px;
+    padding:0;
+
+    border-radius:8px;
 
     font-size:9px;
 
-    border-radius:9px;
+    line-height:38px;
   }
 
   .money input{
     font-size:17px;
+
+    padding-left:14px;
+    padding-right:68px;
   }
 
   .currency{
     right:9px;
+
     min-width:44px;
+    height:28px;
+  }
+}
+
+
+/* ========================================
+   KHÓA HOÀN TOÀN TRÀN NGANG
+======================================== */
+
+@media(max-width:600px){
+
+  html,
+  body{
+    width:100%;
+    max-width:100%;
+
+    overflow-x:hidden !important;
+  }
+
+  header,
+  main,
+  footer,
+  .fund-overview,
+  .supporters,
+  .modal,
+  .modal-box,
+  .field,
+  .money,
+  .quick,
+  .payment-info{
+    min-width:0;
+    max-width:100%;
   }
 }
