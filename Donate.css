@@ -545,7 +545,7 @@ footer{
   align-items:center;
   justify-content:center;
 
-  padding:16px;
+  padding:12px;
 
   background:rgba(10,20,20,.45);
 
@@ -556,88 +556,103 @@ footer{
   display:flex;
 }
 
+
+/* ========================================
+   KHUNG MODAL NHỎ GỌN
+======================================== */
+
 .modal-box{
-  width:min(390px,100%);
-  max-height:88vh;
+  width:min(330px,100%);
+  max-height:86vh;
 
   overflow:auto;
 
-  padding:20px;
+  padding:14px;
 
   background:#fff;
 
   border:1px solid var(--line);
-  border-radius:18px;
+  border-radius:15px;
 
-  box-shadow:0 25px 70px rgba(0,0,0,.18);
+  box-shadow:0 20px 55px rgba(0,0,0,.16);
 }
+
+
+/* ========================================
+   MODAL HEADER
+======================================== */
 
 .modal-head{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:15px;
+  gap:10px;
 
-  margin-bottom:16px;
+  margin-bottom:12px;
 }
 
 .modal-label{
   color:var(--accent);
 
-  font-size:9px;
+  font-size:8px;
   font-weight:850;
   letter-spacing:.7px;
 }
 
 .modal-head h2{
-  margin:5px 0 0;
+  margin:4px 0 0;
 
-  font-size:21px;
-  letter-spacing:-.6px;
+  font-size:18px;
+  letter-spacing:-.5px;
 }
 
 .close{
-  width:32px;
-  height:32px;
+  width:29px;
+  height:29px;
 
-  flex:0 0 32px;
+  flex:0 0 29px;
 
   border:0;
 
   background:#f1f4f4;
 
-  border-radius:9px;
+  border-radius:8px;
 
-  font-size:21px;
+  font-size:19px;
   line-height:1;
 
   cursor:pointer;
 }
 
+
+/* ========================================
+   FORM
+======================================== */
+
 .field{
-  margin-bottom:15px;
+  margin-bottom:12px;
 }
 
 .field label{
   display:block;
 
-  margin-bottom:7px;
+  margin-bottom:6px;
 
   color:var(--muted);
 
-  font-size:10px;
+  font-size:9px;
   font-weight:850;
   letter-spacing:.5px;
 }
 
 .field input{
   width:100%;
-  height:46px;
+  height:42px;
 
-  padding:0 13px;
+  padding:0 11px;
 
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:9px;
 
   outline:0;
 
@@ -645,7 +660,7 @@ footer{
 
   color:var(--text);
 
-  font-size:14px;
+  font-size:13px;
 }
 
 .field input:focus{
@@ -659,23 +674,22 @@ footer{
 }
 
 .money input{
-  padding-right:60px;
+  padding-right:55px;
 
-  /* SỐ TIỀN ĐẬM */
   font-weight:700;
 }
 
 .currency{
   position:absolute;
 
-  right:13px;
+  right:11px;
   top:50%;
 
   transform:translateY(-50%);
 
   color:var(--muted);
 
-  font-size:11px;
+  font-size:10px;
   font-weight:800;
 }
 
@@ -690,29 +704,29 @@ footer{
 
   grid-template-columns:repeat(4,minmax(0,1fr));
 
-  gap:8px;
+  gap:6px;
 
   width:100%;
 
-  margin-bottom:13px;
+  margin-bottom:11px;
 }
 
 .quick button{
   width:100%;
   min-width:0;
-  height:38px;
+  height:34px;
 
-  padding:0 4px;
+  padding:0 3px;
 
   border:1px solid var(--line);
 
   background:var(--surface-soft);
 
-  border-radius:9px;
+  border-radius:8px;
 
   color:var(--text);
 
-  font-size:12px;
+  font-size:10px;
   font-weight:750;
 
   cursor:pointer;
@@ -736,13 +750,13 @@ footer{
 ======================================== */
 
 .error{
-  min-height:18px;
+  min-height:15px;
 
-  margin-bottom:5px;
+  margin-bottom:4px;
 
   color:var(--danger);
 
-  font-size:12px;
+  font-size:10px;
 }
 
 
@@ -752,16 +766,16 @@ footer{
 
 .generate{
   width:100%;
-  height:46px;
+  height:42px;
 
   border:0;
 
   background:var(--accent);
   color:#fff;
 
-  border-radius:11px;
+  border-radius:9px;
 
-  font-size:14px;
+  font-size:13px;
   font-weight:800;
 
   cursor:pointer;
@@ -772,11 +786,11 @@ footer{
 }
 
 .note{
-  margin-top:11px;
+  margin-top:8px;
 
   color:var(--muted);
 
-  font-size:10px;
+  font-size:9px;
 
   text-align:center;
 }
@@ -784,7 +798,6 @@ footer{
 
 /* ========================================
    QR RESULT
-   GỌN - NHỎ - DỄ NHÌN
 ======================================== */
 
 .qr-result{
@@ -796,7 +809,7 @@ footer{
 }
 
 .qr-title{
-  margin-bottom:11px;
+  margin-bottom:7px;
 
   text-align:center;
 }
@@ -804,32 +817,32 @@ footer{
 .qr-title .small{
   color:var(--accent);
 
-  font-size:9px;
+  font-size:8px;
   font-weight:850;
   letter-spacing:.5px;
 }
 
 .qr-title h3{
-  margin:4px 0 0;
+  margin:3px 0 0;
 
-  font-size:18px;
-  line-height:1.2;
+  font-size:16px;
+  line-height:1.15;
 }
 
 
 /* ========================================
-   KHUNG QR NHỎ
+   QR NHỎ
 ======================================== */
 
 .qr-box{
-  width:180px;
-  height:180px;
+  width:135px;
+  height:135px;
 
-  margin:0 auto 11px;
-  padding:7px;
+  margin:0 auto 8px;
+  padding:5px;
 
   border:1px solid var(--line);
-  border-radius:12px;
+  border-radius:9px;
 
   background:#fff;
 }
@@ -849,11 +862,11 @@ footer{
 ======================================== */
 
 .payment-status{
-  margin-bottom:11px;
+  margin-bottom:8px;
 
   color:var(--accent);
 
-  font-size:11px;
+  font-size:10px;
   font-weight:750;
 
   text-align:center;
@@ -861,27 +874,33 @@ footer{
 
 
 /* ========================================
-   THÔNG TIN CHUYỂN KHOẢN
+   BẢNG THÔNG TIN CHUYỂN KHOẢN
+   NHỎ GỌN
 ======================================== */
 
 .payment-info{
+  width:100%;
+
   overflow:hidden;
 
   border:1px solid var(--line);
-  border-radius:11px;
+  border-radius:8px;
 }
 
 .info-row{
   display:flex;
   align-items:center;
   justify-content:space-between;
-  gap:12px;
 
-  padding:8px 11px;
+  gap:8px;
+
+  padding:6px 8px;
 
   border-bottom:1px solid var(--line);
 
-  font-size:11px;
+  font-size:9px;
+
+  line-height:1.2;
 }
 
 .info-row:last-child{
@@ -889,17 +908,22 @@ footer{
 }
 
 .info-label{
+  flex:0 0 auto;
+
   color:var(--muted);
+
+  font-size:9px;
 
   white-space:nowrap;
 }
 
 .info-value{
-  max-width:65%;
+  min-width:0;
+  max-width:62%;
 
   color:var(--text);
 
-  font-size:11px;
+  font-size:9px;
   font-weight:750;
 
   text-align:right;
@@ -908,18 +932,18 @@ footer{
 }
 
 .copy-btn{
-  margin-left:4px;
+  margin-left:2px;
 
-  padding:3px 6px;
+  padding:2px 4px;
 
   border:0;
 
   background:var(--accent-soft);
   color:var(--accent-dark);
 
-  border-radius:5px;
+  border-radius:4px;
 
-  font-size:9px;
+  font-size:7px;
   font-weight:800;
 
   cursor:pointer;
@@ -931,11 +955,11 @@ footer{
 ======================================== */
 
 .timer{
-  margin:11px 0;
+  margin:7px 0;
 
   color:var(--muted);
 
-  font-size:11px;
+  font-size:9px;
 
   text-align:center;
 }
@@ -951,16 +975,16 @@ footer{
 
 .new-code{
   width:100%;
-  height:39px;
+  height:34px;
 
   border:1px solid var(--line);
 
   background:#fff;
   color:var(--text);
 
-  border-radius:9px;
+  border-radius:8px;
 
-  font-size:12px;
+  font-size:10px;
   font-weight:800;
 
   cursor:pointer;
@@ -1061,94 +1085,209 @@ footer{
   }
 
 
-  /* ==============================
-     MODAL MOBILE
-  ============================== */
+  /* ======================================
+     MODAL MOBILE — RẤT GỌN
+  ====================================== */
 
   .modal{
-    padding:12px;
+    padding:10px;
   }
 
   .modal-box{
-    width:min(360px,100%);
+    width:min(300px,100%);
 
-    padding:17px;
+    padding:12px;
 
-    border-radius:17px;
+    border-radius:13px;
   }
 
   .modal-head{
-    margin-bottom:13px;
+    margin-bottom:9px;
   }
 
   .modal-head h2{
-    font-size:20px;
+    font-size:17px;
+  }
+
+  .modal-label{
+    font-size:7px;
+  }
+
+  .close{
+    width:27px;
+    height:27px;
+
+    flex:0 0 27px;
+
+    border-radius:7px;
+
+    font-size:18px;
   }
 
 
-  /* ==============================
+  /* FORM MOBILE */
+
+  .field{
+    margin-bottom:9px;
+  }
+
+  .field label{
+    margin-bottom:5px;
+
+    font-size:8px;
+  }
+
+  .field input{
+    height:38px;
+
+    padding:0 9px;
+
+    border-radius:8px;
+
+    font-size:12px;
+  }
+
+  .currency{
+    right:9px;
+
+    font-size:9px;
+  }
+
+
+  /* ======================================
      4 NÚT TIỀN NHANH
-  ============================== */
+  ====================================== */
 
   .quick{
     grid-template-columns:repeat(4,minmax(0,1fr));
 
-    gap:6px;
-  }
+    gap:5px;
 
-  .quick button{
-    font-size:11px;
-
-    padding:0 2px;
-  }
-
-
-  /* ==============================
-     QR MOBILE NHỎ HƠN
-  ============================== */
-
-  .qr-title{
     margin-bottom:9px;
   }
 
+  .quick button{
+    height:31px;
+
+    font-size:9px;
+
+    padding:0 2px;
+
+    border-radius:7px;
+  }
+
+
+  /* ======================================
+     GENERATE MOBILE
+  ====================================== */
+
+  .generate{
+    height:38px;
+
+    border-radius:8px;
+
+    font-size:12px;
+  }
+
+  .note{
+    margin-top:6px;
+
+    font-size:8px;
+  }
+
+
+  /* ======================================
+     QR MOBILE — NHỎ
+  ====================================== */
+
+  .qr-title{
+    margin-bottom:6px;
+  }
+
+  .qr-title .small{
+    font-size:7px;
+  }
+
   .qr-title h3{
-    font-size:17px;
+    font-size:14px;
   }
 
   .qr-box{
-    width:160px;
-    height:160px;
+    width:120px;
+    height:120px;
 
-    padding:6px;
+    padding:4px;
 
-    margin-bottom:10px;
+    margin-bottom:7px;
 
-    border-radius:11px;
+    border-radius:8px;
   }
 
+  .payment-status{
+    margin-bottom:6px;
+
+    font-size:8px;
+  }
+
+
+  /* ======================================
+     BẢNG THÔNG TIN MOBILE
+  ====================================== */
+
   .payment-info{
-    border-radius:10px;
+    border-radius:7px;
   }
 
   .info-row{
-    padding:8px 10px;
+    gap:5px;
 
-    font-size:10px;
+    padding:5px 7px;
+
+    font-size:8px;
+
+    line-height:1.15;
+  }
+
+  .info-label{
+    font-size:8px;
   }
 
   .info-value{
-    font-size:10px;
+    max-width:65%;
+
+    font-size:8px;
   }
 
   .copy-btn{
-    font-size:8px;
+    padding:2px 3px;
 
-    padding:3px 5px;
+    font-size:6px;
+
+    border-radius:3px;
   }
+
+
+  /* ======================================
+     TIMER MOBILE
+  ====================================== */
+
+  .timer{
+    margin:6px 0;
+
+    font-size:8px;
+  }
+
+
+  /* ======================================
+     NÚT TẠO MÃ MỚI
+  ====================================== */
 
   .new-code{
-    height:38px;
+    height:32px;
 
-    font-size:11px;
+    border-radius:7px;
+
+    font-size:9px;
   }
+
 }
