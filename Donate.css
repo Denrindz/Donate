@@ -536,17 +536,17 @@ button{
 }
 
 .supporter-avatar{
-  width:42px;
-  height:42px;
+  width:36px;
+  height:36px;
   flex:none;
   display:flex;
   align-items:center;
   justify-content:center;
-  margin-right:13px;
-  border-radius:12px;
+  margin-right:8px;
+  border-radius:10px;
   background:#edf5f5;
   color:var(--accent);
-  font-size:14px;
+  font-size:13px;
   font-weight:750;
   border:1px solid #e1eeee;
 }
@@ -1241,7 +1241,7 @@ button{
   }
 
   /* =======================================================
-     HISTORY MOBILE — ĐÃ CHỈNH LỚN HƠN
+     HISTORY MOBILE
   ======================================================= */
 
   .thanks-section{
@@ -1288,12 +1288,14 @@ button{
     padding:15px 4px;
   }
 
+  /* ICON NHỎ HƠN + SÁT TÊN HƠN */
+
   .supporter-avatar{
-    width:56px;
-    height:56px;
-    margin-right:20px;
-    border-radius:16px;
-    font-size:17px;
+    width:36px;
+    height:36px;
+    margin-right:7px;
+    border-radius:10px;
+    font-size:13px;
   }
 
   .supporter-left{
@@ -1448,9 +1450,11 @@ button{
   }
 
   .supporter-avatar{
-    width:38px;
-    height:38px;
-    margin-right:9px;
+    width:34px;
+    height:34px;
+    margin-right:7px;
+    border-radius:9px;
+    font-size:12px;
   }
 
   .supporter-name{
