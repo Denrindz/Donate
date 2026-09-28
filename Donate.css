@@ -124,6 +124,41 @@ h1{
   margin:0;
 }
 /* =========================
+   FUND GOAL
+   KHUNG MỤC TIÊU RIÊNG
+========================= */
+.fund-goal{
+  margin-bottom:22px;
+  padding:22px 24px;
+  background:rgba(255,255,255,.9);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  text-align:left;
+}
+.fund-goal-title{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  color:var(--text);
+  font-size:14px;
+  font-weight:800;
+}
+.fund-goal-title i{
+  color:var(--accent);
+  font-size:16px;
+}
+.fund-goal ul{
+  margin:12px 0 0;
+  padding-left:22px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.65;
+}
+.fund-goal li + li{
+  margin-top:6px;
+}
+/* =========================
    PROGRESS
 ========================= */
 .progress-card,
@@ -579,7 +614,8 @@ footer{
   }
   .progress-card,
   .supporters,
-  .donate-section{
+  .donate-section,
+  .fund-goal{
     padding:22px;
   }
   .progress-top{
@@ -600,4 +636,21 @@ footer{
   .info-row{
     align-items:flex-start;
   }
+  .fund-goal{
+    margin-bottom:18px;
+  }
+  .fund-goal ul{
+    padding-left:20px;
+  }
 }
+
+HTML nhớ đặt theo đúng thứ tự này:
+
+<section class="fund-goal">
+  ...
+</section>
+<section class="progress-card">
+  ...
+</section>
+
+Và không đặt fund-goal bên trong progress-card hoặc donate-section.
