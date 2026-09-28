@@ -1601,28 +1601,44 @@ button{
    POPUP MOBILE
 ========================================================= */
 
+/* =========================================================
+   POPUP MOBILE — CĂN GIỮA MÀN HÌNH
+========================================================= */
+
 @media (max-width:520px){
 
   .overlay{
-    padding:10px;
+    padding:20px;
 
-    align-items:end;
+    display:grid;
+    place-items:center;
+
+    align-items:center;
+    justify-items:center;
   }
 
   .popup{
     width:100%;
+    max-width:390px;
 
-    max-height:calc(100dvh - 20px);
+    max-height:calc(100dvh - 40px);
 
     padding:27px 19px calc(17px + env(safe-area-inset-bottom));
 
     border-radius:21px;
 
-    transform:translateY(45px);
+    transform:translateY(15px) scale(.97);
+
+    opacity:0;
+
+    transition:
+      transform .3s cubic-bezier(.2,.8,.2,1),
+      opacity .25s;
   }
 
   .overlay.show .popup{
-    transform:none;
+    transform:translateY(0) scale(1);
+    opacity:1;
   }
 
   .popup::before{
@@ -1657,7 +1673,6 @@ button{
 
   .p-input{
     height:48px;
-
     font-size:16px;
   }
 
@@ -1671,13 +1686,11 @@ button{
 
   .p-row{
     flex-wrap:wrap;
-
     row-gap:3px;
   }
 
   .p-row b{
     margin-left:auto;
-
     max-width:100%;
   }
 
@@ -1688,7 +1701,6 @@ button{
 
   .p-qr{
     padding:10px;
-
     border-radius:15px;
   }
 }
