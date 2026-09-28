@@ -1209,8 +1209,19 @@ footer{
   }
 
   .quick{
-    grid-template-columns:repeat(2,1fr);
-  }
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:8px;
+  margin:11px 0 15px;
+}
+
+.quick button{
+  width:100%;
+  min-width:0;
+  height:40px;
+  padding:0 4px;
+  white-space:nowrap;
+}
 
   .info-row{
     flex-direction:column;
