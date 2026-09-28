@@ -25,8 +25,16 @@ body{
   margin:0;
   min-height:100vh;
   overflow-x:hidden;
+
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
 
   background:
     linear-gradient(
@@ -67,7 +75,10 @@ header{
   width:10px;
   height:10px;
 
+  flex:0 0 10px;
+
   border-radius:50%;
+
   background:var(--accent);
 
   box-shadow:
@@ -96,6 +107,7 @@ main{
 
 .fund-overview{
   width:100%;
+
   margin:20px 0 22px;
   padding:0 22px 22px;
 
@@ -105,22 +117,27 @@ main{
   border-radius:24px;
 
   box-shadow:var(--shadow);
+
   overflow:hidden;
 }
 
 
 /* ========================================
    HERO
+   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .fund-overview .hero{
   width:100%;
+
   margin:0;
   padding:32px 0 38px;
 
   background:transparent;
+
   border:0;
   border-radius:0;
+
   box-shadow:none;
 }
 
@@ -142,13 +159,15 @@ main{
 
   font-size:11px;
   font-weight:800;
+
   letter-spacing:.7px;
+
+  white-space:nowrap;
 }
 
 
 /* ========================================
    TITLE
-   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 h1{
@@ -168,7 +187,9 @@ h1{
 ======================================== */
 
 .fund-overview .hero p{
+  width:100%;
   max-width:680px;
+
   margin:0;
 
   color:var(--muted);
@@ -179,11 +200,13 @@ h1{
 
 
 /* ========================================
-   MỤC TIÊU
+   MỤC TIÊU SỬ DỤNG
+   GIỮ KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .fund-overview .fund-goal{
   width:100%;
+
   margin:0;
   padding:20px;
 
@@ -191,6 +214,12 @@ h1{
 
   border:1px solid var(--line);
   border-radius:18px;
+
+  /*
+    Không cho padding tự thay đổi
+    khi viewport thay đổi.
+  */
+  flex:none;
 }
 
 .fund-goal-title{
@@ -201,12 +230,16 @@ h1{
   margin-bottom:13px;
 
   font-size:14px;
+  line-height:normal;
   font-weight:800;
 }
 
 .fund-goal-title i{
   color:var(--accent);
+
   font-size:16px;
+
+  flex:0 0 auto;
 }
 
 .fund-goal ul{
@@ -215,6 +248,11 @@ h1{
 
   color:var(--muted);
 
+  font-size:14px;
+  line-height:1.7;
+}
+
+.fund-goal li{
   font-size:14px;
   line-height:1.7;
 }
@@ -230,6 +268,7 @@ h1{
 
 .fund-overview .progress-card{
   width:100%;
+
   margin:16px 0 0;
   padding:20px;
 
@@ -237,41 +276,60 @@ h1{
 
   border:1px solid var(--line);
   border-radius:18px;
+
+  flex:none;
 }
 
 .progress-top{
   display:flex;
   align-items:flex-end;
   justify-content:space-between;
+
   gap:20px;
 }
 
 .received{
   display:flex;
   flex-direction:column;
+
   gap:5px;
+
+  min-width:0;
 }
 
 .received span:first-child{
   color:var(--muted);
 
   font-size:11px;
+  line-height:normal;
+
   font-weight:800;
+
   letter-spacing:.5px;
+
+  white-space:nowrap;
 }
 
 .received span:last-child{
   color:var(--text);
 
   font-size:25px;
+  line-height:normal;
+
   font-weight:850;
+
+  white-space:nowrap;
 }
 
 .percent{
   color:var(--accent);
 
   font-size:22px;
+  line-height:normal;
+
   font-weight:850;
+
+  white-space:nowrap;
 }
 
 .progress{
@@ -283,6 +341,7 @@ h1{
   overflow:hidden;
 
   background:#e8eeee;
+
   border-radius:999px;
 }
 
@@ -291,6 +350,7 @@ h1{
   height:100%;
 
   background:var(--accent);
+
   border-radius:999px;
 
   transition:width .5s ease;
@@ -300,18 +360,28 @@ h1{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:10px;
 
   color:var(--muted);
 
   font-size:12px;
+  line-height:normal;
 }
 
 .progress-bottom strong{
   color:var(--text);
 }
 
+
+/* ========================================
+   HẠN DỰ ÁN
+   KÍCH THƯỚC CỐ ĐỊNH
+======================================== */
+
 .deadline{
+  width:100%;
+
   margin-top:13px;
   padding-top:13px;
 
@@ -320,10 +390,22 @@ h1{
   color:var(--muted);
 
   font-size:12px;
+  line-height:normal;
+
+  /*
+    Giữ kích thước chữ và khoảng cách
+    không bị thay đổi theo viewport.
+  */
+  flex:none;
 }
 
 .deadline strong{
   color:var(--text);
+
+  font-size:12px;
+  line-height:normal;
+
+  white-space:nowrap;
 }
 
 
@@ -353,10 +435,13 @@ h1{
   margin:0 0 8px;
 
   font-size:23px;
+  line-height:normal;
+
   letter-spacing:-.5px;
 }
 
 .donate-section p{
+  width:100%;
   max-width:600px;
 
   margin:0 auto 18px;
@@ -379,6 +464,8 @@ h1{
   border-radius:12px;
 
   font-size:14px;
+  line-height:normal;
+
   font-weight:800;
 
   cursor:pointer;
@@ -388,6 +475,7 @@ h1{
 
 .donate-btn:hover{
   background:var(--accent-dark);
+
   transform:translateY(-1px);
 }
 
@@ -414,6 +502,7 @@ h1{
   display:flex;
   align-items:center;
   justify-content:space-between;
+
   gap:15px;
 
   margin-bottom:18px;
@@ -423,17 +512,23 @@ h1{
   margin:0;
 
   font-size:21px;
+  line-height:normal;
+
   letter-spacing:-.5px;
 }
 
 .live{
   display:flex;
   align-items:center;
+
   gap:7px;
 
   color:var(--muted);
 
   font-size:11px;
+  line-height:normal;
+
+  white-space:nowrap;
 }
 
 .live i{
@@ -441,6 +536,7 @@ h1{
   height:7px;
 
   display:block;
+  flex:0 0 7px;
 
   border-radius:50%;
 
@@ -450,6 +546,7 @@ h1{
 .supporter{
   display:flex;
   align-items:center;
+
   gap:12px;
 
   padding:13px 0;
@@ -483,6 +580,7 @@ h1{
 
 .supporter-name{
   font-size:14px;
+  line-height:normal;
   font-weight:800;
 }
 
@@ -492,13 +590,18 @@ h1{
   color:var(--muted);
 
   font-size:11px;
+  line-height:normal;
 }
 
 .amount{
   color:var(--accent);
 
   font-size:14px;
+  line-height:normal;
+
   font-weight:850;
+
+  white-space:nowrap;
 }
 
 
@@ -512,6 +615,7 @@ footer{
   color:var(--muted);
 
   font-size:11px;
+  line-height:normal;
 
   text-align:center;
 }
@@ -524,9 +628,11 @@ footer{
 .modal{
   position:fixed;
   inset:0;
+
   z-index:1000;
 
   display:none;
+
   align-items:center;
   justify-content:center;
 
@@ -544,11 +650,11 @@ footer{
 
 /* ========================================
    MODAL BOX
-   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .modal-box{
   width:330px;
+
   max-width:calc(100vw - 24px);
   max-height:86vh;
 
@@ -573,6 +679,7 @@ footer{
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
+
   gap:10px;
 
   margin-bottom:12px;
@@ -582,7 +689,10 @@ footer{
   color:var(--accent);
 
   font-size:8px;
+  line-height:normal;
+
   font-weight:850;
+
   letter-spacing:.7px;
 }
 
@@ -590,6 +700,8 @@ footer{
   margin:4px 0 0;
 
   font-size:18px;
+  line-height:normal;
+
   letter-spacing:-.5px;
 }
 
@@ -628,7 +740,10 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+  line-height:normal;
+
   font-weight:850;
+
   letter-spacing:.5px;
 }
 
@@ -653,7 +768,8 @@ footer{
 .field input:focus{
   border-color:var(--accent);
 
-  box-shadow:0 0 0 3px rgba(0,144,144,.10);
+  box-shadow:
+    0 0 0 3px rgba(0,144,144,.10);
 }
 
 .money{
@@ -677,6 +793,8 @@ footer{
   color:var(--muted);
 
   font-size:10px;
+  line-height:normal;
+
   font-weight:800;
 }
 
@@ -689,7 +807,8 @@ footer{
 .quick{
   display:grid;
 
-  grid-template-columns:repeat(4,minmax(0,1fr));
+  grid-template-columns:
+    repeat(4,minmax(0,1fr));
 
   gap:6px;
 
@@ -714,6 +833,8 @@ footer{
   color:var(--text);
 
   font-size:10px;
+  line-height:normal;
+
   font-weight:750;
 
   cursor:pointer;
@@ -721,6 +842,7 @@ footer{
   white-space:nowrap;
 
   overflow:hidden;
+
   text-overflow:ellipsis;
 
   transition:.2s ease;
@@ -728,6 +850,7 @@ footer{
 
 .quick button:hover{
   border-color:var(--accent);
+
   color:var(--accent);
 }
 
@@ -744,6 +867,7 @@ footer{
   color:var(--danger);
 
   font-size:10px;
+  line-height:normal;
 }
 
 
@@ -763,6 +887,8 @@ footer{
   border-radius:9px;
 
   font-size:13px;
+  line-height:normal;
+
   font-weight:800;
 
   cursor:pointer;
@@ -778,6 +904,7 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+  line-height:normal;
 
   text-align:center;
 }
@@ -805,7 +932,10 @@ footer{
   color:var(--accent);
 
   font-size:8px;
+  line-height:normal;
+
   font-weight:850;
+
   letter-spacing:.5px;
 }
 
@@ -819,7 +949,6 @@ footer{
 
 /* ========================================
    QR
-   KÍCH THƯỚC CỐ ĐỊNH
 ======================================== */
 
 .qr-box{
@@ -833,6 +962,8 @@ footer{
   border-radius:9px;
 
   background:#fff;
+
+  flex:none;
 }
 
 .qr-box img{
@@ -855,6 +986,8 @@ footer{
   color:var(--accent);
 
   font-size:10px;
+  line-height:normal;
+
   font-weight:750;
 
   text-align:center;
@@ -871,6 +1004,7 @@ footer{
   overflow:hidden;
 
   border:1px solid var(--line);
+
   border-radius:8px;
 }
 
@@ -886,7 +1020,6 @@ footer{
   border-bottom:1px solid var(--line);
 
   font-size:9px;
-
   line-height:1.2;
 }
 
@@ -900,6 +1033,7 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+  line-height:normal;
 
   white-space:nowrap;
 }
@@ -911,6 +1045,8 @@ footer{
   color:var(--text);
 
   font-size:9px;
+  line-height:normal;
+
   font-weight:750;
 
   text-align:right;
@@ -931,6 +1067,8 @@ footer{
   border-radius:4px;
 
   font-size:7px;
+  line-height:normal;
+
   font-weight:800;
 
   cursor:pointer;
@@ -947,6 +1085,7 @@ footer{
   color:var(--muted);
 
   font-size:9px;
+  line-height:normal;
 
   text-align:center;
 }
@@ -972,102 +1111,31 @@ footer{
   border-radius:8px;
 
   font-size:10px;
+  line-height:normal;
+
   font-weight:800;
 
   cursor:pointer;
 }
 
 
-/* ========================================
-   MOBILE
-   CHỈ ĐỔI BỐ CỤC / CHIỀU RỘNG
-   KHÔNG ĐỔI KÍCH THƯỚC CHỮ, SỐ, QR...
-======================================== */
+@media (min-width:601px){
 
-@media(max-width:600px){
-
-  body{
-    background:
-      linear-gradient(
-        to bottom,
-        #dff4f2 0px,
-        #e8f7f5 70px,
-        #eff9f8 150px,
-        #f5f7f7 320px,
-        #f5f7f7 100%
-      );
+  /* Nội dung Mục tiêu sử dụng */
+  .fund-goal ul,
+  .fund-goal li{
+    font-size:10px;
+    line-height:1.4;
   }
 
-  header{
-    width:calc(100% - 24px);
-    margin-top:12px;
-    padding:14px 2px;
+  /* Hạn dự án - ngang các chữ khác */
+  .deadline{
+    font-size:12px !important;
+    line-height:1.4;
   }
 
-  main{
-    width:calc(100% - 24px);
-  }
-
-  .fund-overview{
-    margin-top:16px;
-    padding:0 16px 16px;
-    border-radius:20px;
-  }
-
-  .fund-overview .hero{
-    padding:24px 0 30px;
-  }
-
-  .fund-overview .fund-goal{
-    padding:17px;
-    border-radius:16px;
-  }
-
-  .fund-overview .progress-card{
-    padding:17px;
-    border-radius:16px;
-  }
-
-  .fund-overview .donate-section{
-    padding:23px 5px 6px;
-  }
-
-  .supporters{
-    padding:19px;
-    border-radius:20px;
-  }
-
-  /*
-    Chỉ đổi cách xếp vị trí.
-    KHÔNG đổi kích thước chữ.
-  */
-  .section-title{
-    align-items:flex-start;
-    flex-direction:column;
-    gap:8px;
-  }
-
-  .progress-top{
-    align-items:flex-start;
-  }
-
-
-  /* ======================================
-     MODAL
-     KHÔNG ĐỔI FONT / QR / BUTTON
-  ====================================== */
-
-  .modal{
-    padding:10px;
-  }
-
-  .modal-box{
-    /*
-      Giữ nguyên width 330px.
-      Chỉ giới hạn để không vượt màn hình nhỏ.
-    */
-    width:330px;
-    max-width:calc(100vw - 20px);
+  .deadline strong{
+    font-size:12px !important;
   }
 
 }
