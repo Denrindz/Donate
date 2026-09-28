@@ -23,15 +23,12 @@ html{
   max-width:100%;
   margin:0;
   padding:0;
-
-  overflow-x:hidden !important;
-
+  overflow-x:hidden;
   scroll-behavior:smooth;
 }
 
 body{
   position:relative;
-
   width:100%;
   max-width:100%;
   min-width:0;
@@ -40,7 +37,7 @@ body{
   margin:0;
   padding:0;
 
-  overflow-x:hidden !important;
+  overflow-x:hidden;
 
   background:var(--bg);
   color:var(--text);
@@ -54,7 +51,6 @@ body{
     sans-serif;
 }
 
-
 /* ========================================
    GLOW XANH
    NẰM SAU TOÀN BỘ WEBSITE
@@ -64,8 +60,7 @@ body::before{
   content:"";
 
   position:fixed;
-
-  z-index:0;
+  z-index:-2;
 
   top:-220px;
   left:50%;
@@ -89,15 +84,29 @@ body::before{
   filter:blur(20px);
 }
 
-
-/*
-  Không dùng lớp gradient phủ lên nội dung
-  để tránh glow đè chữ
-*/
 body::after{
-  display:none;
-}
+  content:"";
 
+  position:fixed;
+  z-index:-1;
+
+  top:0;
+  left:0;
+
+  width:100%;
+  height:430px;
+
+  pointer-events:none;
+
+  background:
+    linear-gradient(
+      to bottom,
+      rgba(245,247,247,0) 0%,
+      rgba(245,247,247,.18) 42%,
+      rgba(245,247,247,.82) 82%,
+      var(--bg) 100%
+    );
+}
 
 /* ========================================
    NỘI DUNG
@@ -110,7 +119,6 @@ main{
 
   min-width:0;
 }
-
 
 /* ========================================
    HEADER
@@ -161,7 +169,6 @@ header{
   font-size:12px;
 }
 
-
 /* ========================================
    MAIN
 ======================================== */
@@ -172,13 +179,8 @@ main{
 
   margin:0 auto 50px;
 
-  /*
-    Không cắt nội dung con
-    nhưng vẫn khóa tràn ngang bằng html/body
-  */
-  overflow:visible;
+  overflow:hidden;
 }
-
 
 /* ========================================
    KHUNG LỚN
@@ -189,7 +191,6 @@ main{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:20px 0 22px;
   padding:0 22px 22px;
@@ -203,26 +204,15 @@ main{
     0 18px 55px rgba(0,40,40,.09),
     0 0 70px rgba(0,144,144,.045);
 
-  /*
-    Card vẫn giữ bo góc,
-    glow bên trong không ảnh hưởng chữ
-  */
   overflow:hidden;
-
-  isolation:isolate;
 }
 
-
-/* ========================================
-   GLOW BÊN TRONG CARD
-======================================== */
-
+/* Glow bên trong card */
 .fund-overview::before{
   content:"";
 
   position:absolute;
-
-  z-index:-1;
+  z-index:0;
 
   top:-20px;
   left:50%;
@@ -244,7 +234,6 @@ main{
 
   filter:blur(18px);
 }
-
 
 /* ========================================
    HERO
@@ -315,7 +304,6 @@ h1{
   line-height:1.75;
 }
 
-
 /* ========================================
    MỤC TIÊU
 ======================================== */
@@ -326,7 +314,6 @@ h1{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:0;
   padding:20px;
@@ -367,7 +354,6 @@ h1{
   margin-top:7px;
 }
 
-
 /* ========================================
    PROGRESS
 ======================================== */
@@ -378,7 +364,6 @@ h1{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:16px 0 0;
   padding:20px;
@@ -484,7 +469,6 @@ h1{
   color:var(--text);
 }
 
-
 /* ========================================
    DONATE
 ======================================== */
@@ -495,7 +479,6 @@ h1{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:16px 0 0;
   padding:25px 10px 8px;
@@ -557,7 +540,6 @@ h1{
     0 10px 25px rgba(0,144,144,.22);
 }
 
-
 /* ========================================
    SUPPORTERS
 ======================================== */
@@ -565,7 +547,6 @@ h1{
 .supporters{
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:0 0 22px;
   padding:24px;
@@ -628,7 +609,6 @@ h1{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   padding:13px 0;
 
@@ -681,7 +661,6 @@ h1{
   font-weight:850;
 }
 
-
 /* ========================================
    FOOTER
 ======================================== */
@@ -698,7 +677,6 @@ footer{
 
   text-align:center;
 }
-
 
 /* ========================================
    MODAL
@@ -733,7 +711,6 @@ footer{
 .modal-box{
   width:min(460px,100%);
   max-width:100%;
-  min-width:0;
 
   max-height:90vh;
 
@@ -793,16 +770,12 @@ footer{
   cursor:pointer;
 }
 
-
 /* ========================================
    FORM
 ======================================== */
 
 .field{
   width:100%;
-  max-width:100%;
-  min-width:0;
-
   margin-bottom:18px;
 }
 
@@ -846,7 +819,7 @@ footer{
   font-size:15px;
   font-weight:600;
 
-  line-height:1.2;
+  line-height:normal;
 
   -webkit-appearance:none;
   appearance:none;
@@ -866,7 +839,7 @@ footer{
   color:#a1aaaa;
   opacity:1;
 
-  line-height:1.2;
+  line-height:normal;
 }
 
 .field input:hover{
@@ -886,7 +859,6 @@ footer{
   transform:translateY(-1px);
 }
 
-
 /* ========================================
    Ô SỐ TIỀN
 ======================================== */
@@ -899,7 +871,6 @@ footer{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   margin:0;
 }
@@ -934,7 +905,7 @@ footer{
   font-size:19px;
   font-weight:800;
 
-  line-height:1.2;
+  line-height:normal;
   letter-spacing:.2px;
 
   -webkit-appearance:none;
@@ -945,7 +916,7 @@ footer{
   color:#a1aaaa;
   opacity:1;
 
-  line-height:1.2;
+  line-height:normal;
 }
 
 .money input:focus{
@@ -956,8 +927,7 @@ footer{
     0 10px 28px rgba(0,144,144,.09);
 }
 
-
-/* bỏ spinner nếu input number còn trong HTML cũ */
+/* bỏ spinner của input number nếu còn input cũ */
 .money input::-webkit-outer-spin-button,
 .money input::-webkit-inner-spin-button{
   -webkit-appearance:none;
@@ -967,7 +937,6 @@ footer{
 .money input[type="number"]{
   -moz-appearance:textfield;
 }
-
 
 /* ========================================
    VND
@@ -1003,16 +972,12 @@ footer{
   pointer-events:none;
 }
 
-
 /* ========================================
    SỐ TIỀN NHANH
    LUÔN 1 HÀNG
 ======================================== */
 
 .quick{
-  position:relative;
-  z-index:5;
-
   display:grid;
 
   grid-template-columns:
@@ -1020,23 +985,15 @@ footer{
 
   width:100%;
   max-width:100%;
-  min-width:0;
 
   gap:8px;
 
   margin:11px 0 15px;
 
-  /*
-    Quan trọng:
-    không cắt phần trên khi nút được nhấn
-  */
-  overflow:visible;
+  overflow:hidden;
 }
 
 .quick button{
-  position:relative;
-  z-index:6;
-
   display:block;
 
   width:100%;
@@ -1067,12 +1024,7 @@ footer{
 
   overflow:hidden;
 
-  transition:
-    border-color .2s ease,
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease,
-    box-shadow .2s ease;
+  transition:.2s ease;
 }
 
 .quick button:hover{
@@ -1091,7 +1043,6 @@ footer{
   transform:scale(.97);
 }
 
-
 /* ========================================
    LỖI
 ======================================== */
@@ -1106,7 +1057,6 @@ footer{
   font-size:11px;
   font-weight:600;
 }
-
 
 /* ========================================
    NÚT TẠO MÃ
@@ -1156,7 +1106,6 @@ footer{
   transform:translateY(1px) scale(.99);
 }
 
-
 /* ========================================
    NOTE
 ======================================== */
@@ -1198,7 +1147,6 @@ footer{
   font-size:9px;
   font-weight:900;
 }
-
 
 /* ========================================
    QR
@@ -1270,7 +1218,6 @@ footer{
 .payment-info{
   width:100%;
   max-width:100%;
-  min-width:0;
 
   overflow:hidden;
 
@@ -1361,7 +1308,6 @@ footer{
   cursor:pointer;
 }
 
-
 /* ========================================
    MOBILE
 ======================================== */
@@ -1388,6 +1334,13 @@ footer{
     filter:blur(18px);
   }
 
+  body::after{
+    position:fixed;
+
+    width:100%;
+    height:380px;
+  }
+
   header{
     width:calc(100% - 24px);
     max-width:calc(100% - 24px);
@@ -1403,8 +1356,6 @@ footer{
   main{
     width:calc(100% - 24px);
     max-width:calc(100% - 24px);
-
-    overflow:visible;
   }
 
   .fund-overview{
@@ -1496,37 +1447,21 @@ footer{
     border-radius:18px;
   }
 
-  /* ======================================
-     4 NÚT TIỀN LUÔN 1 HÀNG
-  ====================================== */
-
+  /* 4 nút vẫn 1 hàng */
   .quick{
-    position:relative;
-    z-index:5;
-
-    display:grid !important;
+    display:grid;
 
     grid-template-columns:
-      repeat(4,minmax(0,1fr)) !important;
-
-    width:100%;
-    max-width:100%;
-    min-width:0;
+      repeat(4,minmax(0,1fr));
 
     gap:5px;
 
-    margin:11px 0 15px;
-
-    overflow:visible;
+    width:100%;
   }
 
   .quick button{
-    position:relative;
-    z-index:6;
-
     width:100%;
     min-width:0;
-    max-width:100%;
 
     height:40px;
 
@@ -1550,7 +1485,6 @@ footer{
   }
 }
 
-
 /* ========================================
    IPHONE MÀN HÌNH RẤT NHỎ
 ======================================== */
@@ -1562,14 +1496,10 @@ footer{
   }
 
   .quick{
-    display:grid !important;
-
     grid-template-columns:
-      repeat(4,minmax(0,1fr)) !important;
+      repeat(4,minmax(0,1fr));
 
     gap:3px;
-
-    overflow:visible;
   }
 
   .quick button{
@@ -1599,7 +1529,6 @@ footer{
   }
 }
 
-
 /* ========================================
    KHÓA HOÀN TOÀN TRÀN NGANG
 ======================================== */
@@ -1627,21 +1556,5 @@ footer{
   .payment-info{
     min-width:0;
     max-width:100%;
-  }
-
-  /*
-    Không cho main cắt nút tiền
-  */
-  main{
-    overflow:visible;
-  }
-
-  /*
-    Modal box vẫn cuộn dọc bình thường,
-    nhưng không tạo scroll ngang
-  */
-  .modal-box{
-    overflow-x:hidden;
-    overflow-y:auto;
   }
 }
