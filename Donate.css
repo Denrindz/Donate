@@ -884,6 +884,7 @@ h1{
 
     opacity:0;
   }
+
 }
 
 .progress-bottom{
@@ -1937,11 +1938,12 @@ footer:hover{
 
   width:460px;
 
-  max-width:calc(100vw - 32px);
+  max-width:
+    calc(100vw - 32px);
 
-  min-height:350px;
+  padding:30px 30px 28px;
 
-  padding:31px 30px 29px;
+  box-sizing:border-box;
 
   display:flex;
 
@@ -1951,26 +1953,32 @@ footer:hover{
 
   justify-content:center;
 
+  gap:0;
+
   text-align:center;
+
+  overflow:visible;
 
   background:
     linear-gradient(
       145deg,
       #ffffff,
-      #fffefa
+      #f4fbfa
     );
 
   border:
     1px solid
-    rgba(0,0,0,.055);
+    rgba(0,144,144,.16);
 
   border-radius:24px;
 
   color:var(--text);
 
   box-shadow:
-    0 30px 90px rgba(0,0,0,.25),
-    0 8px 35px rgba(0,0,0,.10);
+    0 30px 90px
+    rgba(0,70,70,.25),
+    0 8px 35px
+    rgba(0,144,144,.12);
 
   opacity:0;
 
@@ -1991,20 +1999,23 @@ footer:hover{
 }
 
 
-/* NỀN TỐI + BLUR */
+/* =========================================================
+   LỚP LÀM TỐI + BLUR NỀN
+========================================================= */
 
 #donationNotification::after{
   content:"";
 
   position:fixed;
 
-  inset:0;
+  left:50%;
+  top:50%;
 
   width:100vw;
   height:100vh;
 
   background:
-    rgba(15,20,20,.48);
+    rgba(0,60,60,.42);
 
   backdrop-filter:
     blur(10px);
@@ -2012,13 +2023,18 @@ footer:hover{
   -webkit-backdrop-filter:
     blur(10px);
 
+  transform:
+    translate(-50%,-50%);
+
   z-index:-1;
 
   pointer-events:none;
 }
 
 
-/* HIỆN POPUP */
+/* =========================================================
+   POPUP HIỆN
+========================================================= */
 
 #donationNotification.show{
   opacity:1;
@@ -2034,63 +2050,7 @@ footer:hover{
 
 
 /* =========================================================
-   NÚT ĐÓNG
-========================================================= */
-
-.donation-notification-close{
-  position:absolute;
-
-  top:16px;
-  right:16px;
-
-  width:33px;
-  height:33px;
-
-  display:flex;
-
-  align-items:center;
-  justify-content:center;
-
-  padding:0;
-
-  border:
-    1px solid #e4e7e5;
-
-  background:#fff;
-
-  color:#747a78;
-
-  border-radius:10px;
-
-  font-size:20px;
-
-  line-height:1;
-
-  font-weight:400;
-
-  cursor:pointer;
-
-  transition:
-    background .2s ease,
-    color .2s ease,
-    transform .2s ease;
-}
-
-.donation-notification-close:hover{
-  background:#f3f5f4;
-
-  color:#111818;
-
-  transform:scale(1.05);
-}
-
-.donation-notification-close:active{
-  transform:scale(.92);
-}
-
-
-/* =========================================================
-   ICON CHECK VÀNG
+   ICON CHECK TEAL
 ========================================================= */
 
 #donationNotification::before{
@@ -2111,11 +2071,11 @@ footer:hover{
   background:
     linear-gradient(
       145deg,
-      #ffbf1a,
-      #ffb300
+      #008f8f,
+      #00aaaa
     );
 
-  color:#171717;
+  color:#ffffff;
 
   border-radius:18px;
 
@@ -2126,7 +2086,8 @@ footer:hover{
   font-weight:700;
 
   box-shadow:
-    0 9px 28px rgba(255,181,0,.25);
+    0 9px 28px
+    rgba(0,144,144,.25);
 
   animation:
     donationCheckPop .55s
@@ -2136,7 +2097,7 @@ footer:hover{
 
 
 /* =========================================================
-   DÒNG ĐÃ NHẬN ĐƯỢC
+   DÒNG TIÊU ĐỀ
 ========================================================= */
 
 #donationNotification
@@ -2146,7 +2107,7 @@ footer:hover{
 
   margin:0 0 7px;
 
-  color:#6e706e;
+  color:var(--accent);
 
   font-size:10px;
 
@@ -2163,146 +2124,60 @@ footer:hover{
 
 
 /* =========================================================
-   TIÊU ĐỀ CẢM ƠN
-========================================================= */
-
-#donationNotification
-.donation-notification-heading{
-
-  order:2;
-
-  margin:0;
-
-  color:#111818;
-
-  font-size:28px;
-
-  line-height:1.1;
-
-  font-weight:850;
-
-  letter-spacing:-1px;
-
-  text-align:center;
-}
-
-
-/* =========================================================
-   MÔ TẢ
-========================================================= */
-
-#donationNotification
-.donation-notification-message{
-
-  order:3;
-
-  width:100%;
-
-  max-width:340px;
-
-  margin:11px auto 0;
-
-  color:#858b89;
-
-  font-size:12px;
-
-  line-height:1.55;
-
-  font-weight:500;
-
-  text-align:center;
-}
-
-
-/* =========================================================
    SỐ TIỀN
 ========================================================= */
 
 #donationNotification
 .donation-notification-amount{
 
-  order:4;
+  order:2;
 
-  margin:17px 0 0;
+  margin:4px 0 0;
 
-  color:#111818;
+  color:var(--text);
 
-  font-size:25px;
+  font-size:28px;
 
   line-height:1.15;
 
   font-weight:850;
 
-  letter-spacing:-.6px;
+  letter-spacing:-.7px;
 
   text-align:center;
 }
 
 
 /* =========================================================
-   NÚT XEM TIẾN ĐỘ
+   DÒNG XÁC NHẬN
 ========================================================= */
 
-.donation-notification-action{
+#donationNotification
+.donation-notification-name{
 
-  order:5;
+  order:3;
 
   width:100%;
 
-  max-width:398px;
+  max-width:330px;
 
-  height:46px;
+  margin:8px auto 0;
 
-  margin-top:20px;
+  overflow:hidden;
 
-  border:0;
-
-  border-radius:12px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ffbd18,
-      #ffb20b
-    );
-
-  color:#111818;
+  color:var(--muted);
 
   font-size:12px;
 
-  line-height:normal;
+  line-height:1.45;
 
-  font-weight:850;
+  font-weight:500;
 
-  cursor:pointer;
+  text-align:center;
 
-  box-shadow:
-    0 8px 22px
-    rgba(255,181,0,.18);
+  white-space:normal;
 
-  transition:
-    transform .2s ease,
-    box-shadow .2s ease,
-    filter .2s ease;
-}
-
-.donation-notification-action:hover{
-
-  transform:
-    translateY(-2px);
-
-  box-shadow:
-    0 12px 28px
-    rgba(255,181,0,.27);
-
-  filter:brightness(1.02);
-}
-
-.donation-notification-action:active{
-
-  transform:
-    translateY(0)
-    scale(.98);
+  text-overflow:ellipsis;
 }
 
 
@@ -2673,12 +2548,16 @@ footer:hover{
     max-width:
       420px;
 
-    min-height:340px;
-
     padding:
       27px 22px 25px;
 
     border-radius:23px;
+
+    box-shadow:
+      0 25px 75px
+      rgba(0,70,70,.27),
+      0 8px 30px
+      rgba(0,144,144,.10);
 
   }
 
@@ -2697,20 +2576,6 @@ footer:hover{
 
   }
 
-  .donation-notification-close{
-
-    top:14px;
-    right:14px;
-
-    width:32px;
-    height:32px;
-
-    border-radius:9px;
-
-    font-size:19px;
-
-  }
-
   #donationNotification
   .donation-notification-title{
 
@@ -2723,41 +2588,18 @@ footer:hover{
   }
 
   #donationNotification
-  .donation-notification-heading{
-
-    font-size:27px;
-
-  }
-
-  #donationNotification
-  .donation-notification-message{
-
-    max-width:285px;
-
-    margin-top:10px;
-
-    font-size:11px;
-
-  }
-
-  #donationNotification
   .donation-notification-amount{
 
-    margin-top:16px;
+    font-size:26px;
 
-    font-size:25px;
+    letter-spacing:-.6px;
 
   }
 
-  .donation-notification-action{
+  #donationNotification
+  .donation-notification-name{
 
-    max-width:100%;
-
-    height:45px;
-
-    margin-top:19px;
-
-    border-radius:12px;
+    max-width:290px;
 
     font-size:11px;
 
