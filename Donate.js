@@ -159,6 +159,7 @@ function getItemName(item){
 function getItemTime(item){
 
     return (
+        item.when ||
         item.time ||
         item.createdAt ||
         item.created_at ||
@@ -171,7 +172,135 @@ function getItemTime(item){
 
 
 /* =========================================
-   FORMAT THỜI GIAN
+   CHUYỂN THỜI GIAN DONATE
+   API LƯU THỜI GIAN KHÔNG KÈM MÚI GIỜ
+   => GIỮ NGUYÊN GIỜ GỐC
+========================================= */
+
+function parseHistoryDate(value){
+
+    if(!value){
+        return null;
+    }
+
+    const raw =
+        String(value).trim();
+
+    if(!raw){
+        return null;
+    }
+
+
+    /*
+       Nếu API trả dạng:
+
+       2026-09-29T07:00:00
+
+       thì đây là giờ donate được lưu trực tiếp.
+       Không để JavaScript tự hiểu thành UTC rồi cộng
+       thêm 7 tiếng.
+    */
+
+    const match =
+        raw.match(
+            /^(\d{4})-(\d{2})-(\d{2})[T\s](\d{2}):(\d{2})(?::(\d{2}))?$/
+        );
+
+
+    if(match){
+
+        const year =
+            Number(match[1]);
+
+        const month =
+            Number(match[2]);
+
+        const day =
+            Number(match[3]);
+
+        const hour =
+            Number(match[4]);
+
+        const minute =
+            Number(match[5]);
+
+        const second =
+            Number(match[6] || 0);
+
+
+        return {
+            year,
+            month,
+            day,
+            hour,
+            minute,
+            second,
+
+            /*
+               Giá trị này dùng riêng cho việc
+               sắp xếp lịch sử.
+            */
+
+            sortTime:
+                new Date(
+                    year,
+                    month - 1,
+                    day,
+                    hour,
+                    minute,
+                    second
+                ).getTime()
+
+        };
+
+    }
+
+
+    /*
+       Nếu API có trả timestamp hoặc chuỗi có
+       timezone rõ ràng thì xử lý bình thường.
+    */
+
+    const date =
+        new Date(raw);
+
+
+    if(!Number.isNaN(date.getTime())){
+
+        return {
+            year:
+                date.getFullYear(),
+
+            month:
+                date.getMonth() + 1,
+
+            day:
+                date.getDate(),
+
+            hour:
+                date.getHours(),
+
+            minute:
+                date.getMinutes(),
+
+            second:
+                date.getSeconds(),
+
+            sortTime:
+                date.getTime()
+
+        };
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================
+   FORMAT THỜI GIAN LỊCH SỬ
 ========================================= */
 
 function formatHistoryTime(value){
@@ -180,25 +309,45 @@ function formatHistoryTime(value){
         return "Vừa ủng hộ";
     }
 
+
     const date =
-        new Date(value);
+        parseHistoryDate(value);
 
-    if(!Number.isNaN(date.getTime())){
 
-        return date.toLocaleString(
-            "vi-VN",
-            {
-                day:"2-digit",
-                month:"2-digit",
-                year:"numeric",
-                hour:"2-digit",
-                minute:"2-digit"
-            }
-        );
-
+    if(!date){
+        return String(value);
     }
 
-    return String(value);
+
+    return (
+        String(date.day).padStart(2,"0") +
+        "/" +
+        String(date.month).padStart(2,"0") +
+        "/" +
+        date.year +
+        ", " +
+        String(date.hour).padStart(2,"0") +
+        ":" +
+        String(date.minute).padStart(2,"0")
+    );
+
+}
+
+
+/* =========================================
+   LẤY TIMESTAMP LỊCH SỬ
+========================================= */
+
+function getHistoryTimestamp(item){
+
+    const parsed =
+        parseHistoryDate(
+            getItemTime(item)
+        );
+
+    return parsed
+        ? parsed.sortTime
+        : 0;
 
 }
 
@@ -218,6 +367,7 @@ function renderHistory(history){
         return;
     }
 
+
     const donations =
         history
             .filter(isDonateTransaction)
@@ -227,18 +377,15 @@ function renderHistory(history){
             .sort((a,b) => {
 
                 const da =
-                    new Date(
-                        getItemTime(a)
-                    ).getTime() || 0;
+                    getHistoryTimestamp(a);
 
                 const db =
-                    new Date(
-                        getItemTime(b)
-                    ).getTime() || 0;
+                    getHistoryTimestamp(b);
 
                 return db - da;
 
             });
+
 
     if(!donations.length){
 
@@ -272,6 +419,7 @@ function renderHistory(history){
 
     }
 
+
     list.innerHTML =
         donations
             .map(item => {
@@ -300,6 +448,7 @@ function renderHistory(history){
                         .charAt(0)
                         .toUpperCase() || "?"
                     );
+
 
                 return `
                     <div class="supporter">
@@ -349,12 +498,6 @@ function updateDonationCount(history, data){
     }
 
 
-    /*
-       Nếu API có trả count thì ưu tiên dùng count.
-       Nếu không thì đếm các giao dịch DXM
-       trong history.
-    */
-
     let count =
         Number(data?.count);
 
@@ -370,10 +513,6 @@ function updateDonationCount(history, data){
 
     }
 
-
-    /*
-       Không cho hiển thị số âm
-    */
 
     count =
         Math.max(
@@ -393,11 +532,6 @@ function updateDonationCount(history, data){
 ========================================= */
 
 function showDonationSuccess(amount){
-
-    /*
-       ẨN HOÀN TOÀN BẢNG QR / CHUYỂN KHOẢN
-       KHI THÔNG BÁO ĐÃ NHẬN HIỆN LÊN
-    */
 
     const qrResult =
         document.getElementById(
@@ -425,10 +559,6 @@ function showDonationSuccess(amount){
     }
 
 
-    /*
-       DỪNG TIMER
-    */
-
     clearInterval(
         countdownInterval
     );
@@ -437,10 +567,6 @@ function showDonationSuccess(amount){
 
     countdownEndTime = null;
 
-
-    /*
-       DỪNG CHECK THANH TOÁN
-    */
 
     clearInterval(
         paymentCheckInterval
@@ -454,6 +580,7 @@ function showDonationSuccess(amount){
             "denrinDonationSuccess"
         );
 
+
     if(!modal){
 
         modal =
@@ -461,6 +588,7 @@ function showDonationSuccess(amount){
 
         modal.id =
             "denrinDonationSuccess";
+
 
         modal.innerHTML = `
             <div class="denrin-donation-box">
@@ -495,19 +623,17 @@ function showDonationSuccess(amount){
             </div>
         `;
 
+
         document.body.appendChild(
             modal
         );
 
 
-        /*
-           NÚT XEM TIẾN ĐỘ MỚI
-        */
-
         const reloadButton =
             modal.querySelector(
                 ".denrin-donation-reload"
             );
+
 
         if(reloadButton){
 
@@ -529,6 +655,7 @@ function showDonationSuccess(amount){
                 ".denrin-donation-amount"
             );
 
+
         if(amountElement){
 
             amountElement.textContent =
@@ -538,10 +665,6 @@ function showDonationSuccess(amount){
 
     }
 
-
-    /*
-       HIỆN POPUP
-    */
 
     requestAnimationFrame(() => {
 
@@ -570,11 +693,14 @@ function injectDonationSuccessStyle(){
 
     }
 
+
     const style =
         document.createElement("style");
 
+
     style.id =
         "denrinDonationSuccessStyle";
+
 
     style.textContent = `
 
@@ -854,11 +980,13 @@ function injectDonationSuccessStyle(){
 
     `;
 
+
     document.head.appendChild(
         style
     );
 
 }
+
 
 injectDonationSuccessStyle();
 
@@ -883,6 +1011,7 @@ async function updateProgress(){
                 }
             );
 
+
         if(!response.ok){
 
             throw new Error(
@@ -891,8 +1020,10 @@ async function updateProgress(){
 
         }
 
+
         const data =
             await response.json();
+
 
         const history =
             getHistoryArray(data);
@@ -904,10 +1035,6 @@ async function updateProgress(){
             );
 
 
-        /* =================================
-           CẬP NHẬT BỘ ĐẾM
-        ================================= */
-
         updateDonationCount(
             history,
             data
@@ -916,6 +1043,7 @@ async function updateProgress(){
 
         let historyTotal =
             Number(data?.total);
+
 
         if(
             !Number.isFinite(
@@ -1188,6 +1316,7 @@ const donationInput =
         "donationAmount"
     );
 
+
 if(donationInput){
 
     donationInput.addEventListener(
@@ -1200,6 +1329,7 @@ if(donationInput){
                     ""
                 );
 
+
             if(!value){
 
                 this.value = "";
@@ -1207,6 +1337,7 @@ if(donationInput){
                 return;
 
             }
+
 
             this.value =
                 Number(value)
@@ -1236,6 +1367,7 @@ function generateQR(){
             "donationAmount"
         );
 
+
     if(
         !nameElement ||
         !amountElement
@@ -1245,8 +1377,10 @@ function generateQR(){
 
     }
 
+
     const name =
         nameElement.value.trim();
+
 
     const amount =
         Number(
@@ -1299,6 +1433,7 @@ function generateQR(){
             100000 +
             Math.random() * 900000
         );
+
 
     currentContent =
         "DXM-" + randomCode;
@@ -1367,7 +1502,10 @@ function generateQR(){
         qrTime.textContent =
             new Date()
                 .toLocaleString(
-                    "vi-VN"
+                    "vi-VN",
+                    {
+                        timeZone:"Asia/Ho_Chi_Minh"
+                    }
                 );
 
     }
@@ -1392,6 +1530,7 @@ function generateQR(){
             "qrImage"
         );
 
+
     if(qrImage){
 
         qrImage.src =
@@ -1404,6 +1543,7 @@ function generateQR(){
         document.getElementById(
             "paymentStatus"
         );
+
 
     if(status){
 
@@ -1435,6 +1575,7 @@ function generateQR(){
             "none";
 
     }
+
 
     if(qrResult){
 
@@ -1474,6 +1615,7 @@ function copyStk(){
 
     }
 
+
     navigator.clipboard
         .writeText(
             ACCOUNT_NO
@@ -1489,11 +1631,14 @@ function copyStk(){
                 return;
             }
 
+
             const oldText =
                 button.textContent;
 
+
             button.textContent =
                 "Đã sao chép";
+
 
             setTimeout(() => {
 
