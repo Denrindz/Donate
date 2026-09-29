@@ -61,175 +61,185 @@ function escapeHTML(value){
 
 
 /* =========================================
-   THÔNG BÁO ĐÃ NHẬN DONATE
+   THÔNG BÁO ỦNG HỘ THÀNH CÔNG TRÊN QR
 ========================================= */
 
-function showDonationNotification(amount, name){
+function showDonationSuccess(amount, name){
 
-    let notification =
+    const qrResult =
         document.getElementById(
-            "donationNotification"
+            "qrResult"
         );
 
-    if(!notification){
+    if(!qrResult){
+        return;
+    }
 
-        notification =
+
+    let overlay =
+        document.getElementById(
+            "donationSuccessOverlay"
+        );
+
+
+    if(!overlay){
+
+        overlay =
             document.createElement("div");
 
-        notification.id =
-            "donationNotification";
+        overlay.id =
+            "donationSuccessOverlay";
 
-        notification.innerHTML = `
-            <div class="donation-notification-title">
-                Đã nhận ủng hộ
+
+        overlay.innerHTML = `
+
+            <div class="donation-success-check">
+                ✓
             </div>
 
-            <div class="donation-notification-amount">
+            <div class="donation-success-title">
+                Ủng hộ thành công
+            </div>
+
+            <div class="donation-success-amount">
                 ${formatMoney(amount)}
             </div>
 
-            <div class="donation-notification-name">
-                ${escapeHTML(
+            <div class="donation-success-name">
+                Cảm ơn ${escapeHTML(
                     name ||
-                    "Một người ủng hộ"
-                )}
+                    "mầy"
+                )} đã ủng hộ
             </div>
+
         `;
 
-        document.body.appendChild(
-            notification
+
+        qrResult.appendChild(
+            overlay
         );
+
 
     }else{
 
-        notification.innerHTML = `
-            <div class="donation-notification-title">
-                Đã nhận ủng hộ
+        overlay.innerHTML = `
+
+            <div class="donation-success-check">
+                ✓
             </div>
 
-            <div class="donation-notification-amount">
+            <div class="donation-success-title">
+                Ủng hộ thành công
+            </div>
+
+            <div class="donation-success-amount">
                 ${formatMoney(amount)}
             </div>
 
-            <div class="donation-notification-name">
-                ${escapeHTML(
+            <div class="donation-success-name">
+                Cảm ơn ${escapeHTML(
                     name ||
-                    "Một người ủng hộ"
-                )}
+                    "mầy"
+                )} đã ủng hộ
             </div>
+
         `;
 
     }
 
 
     /* =====================================
-       CSS THÔNG BÁO
+       CSS XÁC NHẬN
     ===================================== */
 
     if(
         !document.getElementById(
-            "donationNotificationStyle"
+            "donationSuccessStyle"
         )
     ){
 
         const style =
             document.createElement("style");
 
+
         style.id =
-            "donationNotificationStyle";
+            "donationSuccessStyle";
+
 
         style.textContent = `
-            #donationNotification{
 
-                position:fixed;
+            #donationSuccessOverlay{
 
-                top:24px;
-                left:50%;
+                position:absolute;
 
-                width:min(
-                    calc(100% - 32px),
-                    360px
-                );
+                inset:0;
 
-                box-sizing:border-box;
+                z-index:20;
 
-                padding:18px 20px;
+                display:flex;
 
-                transform:
-                    translate(-50%, -20px)
-                    scale(.96);
+                flex-direction:column;
 
-                opacity:0;
+                align-items:center;
 
-                background:
-                    rgba(255,255,255,.96);
-
-                border:
-                    1px solid
-                    rgba(0,0,0,.08);
-
-                border-radius:18px;
-
-                box-shadow:
-                    0 12px 40px
-                    rgba(0,0,0,.12);
-
-                backdrop-filter:
-                    blur(20px);
-
-                -webkit-backdrop-filter:
-                    blur(20px);
+                justify-content:center;
 
                 text-align:center;
 
-                font-family:
-                    -apple-system,
-                    BlinkMacSystemFont,
-                    "SF Pro Display",
-                    "SF Pro Text",
-                    Arial,
-                    sans-serif;
+                padding:24px;
 
-                pointer-events:none;
+                box-sizing:border-box;
 
-                z-index:99999;
+                border-radius:inherit;
 
-                transition:
-                    opacity .35s ease,
-                    transform .35s
-                    cubic-bezier(.2,.8,.2,1);
-            }
+                background:
+                    rgba(255,255,255,.97);
 
+                backdrop-filter:
+                    blur(18px);
 
-            #donationNotification.show{
+                -webkit-backdrop-filter:
+                    blur(18px);
 
-                opacity:1;
-
-                transform:
-                    translate(-50%, 0)
-                    scale(1);
+                animation:
+                    donationSuccessIn
+                    .35s ease both;
 
             }
 
 
-            .donation-notification-title{
+            .donation-success-check{
 
-                font-size:14px;
+                width:64px;
+
+                height:64px;
+
+                display:flex;
+
+                align-items:center;
+
+                justify-content:center;
+
+                margin-bottom:16px;
+
+                border-radius:50%;
+
+                background:#111;
+
+                color:#fff;
+
+                font-size:34px;
 
                 font-weight:600;
 
-                color:#555;
-
-                margin-bottom:5px;
+                line-height:1;
 
             }
 
 
-            .donation-notification-amount{
+            .donation-success-title{
 
-                font-size:24px;
-
-                line-height:1.2;
+                font-size:22px;
 
                 font-weight:700;
 
@@ -240,22 +250,54 @@ function showDonationNotification(amount, name){
             }
 
 
-            .donation-notification-name{
+            .donation-success-amount{
 
-                margin-top:5px;
+                margin-top:8px;
 
-                font-size:13px;
+                font-size:26px;
 
-                color:#888;
+                font-weight:700;
 
-                white-space:nowrap;
+                color:#111;
 
-                overflow:hidden;
-
-                text-overflow:ellipsis;
+                letter-spacing:-.5px;
 
             }
+
+
+            .donation-success-name{
+
+                margin-top:8px;
+
+                font-size:14px;
+
+                color:#777;
+
+            }
+
+
+            @keyframes donationSuccessIn{
+
+                from{
+
+                    opacity:0;
+
+                    transform:scale(.96);
+
+                }
+
+                to{
+
+                    opacity:1;
+
+                    transform:scale(1);
+
+                }
+
+            }
+
         `;
+
 
         document.head.appendChild(
             style
@@ -264,35 +306,20 @@ function showDonationNotification(amount, name){
     }
 
 
-    /* =====================================
-       HIỆN
-    ===================================== */
+    /*
+       Đảm bảo lớp xác nhận
+       nằm đúng trên QR
+    */
 
-    requestAnimationFrame(() => {
+    if(
+        getComputedStyle(qrResult)
+            .position === "static"
+    ){
 
-        notification.classList.add(
-            "show"
-        );
+        qrResult.style.position =
+            "relative";
 
-    });
-
-
-    /* =====================================
-       TỰ ẨN SAU 4.5 GIÂY
-    ===================================== */
-
-    clearTimeout(
-        notification._hideTimer
-    );
-
-    notification._hideTimer =
-        setTimeout(() => {
-
-            notification.classList.remove(
-                "show"
-            );
-
-        }, 4500);
+    }
 
 }
 
@@ -1157,6 +1184,22 @@ function generateQR(){
     }
 
 
+    /* =====================================
+       XÓA XÁC NHẬN CŨ
+    ===================================== */
+
+    const successOverlay =
+        document.getElementById(
+            "donationSuccessOverlay"
+        );
+
+    if(successOverlay){
+
+        successOverlay.remove();
+
+    }
+
+
     const formArea =
         document.getElementById(
             "formArea"
@@ -1378,10 +1421,10 @@ function checkPayment(
 
 
                     /* =================================
-                       THÔNG BÁO NỔI
+                       HIỂN THỊ XÁC NHẬN NGAY TRÊN QR
                     ================================= */
 
-                    showDonationNotification(
+                    showDonationSuccess(
                         Number(
                             data?.donor?.amount ||
                             amount
@@ -1583,6 +1626,22 @@ function newCode(){
     countdownInterval = null;
     paymentCheckInterval = null;
     countdownEndTime = null;
+
+
+    /* =====================================
+       XÓA MÀN HÌNH XÁC NHẬN CŨ
+    ===================================== */
+
+    const successOverlay =
+        document.getElementById(
+            "donationSuccessOverlay"
+        );
+
+    if(successOverlay){
+
+        successOverlay.remove();
+
+    }
 
 
     const qrResult =
