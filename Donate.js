@@ -11,6 +11,11 @@ const PROJECT_TARGET = 1000000;
 let received = 0;
 let currentContent = "";
 
+/* CHỈ THÊM BIẾN NÀY ĐỂ GHI NHẬN
+   KHOẢN VỪA THANH TOÁN TRONG LÚC
+   HISTORY CHƯA KỊP CẬP NHẬT */
+let pendingPaidDonations = {};
+
 let countdownInterval = null;
 let paymentCheckInterval = null;
 let countdownEndTime = null;
@@ -41,7 +46,6 @@ function formatMoney(number){
 
 /* =========================================
    ESCAPE HTML
-   Tránh tên người donate chèn HTML
 ========================================= */
 
 function escapeHTML(value){
@@ -109,6 +113,7 @@ function isDonateTransaction(item){
         .toUpperCase();
 
     return code.startsWith("DXM");
+
 }
 
 /* =========================================
@@ -350,33 +355,82 @@ async function updateProgress(){
 
         /* =====================================
            TÍNH TỔNG TIỀN ĐÃ NHẬN
-
-           CHỈ CỘNG CÁC GIAO DỊCH DXM
-           ĐÃ CÓ TRONG HISTORY.
         ===================================== */
 
+        const historyDonations =
+            history.filter(
+                isDonateTransaction
+            );
+
         const historyTotal =
-            history
-                .filter(isDonateTransaction)
-                .reduce(
-                    (sum,item) =>
-                        sum +
-                        getItemAmount(item),
-                    0
-                );
+            historyDonations.reduce(
+                (sum,item) =>
+                    sum +
+                    getItemAmount(item),
+                0
+            );
 
-        /*
-           ĐÃ SỬA:
-           Không lấy data.total nữa.
+        /* =====================================
+           KIỂM TRA CÁC MÃ ĐÃ CÓ TRONG HISTORY
+        ===================================== */
 
-           Số tiền đã nhận luôn được tính
-           trực tiếp từ các giao dịch DXM
-           trong history.
-        */
+        const historyCodes =
+            new Set(
+                historyDonations.map(item =>
+                    String(
+                        item.code ||
+                        item.content ||
+                        item.message ||
+                        ""
+                    )
+                    .trim()
+                    .toUpperCase()
+                )
+            );
+
+        /* =====================================
+           CỘNG KHOẢN VỪA DONATE
+
+           Nếu giao dịch chưa xuất hiện trong
+           HISTORY thì cộng tạm vào.
+
+           Khi HISTORY có giao dịch rồi thì
+           xoá khoản tạm để không cộng trùng.
+        ===================================== */
+
+        let pendingTotal = 0;
+
+        Object.keys(
+            pendingPaidDonations
+        ).forEach(code => {
+
+            if(
+                !historyCodes.has(code)
+            ){
+
+                pendingTotal +=
+                    Number(
+                        pendingPaidDonations[code]
+                    ) || 0;
+
+            }else{
+
+                delete pendingPaidDonations[
+                    code
+                ];
+
+            }
+
+        });
+
+        /* =====================================
+           ĐÃ NHẬN
+        ===================================== */
 
         received =
             Math.max(
-                historyTotal,
+                historyTotal +
+                pendingTotal,
                 0
             );
 
@@ -479,11 +533,6 @@ async function updateProgress(){
             "Không lấy được lịch sử donate:",
             error
         );
-
-        /*
-           Không xoá dữ liệu đang hiển thị
-           nếu API tạm thời lỗi.
-        */
 
     }
 
@@ -985,6 +1034,33 @@ function checkPayment(
                     data.paid === true
                 ){
 
+                    /* =================================
+                       GHI NHẬN KHOẢN VỪA DONATE
+
+                       Ví dụ:
+                       Đang có 50.000
+                       Donate 10.000
+                       => ngay lập tức thành 60.000
+                    ================================= */
+
+                    const paidCode =
+                        String(code)
+                            .trim()
+                            .toUpperCase();
+
+                    if(
+                        !pendingPaidDonations[
+                            paidCode
+                        ]
+                    ){
+
+                        pendingPaidDonations[
+                            paidCode
+                        ] =
+                            Number(amount) || 0;
+
+                    }
+
                     clearInterval(
                         paymentCheckInterval
                     );
@@ -1027,8 +1103,7 @@ function checkPayment(
                     }
 
                     /* =================================
-                       QUAN TRỌNG:
-                       LẤY HISTORY MỚI NGAY LẬP TỨC
+                       CẬP NHẬT TIẾN ĐỘ NGAY
                     ================================= */
 
                     await updateProgress();
