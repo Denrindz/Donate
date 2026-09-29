@@ -339,6 +339,61 @@ function renderHistory(history){
 
 function showDonationSuccess(amount){
 
+    /*
+       ẨN HOÀN TOÀN BẢNG QR / CHUYỂN KHOẢN
+       KHI THÔNG BÁO ĐÃ NHẬN HIỆN LÊN
+    */
+
+    const qrResult =
+        document.getElementById(
+            "qrResult"
+        );
+
+    if(qrResult){
+
+        qrResult.style.display =
+            "none";
+
+    }
+
+
+    const formArea =
+        document.getElementById(
+            "formArea"
+        );
+
+    if(formArea){
+
+        formArea.style.display =
+            "none";
+
+    }
+
+
+    /*
+       DỪNG TIMER
+    */
+
+    clearInterval(
+        countdownInterval
+    );
+
+    countdownInterval = null;
+
+    countdownEndTime = null;
+
+
+    /*
+       DỪNG CHECK THANH TOÁN
+    */
+
+    clearInterval(
+        paymentCheckInterval
+    );
+
+    paymentCheckInterval = null;
+
+
     let modal =
         document.getElementById(
             "denrinDonationSuccess"
@@ -398,9 +453,9 @@ function showDonationSuccess(amount){
         );
 
 
-        /* =================================
-           ĐÓNG
-        ================================= */
+        /*
+           NÚT ĐÓNG
+        */
 
         const closeButton =
             modal.querySelector(
@@ -423,9 +478,9 @@ function showDonationSuccess(amount){
         }
 
 
-        /* =================================
-           XEM TIẾN ĐỘ MỚI
-        ================================= */
+        /*
+           NÚT XEM TIẾN ĐỘ MỚI
+        */
 
         const reloadButton =
             modal.querySelector(
@@ -462,9 +517,9 @@ function showDonationSuccess(amount){
     }
 
 
-    /* =================================
-       HIỆN MODAL
-    ================================= */
+    /*
+       HIỆN POPUP
+    */
 
     requestAnimationFrame(() => {
 
@@ -554,6 +609,8 @@ function injectDonationSuccessStyle(){
 
         /* =================================
            HỘP THÔNG BÁO
+
+           WIDTH = BẢNG NHẬP TIỀN
         ================================= */
 
         .denrin-donation-box{
@@ -562,7 +619,12 @@ function injectDonationSuccessStyle(){
 
             width:100%;
 
-            max-width:460px;
+            /*
+               Giữ cùng kích thước ngang
+               với form donate phổ biến
+            */
+
+            max-width:520px;
 
             box-sizing:border-box;
 
@@ -857,6 +919,8 @@ function injectDonationSuccessStyle(){
 
             .denrin-donation-box{
 
+                width:100%;
+
                 max-width:100%;
 
                 padding:
@@ -934,10 +998,6 @@ async function updateProgress(){
             );
 
 
-        /* =====================================
-           TỔNG TIỀN
-        ===================================== */
-
         let historyTotal =
             Number(data?.total);
 
@@ -957,10 +1017,6 @@ async function updateProgress(){
 
         }
 
-
-        /* =====================================
-           PENDING
-        ===================================== */
 
         const historyCodes =
             new Set(
@@ -1032,16 +1088,8 @@ async function updateProgress(){
             );
 
 
-        /* =====================================
-           HISTORY
-        ===================================== */
-
         renderHistory(history);
 
-
-        /* =====================================
-           PHẦN TRĂM
-        ===================================== */
 
         const percent =
             Math.min(
@@ -1122,10 +1170,6 @@ async function updateProgress(){
 
 }
 
-
-/* =========================================
-   TỰ ĐỘNG CẬP NHẬT
-========================================= */
 
 updateProgress();
 
@@ -1468,6 +1512,7 @@ function generateQR(){
             "qrResult"
         );
 
+
     if(formArea){
 
         formArea.style.display =
@@ -1476,6 +1521,9 @@ function generateQR(){
     }
 
     if(qrResult){
+
+        qrResult.style.display =
+            "";
 
         qrResult.classList.add(
             "show"
@@ -1596,10 +1644,6 @@ function checkPayment(
                     await response.json();
 
 
-                /* =================================
-                   ĐÃ THANH TOÁN
-                ================================= */
-
                 if(
                     data &&
                     data.ok === true &&
@@ -1645,10 +1689,6 @@ function checkPayment(
                         null;
 
 
-                    /* =================================
-                       TRẠNG THÁI TRÊN QR
-                    ================================= */
-
                     const status =
                         document.getElementById(
                             "paymentStatus"
@@ -1671,10 +1711,6 @@ function checkPayment(
                     }
 
 
-                    /* =================================
-                       HIỆN BẢNG THÔNG BÁO
-                    ================================= */
-
                     showDonationSuccess(
                         Number(
                             data?.donor?.amount ||
@@ -1682,10 +1718,6 @@ function checkPayment(
                         )
                     );
 
-
-                    /* =================================
-                       CẬP NHẬT TIẾN ĐỘ
-                    ================================= */
 
                     await updateProgress();
 
@@ -1703,12 +1735,8 @@ function checkPayment(
         };
 
 
-    /* Check ngay */
-
     check();
 
-
-    /* Check mỗi 3 giây */
 
     paymentCheckInterval =
         setInterval(
@@ -1882,6 +1910,9 @@ function newCode(){
 
 
     if(qrResult){
+
+        qrResult.style.display =
+            "";
 
         qrResult.classList.remove(
             "show"
