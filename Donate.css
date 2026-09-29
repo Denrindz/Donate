@@ -2958,5 +2958,179 @@ footer:hover{
 
     scroll-behavior:auto !important;
   }
+/* =========================================
+   BỘ ĐẾM LƯỢT DONATE
+========================================= */
+
+.donation-count-card{
+
+    width:100%;
+
+    box-sizing:border-box;
+
+    margin-top:20px;
+
+    padding:22px 24px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:space-between;
+
+    gap:20px;
+
+    border-radius:20px;
+
+    background:#ffffff;
+
+    border:1px solid rgba(15,23,42,.08);
+
+    box-shadow:
+        0 8px 30px rgba(15,23,42,.06);
+
+}
+
+
+/* =========================================
+   BÊN TRÁI
+========================================= */
+
+.donation-count-info{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    min-width:0;
+
+}
+
+
+.donation-count-icon{
+
+    width:46px;
+
+    height:46px;
+
+    flex:none;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    border-radius:14px;
+
+    background:#eefafa;
+
+    color:#008f8f;
+
+    font-size:18px;
+
+}
+
+
+.donation-count-label{
+
+    margin-bottom:4px;
+
+    font-size:10px;
+
+    font-weight:800;
+
+    letter-spacing:1.8px;
+
+    color:#008f8f;
+
+}
+
+
+.donation-count-title{
+
+    font-size:15px;
+
+    line-height:1.3;
+
+    font-weight:700;
+
+    color:#171c1c;
+
+}
+
+
+/* =========================================
+   CON SỐ
+========================================= */
+
+.donation-count-number{
+
+    flex:none;
+
+    font-size:30px;
+
+    line-height:1;
+
+    font-weight:800;
+
+    letter-spacing:-.5px;
+
+    color:#008f8f;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media(max-width:480px){
+
+    .donation-count-card{
+
+        padding:20px;
+
+        border-radius:18px;
+
+    }
+
+
+    .donation-count-icon{
+
+        width:42px;
+
+        height:42px;
+
+        border-radius:13px;
+
+        font-size:16px;
+
+    }
+
+
+    .donation-count-label{
+
+        font-size:9px;
+
+        letter-spacing:1.5px;
+
+    }
+
+
+    .donation-count-title{
+
+        font-size:14px;
+
+    }
+
+
+    .donation-count-number{
+
+        font-size:27px;
+
+    }
 
 }
