@@ -410,14 +410,6 @@ function showDonationSuccess(amount){
         modal.innerHTML = `
             <div class="denrin-donation-box">
 
-                <button
-                    class="denrin-donation-close"
-                    type="button"
-                    aria-label="Đóng"
-                >
-                    ×
-                </button>
-
                 <div class="denrin-donation-icon">
                     ✓
                 </div>
@@ -451,31 +443,6 @@ function showDonationSuccess(amount){
         document.body.appendChild(
             modal
         );
-
-
-        /*
-           NÚT ĐÓNG
-        */
-
-        const closeButton =
-            modal.querySelector(
-                ".denrin-donation-close"
-            );
-
-        if(closeButton){
-
-            closeButton.addEventListener(
-                "click",
-                function(){
-
-                    modal.classList.remove(
-                        "show"
-                    );
-
-                }
-            );
-
-        }
 
 
         /*
@@ -609,7 +576,7 @@ function injectDonationSuccessStyle(){
 
         /* =================================
            HỘP THÔNG BÁO
-
+           
            WIDTH = BẢNG NHẬP TIỀN
         ================================= */
 
@@ -618,11 +585,6 @@ function injectDonationSuccessStyle(){
             position:relative;
 
             width:100%;
-
-            /*
-               Giữ cùng kích thước ngang
-               với form donate phổ biến
-            */
 
             max-width:520px;
 
@@ -672,60 +634,6 @@ function injectDonationSuccessStyle(){
             transform:
                 translateY(0)
                 scale(1);
-
-        }
-
-
-        /* =================================
-           NÚT ĐÓNG
-        ================================= */
-
-        .denrin-donation-close{
-
-            position:absolute;
-
-            top:14px;
-
-            right:14px;
-
-            width:34px;
-
-            height:34px;
-
-            border:
-                1px solid
-                rgba(0,144,144,.18);
-
-            border-radius:10px;
-
-            background:#ffffff;
-
-            color:#008f8f;
-
-            font-size:22px;
-
-            line-height:1;
-
-            cursor:pointer;
-
-            transition:
-                background .15s ease,
-                transform .15s ease;
-
-        }
-
-
-        .denrin-donation-close:hover{
-
-            background:#eefafa;
-
-        }
-
-
-        .denrin-donation-close:active{
-
-            transform:
-                scale(.95);
 
         }
 
