@@ -61,7 +61,7 @@ function escapeHTML(value){
 
 
 /* =========================================
-   LẤY GIÁ TRỊ TỪ HISTORY API
+   LẤY HISTORY
 ========================================= */
 
 function getHistoryArray(data){
@@ -95,7 +95,7 @@ function getHistoryArray(data){
 
 
 /* =========================================
-   KIỂM TRA GIAO DỊCH HỢP LỆ
+   KIỂM TRA GIAO DỊCH
 ========================================= */
 
 function isDonateTransaction(item){
@@ -204,7 +204,7 @@ function formatHistoryTime(value){
 
 
 /* =========================================
-   RENDER LỊCH SỬ DONATE
+   RENDER LỊCH SỬ
 ========================================= */
 
 function renderHistory(history){
@@ -334,6 +334,325 @@ function renderHistory(history){
 
 
 /* =========================================
+   THÔNG BÁO ĐÃ NHẬN TIỀN
+========================================= */
+
+function showDonationSuccess(amount){
+
+    let modal =
+        document.getElementById(
+            "donationSuccessModal"
+        );
+
+    if(!modal){
+
+        modal =
+            document.createElement("div");
+
+        modal.id =
+            "donationSuccessModal";
+
+        modal.innerHTML = `
+            <div class="donation-success-box">
+
+                <button
+                    class="donation-success-close"
+                    type="button"
+                    aria-label="Đóng"
+                >
+                    ×
+                </button>
+
+                <div class="donation-success-icon">
+                    ✓
+                </div>
+
+                <div class="donation-success-label">
+                    ĐÃ NHẬN ĐƯỢC
+                </div>
+
+                <div class="donation-success-title">
+                    Cảm ơn bạn!
+                </div>
+
+                <div class="donation-success-text">
+                    Khoản ủng hộ đã được xác nhận.
+                    Bạn vừa giúp dự án 3105 tiến gần hơn một chút.
+                </div>
+
+                <div class="donation-success-amount">
+                    ${formatMoney(amount)}
+                </div>
+
+                <button
+                    class="donation-success-reload"
+                    type="button"
+                >
+                    Xem tiến độ mới
+                </button>
+
+            </div>
+        `;
+
+        document.body.appendChild(
+            modal
+        );
+
+
+        /* =================================
+           ĐÓNG
+        ================================= */
+
+        const closeButton =
+            modal.querySelector(
+                ".donation-success-close"
+            );
+
+        closeButton.addEventListener(
+            "click",
+            function(){
+
+                modal.classList.remove(
+                    "show"
+                );
+
+            }
+        );
+
+
+        /* =================================
+           XEM TIẾN ĐỘ MỚI
+        ================================= */
+
+        const reloadButton =
+            modal.querySelector(
+                ".donation-success-reload"
+            );
+
+        reloadButton.addEventListener(
+            "click",
+            function(){
+
+                window.location.reload();
+
+            }
+        );
+
+    }else{
+
+        const amountElement =
+            modal.querySelector(
+                ".donation-success-amount"
+            );
+
+        if(amountElement){
+
+            amountElement.textContent =
+                formatMoney(amount);
+
+        }
+
+    }
+
+
+    /* =================================
+       HIỆN MODAL
+    ================================= */
+
+    requestAnimationFrame(() => {
+
+        modal.classList.add(
+            "show"
+        );
+
+    });
+
+}
+
+
+/* =========================================
+   CSS CHO THÔNG BÁO
+========================================= */
+
+function injectDonationSuccessStyle(){
+
+    if(
+        document.getElementById(
+            "donationSuccessStyle"
+        )
+    ){
+
+        return;
+
+    }
+
+    const style =
+        document.createElement("style");
+
+    style.id =
+        "donationSuccessStyle";
+
+    style.textContent = `
+
+        #donationSuccessModal{
+            position:fixed;
+            inset:0;
+            z-index:999999;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            padding:20px;
+            box-sizing:border-box;
+            background:rgba(20,24,24,.48);
+            backdrop-filter:blur(12px);
+            -webkit-backdrop-filter:blur(12px);
+            opacity:0;
+            visibility:hidden;
+            transition:
+                opacity .25s ease,
+                visibility .25s ease;
+        }
+
+        #donationSuccessModal.show{
+            opacity:1;
+            visibility:visible;
+        }
+
+        .donation-success-box{
+            position:relative;
+            width:100%;
+            max-width:460px;
+            box-sizing:border-box;
+            padding:30px 30px 28px;
+            border-radius:24px;
+            background:#fff;
+            text-align:center;
+            box-shadow:
+                0 24px 70px
+                rgba(0,0,0,.20);
+            transform:
+                translateY(12px)
+                scale(.97);
+            transition:
+                transform .3s ease;
+        }
+
+        #donationSuccessModal.show
+        .donation-success-box{
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+        .donation-success-close{
+            position:absolute;
+            top:14px;
+            right:14px;
+            width:34px;
+            height:34px;
+            border:1px solid #e5e5e5;
+            border-radius:10px;
+            background:#fff;
+            color:#777;
+            font-size:22px;
+            line-height:1;
+            cursor:pointer;
+        }
+
+        .donation-success-icon{
+            width:60px;
+            height:60px;
+            margin:0 auto 17px;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            border-radius:18px;
+            background:#ffb817;
+            color:#111;
+            font-size:30px;
+            font-weight:700;
+            box-shadow:
+                0 8px 24px
+                rgba(255,184,23,.28);
+        }
+
+        .donation-success-label{
+            margin-bottom:7px;
+            font-size:11px;
+            font-weight:800;
+            letter-spacing:3px;
+            color:#777;
+        }
+
+        .donation-success-title{
+            margin-bottom:8px;
+            font-size:28px;
+            line-height:1.15;
+            font-weight:800;
+            color:#111;
+        }
+
+        .donation-success-text{
+            max-width:350px;
+            margin:0 auto;
+            font-size:13px;
+            line-height:1.55;
+            color:#888;
+        }
+
+        .donation-success-amount{
+            margin:18px 0 20px;
+            font-size:23px;
+            line-height:1;
+            font-weight:800;
+            color:#111;
+        }
+
+        .donation-success-reload{
+            width:100%;
+            height:48px;
+            border:0;
+            border-radius:13px;
+            background:#ffb817;
+            color:#111;
+            font-size:13px;
+            font-weight:800;
+            cursor:pointer;
+            transition:
+                transform .15s ease,
+                opacity .15s ease;
+        }
+
+        .donation-success-reload:active{
+            transform:scale(.98);
+        }
+
+        @media(max-width:480px){
+
+            .donation-success-box{
+                max-width:100%;
+                padding:30px 30px 28px;
+                border-radius:23px;
+            }
+
+            .donation-success-title{
+                font-size:27px;
+            }
+
+        }
+
+    `;
+
+    document.head.appendChild(
+        style
+    );
+
+}
+
+injectDonationSuccessStyle();
+
+
+/* =========================================
    CẬP NHẬT TIẾN ĐỘ + LỊCH SỬ
 ========================================= */
 
@@ -368,12 +687,16 @@ async function updateProgress(){
             getHistoryArray(data);
 
 
+        const historyDonations =
+            history.filter(
+                isDonateTransaction
+            );
+
+
         /* =====================================
-           TÍNH TỔNG TIỀN ĐÃ NHẬN
+           TỔNG TIỀN
 
            Ưu tiên total từ Worker.
-           Nếu API cũ chưa có total thì
-           fallback về cộng history.
         ===================================== */
 
         let historyTotal =
@@ -384,11 +707,6 @@ async function updateProgress(){
                 historyTotal
             )
         ){
-
-            const historyDonations =
-                history.filter(
-                    isDonateTransaction
-                );
 
             historyTotal =
                 historyDonations.reduce(
@@ -402,13 +720,8 @@ async function updateProgress(){
 
 
         /* =====================================
-           KIỂM TRA CÁC MÃ ĐÃ CÓ TRONG HISTORY
+           PENDING
         ===================================== */
-
-        const historyDonations =
-            history.filter(
-                isDonateTransaction
-            );
 
         const historyCodes =
             new Set(
@@ -425,45 +738,52 @@ async function updateProgress(){
             );
 
 
-        /* =====================================
-           CỘNG KHOẢN VỪA DONATE
-
-           Nếu giao dịch chưa xuất hiện trong
-           HISTORY thì cộng tạm vào.
-
-           Khi HISTORY có giao dịch rồi thì
-           xoá khoản tạm để không cộng trùng.
-        ===================================== */
-
         let pendingTotal = 0;
 
-        Object.keys(
-            pendingPaidDonations
-        ).forEach(code => {
 
-            if(
-                !historyCodes.has(code)
-            ){
+        if(
+            !Number.isFinite(
+                Number(data?.total)
+            )
+        ){
 
-                pendingTotal +=
-                    Number(
-                        pendingPaidDonations[code]
-                    ) || 0;
+            Object.keys(
+                pendingPaidDonations
+            ).forEach(code => {
 
-            }else{
+                if(
+                    !historyCodes.has(code)
+                ){
+
+                    pendingTotal +=
+                        Number(
+                            pendingPaidDonations[code]
+                        ) || 0;
+
+                }else{
+
+                    delete pendingPaidDonations[
+                        code
+                    ];
+
+                }
+
+            });
+
+        }else{
+
+            Object.keys(
+                pendingPaidDonations
+            ).forEach(code => {
 
                 delete pendingPaidDonations[
                     code
                 ];
 
-            }
+            });
 
-        });
+        }
 
-
-        /* =====================================
-           ĐÃ NHẬN
-        ===================================== */
 
         received =
             Math.max(
@@ -474,14 +794,14 @@ async function updateProgress(){
 
 
         /* =====================================
-           RENDER LỊCH SỬ
+           HISTORY
         ===================================== */
 
         renderHistory(history);
 
 
         /* =====================================
-           TÍNH %
+           PHẦN TRĂM
         ===================================== */
 
         const percent =
@@ -490,10 +810,6 @@ async function updateProgress(){
                 100
             );
 
-
-        /* =====================================
-           DOM
-        ===================================== */
 
         const receivedElement =
             document.getElementById(
@@ -516,10 +832,6 @@ async function updateProgress(){
             );
 
 
-        /* =====================================
-           ĐÃ NHẬN
-        ===================================== */
-
         if(receivedElement){
 
             receivedElement.textContent =
@@ -527,10 +839,6 @@ async function updateProgress(){
 
         }
 
-
-        /* =====================================
-           CÒN LẠI
-        ===================================== */
 
         if(remainingElement){
 
@@ -546,10 +854,6 @@ async function updateProgress(){
         }
 
 
-        /* =====================================
-           PHẦN TRĂM
-        ===================================== */
-
         if(percentElement){
 
             percentElement.textContent =
@@ -560,10 +864,6 @@ async function updateProgress(){
 
         }
 
-
-        /* =====================================
-           PROGRESS BAR
-        ===================================== */
 
         if(progressBar){
 
@@ -585,8 +885,7 @@ async function updateProgress(){
 
 
 /* =========================================
-   TỰ ĐỘNG CẬP NHẬT LỊCH SỬ
-   MỖI 5 GIÂY
+   TỰ ĐỘNG CẬP NHẬT
 ========================================= */
 
 updateProgress();
@@ -758,10 +1057,6 @@ function generateQR(){
         );
 
 
-    /* =====================================
-       KIỂM TRA TÊN
-    ===================================== */
-
     if(!name){
 
         alert(
@@ -772,10 +1067,6 @@ function generateQR(){
 
     }
 
-
-    /* =====================================
-       KIỂM TRA TIỀN
-    ===================================== */
 
     if(
         !amount ||
@@ -791,10 +1082,6 @@ function generateQR(){
     }
 
 
-    /* =====================================
-       DỪNG TIMER CŨ
-    ===================================== */
-
     clearInterval(
         countdownInterval
     );
@@ -808,10 +1095,6 @@ function generateQR(){
     countdownEndTime = null;
 
 
-    /* =====================================
-       TẠO CODE
-    ===================================== */
-
     const randomCode =
         Math.floor(
             100000 +
@@ -821,10 +1104,6 @@ function generateQR(){
     currentContent =
         "DXM-" + randomCode;
 
-
-    /* =====================================
-       HIỂN THỊ THÔNG TIN
-    ===================================== */
 
     const qrAmount =
         document.getElementById(
@@ -895,10 +1174,6 @@ function generateQR(){
     }
 
 
-    /* =====================================
-       VIETQR
-    ===================================== */
-
     const qrURL =
         "https://img.vietqr.io/image/" +
         BANK_ID +
@@ -926,10 +1201,6 @@ function generateQR(){
     }
 
 
-    /* =====================================
-       STATUS
-    ===================================== */
-
     const status =
         document.getElementById(
             "paymentStatus"
@@ -947,28 +1218,6 @@ function generateQR(){
 
     }
 
-
-    /* =====================================
-       ẨN THÔNG BÁO CŨ
-    ===================================== */
-
-    const oldNotification =
-        document.getElementById(
-            "donationNotification"
-        );
-
-    if(oldNotification){
-
-        oldNotification.classList.remove(
-            "show"
-        );
-
-    }
-
-
-    /* =====================================
-       CHUYỂN SANG QR
-    ===================================== */
 
     const formArea =
         document.getElementById(
@@ -996,16 +1245,8 @@ function generateQR(){
     }
 
 
-    /* =====================================
-       TIMER
-    ===================================== */
-
     startTimer();
 
-
-    /* =====================================
-       CHECK PAYMENT
-    ===================================== */
 
     checkPayment(
         amount,
@@ -1059,148 +1300,6 @@ function copyStk(){
             },1500);
 
         });
-
-}
-
-
-/* =========================================
-   THÔNG BÁO ĐÃ NHẬN ỦNG HỘ
-========================================= */
-
-function showDonationNotification(
-    amount,
-    name
-){
-
-    const qrResult =
-        document.getElementById(
-            "qrResult"
-        );
-
-    if(!qrResult){
-        return;
-    }
-
-
-    let notification =
-        document.getElementById(
-            "donationNotification"
-        );
-
-
-    /* =====================================
-       TẠO THÔNG BÁO
-    ===================================== */
-
-    if(!notification){
-
-        notification =
-            document.createElement(
-                "div"
-            );
-
-        notification.id =
-            "donationNotification";
-
-
-        notification.innerHTML = `
-            <div>
-
-                <div class="donation-notification-title">
-                    Đã nhận ủng hộ
-                </div>
-
-                <div class="donation-notification-amount">
-                    ${formatMoney(amount)}
-                </div>
-
-                <div class="donation-notification-name">
-                    ${escapeHTML(
-                        name ||
-                        "Một người ủng hộ"
-                    )}
-                </div>
-
-            </div>
-        `;
-
-
-        const status =
-            document.getElementById(
-                "paymentStatus"
-            );
-
-
-        if(status){
-
-            status.parentNode.insertBefore(
-                notification,
-                status
-            );
-
-        }else{
-
-            qrResult.appendChild(
-                notification
-            );
-
-        }
-
-    }else{
-
-        notification.innerHTML = `
-            <div>
-
-                <div class="donation-notification-title">
-                    Đã nhận ủng hộ
-                </div>
-
-                <div class="donation-notification-amount">
-                    ${formatMoney(amount)}
-                </div>
-
-                <div class="donation-notification-name">
-                    ${escapeHTML(
-                        name ||
-                        "Một người ủng hộ"
-                    )}
-                </div>
-
-            </div>
-        `;
-
-    }
-
-
-    /* =====================================
-       HIỆN THÔNG BÁO
-    ===================================== */
-
-    requestAnimationFrame(() => {
-
-        notification.classList.add(
-            "show"
-        );
-
-    });
-
-
-    /* =====================================
-       TỰ ẨN SAU 5 GIÂY
-    ===================================== */
-
-    clearTimeout(
-        notification._hideTimer
-    );
-
-    notification._hideTimer =
-        setTimeout(() => {
-
-            notification.classList.remove(
-                "show"
-            );
-
-        },5000);
 
 }
 
@@ -1268,10 +1367,6 @@ function checkPayment(
                     data.paid === true
                 ){
 
-                    /* =================================
-                       GHI NHẬN KHOẢN VỪA DONATE
-                    ================================= */
-
                     const paidCode =
                         String(code)
                             .trim()
@@ -1290,20 +1385,6 @@ function checkPayment(
                             Number(amount) || 0;
 
                     }
-
-
-                    /* =================================
-                       HIỆN THÔNG BÁO ĐÃ NHẬN
-                    ================================= */
-
-                    showDonationNotification(
-                        Number(
-                            data?.donor?.amount ||
-                            amount
-                        ),
-                        data?.donor?.name ||
-                        name
-                    );
 
 
                     clearInterval(
@@ -1326,7 +1407,7 @@ function checkPayment(
 
 
                     /* =================================
-                       HIỂN THỊ ĐÃ THANH TOÁN
+                       TRẠNG THÁI TRÊN QR
                     ================================= */
 
                     const status =
@@ -1352,7 +1433,19 @@ function checkPayment(
 
 
                     /* =================================
-                       CẬP NHẬT TIẾN ĐỘ NGAY
+                       HIỆN BẢNG THÔNG BÁO
+                    ================================= */
+
+                    showDonationSuccess(
+                        Number(
+                            data?.donor?.amount ||
+                            amount
+                        )
+                    );
+
+
+                    /* =================================
+                       CẬP NHẬT TIẾN ĐỘ
                     ================================= */
 
                     await updateProgress();
@@ -1371,16 +1464,12 @@ function checkPayment(
         };
 
 
-    /* =================================
-       CHECK NGAY
-    ================================= */
+    /* Check ngay */
 
     check();
 
 
-    /* =================================
-       CHECK MỖI 3 GIÂY
-    ================================= */
+    /* Check mỗi 3 giây */
 
     paymentCheckInterval =
         setInterval(
@@ -1545,24 +1634,6 @@ function newCode(){
     countdownInterval = null;
     paymentCheckInterval = null;
     countdownEndTime = null;
-
-
-    /* =====================================
-       ẨN THÔNG BÁO CŨ
-    ===================================== */
-
-    const notification =
-        document.getElementById(
-            "donationNotification"
-        );
-
-    if(notification){
-
-        notification.classList.remove(
-            "show"
-        );
-
-    }
 
 
     const qrResult =
