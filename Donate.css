@@ -1927,257 +1927,295 @@ footer:hover{
 
 
 /* =========================================================
-   THÔNG BÁO ĐÃ NHẬN ỦNG HỘ
+   DONATION SUCCESS POPUP
 ========================================================= */
 
-#donationNotification{
+#denrinDonationSuccess{
   position:fixed;
 
-  top:50%;
-  left:50%;
+  inset:0;
 
-  width:460px;
-
-  max-width:
-    calc(100vw - 32px);
-
-  padding:30px 30px 28px;
-
-  box-sizing:border-box;
+  z-index:999999;
 
   display:flex;
 
-  flex-direction:column;
-
   align-items:center;
-
   justify-content:center;
 
-  gap:0;
+  padding:20px;
 
-  text-align:center;
-
-  overflow:visible;
+  box-sizing:border-box;
 
   background:
-    linear-gradient(
-      145deg,
-      #ffffff,
-      #f4fbfa
-    );
+    rgba(0,70,70,.48);
 
-  border:
-    1px solid
-    rgba(0,144,144,.16);
+  backdrop-filter:blur(12px);
 
-  border-radius:24px;
-
-  color:var(--text);
-
-  box-shadow:
-    0 30px 90px
-    rgba(0,70,70,.25),
-    0 8px 35px
-    rgba(0,144,144,.12);
+  -webkit-backdrop-filter:blur(12px);
 
   opacity:0;
 
   visibility:hidden;
 
-  transform:
-    translate(-50%,-46%)
-    scale(.94);
-
   pointer-events:none;
-
-  z-index:99999;
 
   transition:
-    opacity .35s ease,
-    visibility .35s ease,
-    transform .45s cubic-bezier(.2,.8,.2,1);
+    opacity .25s ease,
+    visibility .25s ease;
 }
 
-
-/* =========================================================
-   LỚP LÀM TỐI + BLUR NỀN
-========================================================= */
-
-#donationNotification::after{
-  content:"";
-
-  position:fixed;
-
-  left:50%;
-  top:50%;
-
-  width:100vw;
-  height:100vh;
-
-  background:
-    rgba(0,60,60,.42);
-
-  backdrop-filter:
-    blur(10px);
-
-  -webkit-backdrop-filter:
-    blur(10px);
-
-  transform:
-    translate(-50%,-50%);
-
-  z-index:-1;
-
-  pointer-events:none;
-}
-
-
-/* =========================================================
-   POPUP HIỆN
-========================================================= */
-
-#donationNotification.show{
+#denrinDonationSuccess.show{
   opacity:1;
 
   visibility:visible;
-
-  transform:
-    translate(-50%,-50%)
-    scale(1);
 
   pointer-events:auto;
 }
 
 
 /* =========================================================
-   ICON CHECK TEAL
+   SUCCESS BOX
 ========================================================= */
 
-#donationNotification::before{
-  content:"✓";
+.denrin-donation-box{
+  position:relative;
 
+  width:100%;
+
+  max-width:460px;
+
+  padding:30px;
+
+  box-sizing:border-box;
+
+  border-radius:24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #ffffff,
+      #e8fafa
+    );
+
+  border:
+    1px solid
+    rgba(0,144,144,.22);
+
+  text-align:center;
+
+  box-shadow:
+    0 30px 90px
+    rgba(0,70,70,.28),
+
+    0 10px 35px
+    rgba(0,144,144,.16);
+
+  transform:
+    translateY(12px)
+    scale(.97);
+
+  transition:
+    transform .3s ease;
+}
+
+#denrinDonationSuccess.show
+.denrin-donation-box{
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* =========================================================
+   CLOSE
+========================================================= */
+
+.denrin-donation-close{
+  position:absolute;
+
+  top:14px;
+  right:14px;
+
+  width:34px;
+  height:34px;
+
+  border:
+    1px solid
+    rgba(0,144,144,.18);
+
+  border-radius:10px;
+
+  background:#ffffff;
+
+  color:#008f8f;
+
+  font-size:22px;
+
+  line-height:1;
+
+  cursor:pointer;
+}
+
+
+/* =========================================================
+   CHECK
+========================================================= */
+
+.denrin-donation-icon{
   width:60px;
   height:60px;
 
-  flex:0 0 60px;
+  margin:0 auto 17px;
 
   display:flex;
 
   align-items:center;
   justify-content:center;
 
-  margin:0 auto 17px;
+  border-radius:18px;
 
   background:
     linear-gradient(
       145deg,
-      #008f8f,
-      #00aaaa
+      #00b8b8,
+      #008f8f
     );
 
   color:#ffffff;
 
-  border-radius:18px;
-
-  font-size:31px;
-
-  line-height:1;
+  font-size:30px;
 
   font-weight:700;
 
   box-shadow:
-    0 9px 28px
-    rgba(0,144,144,.25);
+    0 8px 24px
+    rgba(0,144,144,.28);
 
   animation:
-    donationCheckPop .55s
+    donationCheckPop
+    .55s
     cubic-bezier(.2,.8,.2,1)
     both;
 }
 
 
 /* =========================================================
-   DÒNG TIÊU ĐỀ
+   LABEL
 ========================================================= */
 
-#donationNotification
-.donation-notification-title{
+.denrin-donation-label{
+  margin-bottom:7px;
 
-  order:1;
+  font-size:11px;
 
-  margin:0 0 7px;
+  font-weight:800;
 
-  color:var(--accent);
+  letter-spacing:3px;
 
-  font-size:10px;
-
-  line-height:1.2;
-
-  font-weight:850;
-
-  letter-spacing:2px;
-
-  text-align:center;
-
-  text-transform:uppercase;
+  color:#008f8f;
 }
 
 
 /* =========================================================
-   SỐ TIỀN
+   TITLE
 ========================================================= */
 
-#donationNotification
-.donation-notification-amount{
-
-  order:2;
-
-  margin:4px 0 0;
-
-  color:var(--text);
+.denrin-donation-title{
+  margin-bottom:8px;
 
   font-size:28px;
 
   line-height:1.15;
 
-  font-weight:850;
+  font-weight:800;
 
-  letter-spacing:-.7px;
-
-  text-align:center;
+  color:#111818;
 }
 
 
 /* =========================================================
-   DÒNG XÁC NHẬN
+   MESSAGE
 ========================================================= */
 
-#donationNotification
-.donation-notification-name{
+.denrin-donation-text{
+  max-width:350px;
 
-  order:3;
+  margin:0 auto;
 
+  font-size:13px;
+
+  line-height:1.55;
+
+  color:#708080;
+}
+
+
+/* =========================================================
+   AMOUNT
+========================================================= */
+
+.denrin-donation-amount{
+  margin:18px 0 20px;
+
+  font-size:23px;
+
+  line-height:1;
+
+  font-weight:800;
+
+  color:#008f8f;
+}
+
+
+/* =========================================================
+   RELOAD BUTTON
+========================================================= */
+
+.denrin-donation-reload{
   width:100%;
 
-  max-width:330px;
+  height:48px;
 
-  margin:8px auto 0;
+  border:0;
 
-  overflow:hidden;
+  border-radius:13px;
 
-  color:var(--muted);
+  background:
+    linear-gradient(
+      135deg,
+      #008f8f,
+      #00a6a6,
+      #00b8b8
+    );
 
-  font-size:12px;
+  color:#ffffff;
 
-  line-height:1.45;
+  font-size:13px;
 
-  font-weight:500;
+  font-weight:800;
 
-  text-align:center;
+  cursor:pointer;
 
-  white-space:normal;
+  box-shadow:
+    0 8px 22px
+    rgba(0,144,144,.22);
 
-  text-overflow:ellipsis;
+  transition:
+    transform .15s ease,
+    filter .15s ease,
+    box-shadow .15s ease;
+}
+
+.denrin-donation-reload:hover{
+  filter:brightness(1.03);
+
+  box-shadow:
+    0 10px 26px
+    rgba(0,144,144,.28);
+}
+
+.denrin-donation-reload:active{
+  transform:scale(.98);
 }
 
 
@@ -2537,72 +2575,32 @@ footer:hover{
 
 
   /* =======================================================
-     NOTIFICATION MOBILE
+     DONATION SUCCESS MOBILE
   ======================================================= */
 
-  #donationNotification{
-
-    width:
-      calc(100vw - 44px);
-
-    max-width:
-      420px;
-
-    padding:
-      27px 22px 25px;
-
-    border-radius:23px;
-
-    box-shadow:
-      0 25px 75px
-      rgba(0,70,70,.27),
-      0 8px 30px
-      rgba(0,144,144,.10);
-
+  #denrinDonationSuccess{
+    padding:16px;
   }
 
-  #donationNotification::before{
+  .denrin-donation-box{
+    max-width:100%;
 
+    padding:30px 24px 26px;
+
+    border-radius:23px;
+  }
+
+  .denrin-donation-icon{
     width:58px;
     height:58px;
-
-    flex-basis:58px;
-
-    margin-bottom:16px;
 
     border-radius:17px;
 
     font-size:29px;
-
   }
 
-  #donationNotification
-  .donation-notification-title{
-
-    font-size:9px;
-
-    letter-spacing:1.8px;
-
-    margin-bottom:7px;
-
-  }
-
-  #donationNotification
-  .donation-notification-amount{
-
+  .denrin-donation-title{
     font-size:26px;
-
-    letter-spacing:-.6px;
-
-  }
-
-  #donationNotification
-  .donation-notification-name{
-
-    max-width:290px;
-
-    font-size:11px;
-
   }
 
 }
