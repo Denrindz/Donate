@@ -334,6 +334,61 @@ function renderHistory(history){
 
 
 /* =========================================
+   BỘ ĐẾM LƯỢT ỦNG HỘ
+========================================= */
+
+function updateDonationCount(history, data){
+
+    const countElement =
+        document.getElementById(
+            "donationCount"
+        );
+
+    if(!countElement){
+        return;
+    }
+
+
+    /*
+       Nếu API có trả count thì ưu tiên dùng count.
+       Nếu không thì đếm các giao dịch DXM
+       trong history.
+    */
+
+    let count =
+        Number(data?.count);
+
+
+    if(!Number.isFinite(count)){
+
+        count =
+            history.filter(
+                item =>
+                    isDonateTransaction(item) &&
+                    getItemAmount(item) > 0
+            ).length;
+
+    }
+
+
+    /*
+       Không cho hiển thị số âm
+    */
+
+    count =
+        Math.max(
+            0,
+            Math.floor(count)
+        );
+
+
+    countElement.textContent =
+        count.toLocaleString("vi-VN");
+
+}
+
+
+/* =========================================
    THÔNG BÁO ĐÃ NHẬN TIỀN
 ========================================= */
 
@@ -523,26 +578,17 @@ function injectDonationSuccessStyle(){
 
     style.textContent = `
 
-        /* =================================
-           LỚP PHỦ
-        ================================= */
-
         #denrinDonationSuccess{
 
             position:fixed;
-
             inset:0;
-
             z-index:999999;
 
             display:flex;
-
             align-items:center;
-
             justify-content:center;
 
             padding:20px;
-
             box-sizing:border-box;
 
             background:
@@ -555,7 +601,6 @@ function injectDonationSuccessStyle(){
                 blur(12px);
 
             opacity:0;
-
             visibility:hidden;
 
             transition:
@@ -568,24 +613,16 @@ function injectDonationSuccessStyle(){
         #denrinDonationSuccess.show{
 
             opacity:1;
-
             visibility:visible;
 
         }
 
-
-        /* =================================
-           HỘP THÔNG BÁO
-           
-           WIDTH = BẢNG NHẬP TIỀN
-        ================================= */
 
         .denrin-donation-box{
 
             position:relative;
 
             width:100%;
-
             max-width:520px;
 
             box-sizing:border-box;
@@ -638,14 +675,9 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           ICON CHECK
-        ================================= */
-
         .denrin-donation-icon{
 
             width:60px;
-
             height:60px;
 
             margin:
@@ -654,7 +686,6 @@ function injectDonationSuccessStyle(){
             display:flex;
 
             align-items:center;
-
             justify-content:center;
 
             border-radius:18px;
@@ -670,7 +701,6 @@ function injectDonationSuccessStyle(){
             color:#ffffff;
 
             font-size:30px;
-
             font-weight:700;
 
             box-shadow:
@@ -680,16 +710,11 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           LABEL
-        ================================= */
-
         .denrin-donation-label{
 
             margin-bottom:7px;
 
             font-size:11px;
-
             font-weight:800;
 
             letter-spacing:3px;
@@ -699,16 +724,11 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           TIÊU ĐỀ
-        ================================= */
-
         .denrin-donation-title{
 
             margin-bottom:8px;
 
             font-size:28px;
-
             line-height:1.15;
 
             font-weight:800;
@@ -718,10 +738,6 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           NỘI DUNG
-        ================================= */
-
         .denrin-donation-text{
 
             max-width:350px;
@@ -729,7 +745,6 @@ function injectDonationSuccessStyle(){
             margin:0 auto;
 
             font-size:13px;
-
             line-height:1.55;
 
             color:#708080;
@@ -737,17 +752,12 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           SỐ TIỀN
-        ================================= */
-
         .denrin-donation-amount{
 
             margin:
                 18px 0 20px;
 
             font-size:23px;
-
             line-height:1;
 
             font-weight:800;
@@ -757,18 +767,12 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           NÚT XEM TIẾN ĐỘ
-        ================================= */
-
         .denrin-donation-reload{
 
             width:100%;
-
             height:48px;
 
             border:0;
-
             border-radius:13px;
 
             background:
@@ -782,7 +786,6 @@ function injectDonationSuccessStyle(){
             color:#ffffff;
 
             font-size:13px;
-
             font-weight:800;
 
             cursor:pointer;
@@ -819,16 +822,11 @@ function injectDonationSuccessStyle(){
         }
 
 
-        /* =================================
-           MOBILE
-        ================================= */
-
         @media(max-width:480px){
 
             .denrin-donation-box{
 
                 width:100%;
-
                 max-width:100%;
 
                 padding:
@@ -866,7 +864,7 @@ injectDonationSuccessStyle();
 
 
 /* =========================================
-   CẬP NHẬT TIẾN ĐỘ + LỊCH SỬ
+   CẬP NHẬT TIẾN ĐỘ + LỊCH SỬ + BỘ ĐẾM
 ========================================= */
 
 async function updateProgress(){
@@ -904,6 +902,16 @@ async function updateProgress(){
             history.filter(
                 isDonateTransaction
             );
+
+
+        /* =================================
+           CẬP NHẬT BỘ ĐẾM
+        ================================= */
+
+        updateDonationCount(
+            history,
+            data
+        );
 
 
         let historyTotal =
