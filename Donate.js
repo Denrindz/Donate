@@ -341,12 +341,8 @@ function showDonationSuccess(amount){
 
     let modal =
         document.getElementById(
-            "donationSuccessModal"
+            "denrinDonationSuccess"
         );
-
-    /* =====================================
-       NẾU CHƯA CÓ MODAL THÌ TẠO
-    ===================================== */
 
     if(!modal){
 
@@ -354,115 +350,121 @@ function showDonationSuccess(amount){
             document.createElement("div");
 
         modal.id =
-            "donationSuccessModal";
+            "denrinDonationSuccess";
+
+        modal.innerHTML = `
+            <div class="denrin-donation-box">
+
+                <button
+                    class="denrin-donation-close"
+                    type="button"
+                    aria-label="Đóng"
+                >
+                    ×
+                </button>
+
+                <div class="denrin-donation-icon">
+                    ✓
+                </div>
+
+                <div class="denrin-donation-label">
+                    ĐÃ NHẬN ĐƯỢC
+                </div>
+
+                <div class="denrin-donation-title">
+                    Cảm ơn bạn!
+                </div>
+
+                <div class="denrin-donation-text">
+                    Khoản ủng hộ đã được xác nhận.
+                </div>
+
+                <div class="denrin-donation-amount">
+                    ${formatMoney(amount)}
+                </div>
+
+                <button
+                    class="denrin-donation-reload"
+                    type="button"
+                >
+                    Xem tiến độ mới
+                </button>
+
+            </div>
+        `;
 
         document.body.appendChild(
             modal
         );
 
-    }
+
+        /* =================================
+           ĐÓNG
+        ================================= */
+
+        const closeButton =
+            modal.querySelector(
+                ".denrin-donation-close"
+            );
+
+        if(closeButton){
+
+            closeButton.addEventListener(
+                "click",
+                function(){
+
+                    modal.classList.remove(
+                        "show"
+                    );
+
+                }
+            );
+
+        }
 
 
-    /* =====================================
-       LUÔN GHI ĐÈ NỘI DUNG MỚI
+        /* =================================
+           XEM TIẾN ĐỘ MỚI
+        ================================= */
 
-       Không dùng lại nội dung cũ
-       trong HTML.
-    ===================================== */
+        const reloadButton =
+            modal.querySelector(
+                ".denrin-donation-reload"
+            );
 
-    modal.innerHTML = `
-        <div class="donation-success-box">
+        if(reloadButton){
 
-            <button
-                class="donation-success-close"
-                type="button"
-                aria-label="Đóng"
-            >
-                ×
-            </button>
+            reloadButton.addEventListener(
+                "click",
+                function(){
 
-            <div class="donation-success-icon">
-                ✓
-            </div>
+                    window.location.reload();
 
-            <div class="donation-success-label">
-                ĐÃ NHẬN ĐƯỢC
-            </div>
+                }
+            );
 
-            <div class="donation-success-title">
-                Cảm ơn bạn!
-            </div>
+        }
 
-            <div class="donation-success-text">
-                Khoản ủng hộ đã được xác nhận.
-            </div>
+    }else{
 
-            <div class="donation-success-amount">
-                ${formatMoney(amount)}
-            </div>
+        const amountElement =
+            modal.querySelector(
+                ".denrin-donation-amount"
+            );
 
-            <button
-                class="donation-success-reload"
-                type="button"
-            >
-                Xem tiến độ mới
-            </button>
+        if(amountElement){
 
-        </div>
-    `;
+            amountElement.textContent =
+                formatMoney(amount);
 
-
-    /* =====================================
-       ĐÓNG
-    ===================================== */
-
-    const closeButton =
-        modal.querySelector(
-            ".donation-success-close"
-        );
-
-    if(closeButton){
-
-        closeButton.addEventListener(
-            "click",
-            function(){
-
-                modal.classList.remove(
-                    "show"
-                );
-
-            }
-        );
+        }
 
     }
 
 
-    /* =====================================
-       XEM TIẾN ĐỘ MỚI
-    ===================================== */
-
-    const reloadButton =
-        modal.querySelector(
-            ".donation-success-reload"
-        );
-
-    if(reloadButton){
-
-        reloadButton.addEventListener(
-            "click",
-            function(){
-
-                window.location.reload();
-
-            }
-        );
-
-    }
-
-
-    /* =====================================
+    /* =================================
        HIỆN MODAL
-    ===================================== */
+    ================================= */
 
     requestAnimationFrame(() => {
 
@@ -481,61 +483,72 @@ function showDonationSuccess(amount){
 
 function injectDonationSuccessStyle(){
 
-    const oldStyle =
+    if(
         document.getElementById(
-            "donationSuccessStyle"
-        );
+            "denrinDonationSuccessStyle"
+        )
+    ){
 
-    if(oldStyle){
-
-        oldStyle.remove();
+        return;
 
     }
-
 
     const style =
         document.createElement("style");
 
     style.id =
-        "donationSuccessStyle";
-
+        "denrinDonationSuccessStyle";
 
     style.textContent = `
 
         /* =================================
-           BACKDROP
+           LỚP PHỦ
         ================================= */
 
-        #donationSuccessModal{
-            position:fixed !important;
-            inset:0 !important;
+        #denrinDonationSuccess{
 
-            z-index:999999 !important;
+            position:fixed;
 
-            display:flex !important;
-            align-items:center !important;
-            justify-content:center !important;
+            inset:0;
 
-            padding:20px !important;
-            box-sizing:border-box !important;
+            z-index:999999;
 
-            background:rgba(20,24,24,.48) !important;
+            display:flex;
 
-            backdrop-filter:blur(12px) !important;
-            -webkit-backdrop-filter:blur(12px) !important;
+            align-items:center;
 
-            opacity:0 !important;
-            visibility:hidden !important;
+            justify-content:center;
+
+            padding:20px;
+
+            box-sizing:border-box;
+
+            background:
+                rgba(0,70,70,.48);
+
+            backdrop-filter:
+                blur(12px);
+
+            -webkit-backdrop-filter:
+                blur(12px);
+
+            opacity:0;
+
+            visibility:hidden;
 
             transition:
                 opacity .25s ease,
-                visibility .25s ease !important;
+                visibility .25s ease;
+
         }
 
 
-        #donationSuccessModal.show{
-            opacity:1 !important;
-            visibility:visible !important;
+        #denrinDonationSuccess.show{
+
+            opacity:1;
+
+            visibility:visible;
+
         }
 
 
@@ -543,53 +556,60 @@ function injectDonationSuccessStyle(){
            HỘP THÔNG BÁO
         ================================= */
 
-        #donationSuccessModal .donation-success-box{
+        .denrin-donation-box{
 
-            position:relative !important;
+            position:relative;
 
-            width:100% !important;
-            max-width:460px !important;
+            width:100%;
 
-            box-sizing:border-box !important;
+            max-width:460px;
 
-            padding:30px 30px 28px !important;
+            box-sizing:border-box;
 
-            border-radius:24px !important;
+            padding:
+                30px
+                30px
+                28px;
+
+            border-radius:24px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #ffffff,
-                    #eefafa
-                ) !important;
+                    #ffffff 0%,
+                    #f5ffff 55%,
+                    #e8fafa 100%
+                );
 
             border:
                 1px solid
-                rgba(0,144,144,.18) !important;
+                rgba(0,144,144,.22);
 
-            text-align:center !important;
+            text-align:center;
 
             box-shadow:
-                0 24px 70px
-                rgba(0,70,70,.22),
-                0 8px 30px
-                rgba(0,144,144,.12) !important;
+                0 30px 90px
+                rgba(0,70,70,.28),
+
+                0 10px 35px
+                rgba(0,144,144,.16);
 
             transform:
                 translateY(12px)
-                scale(.97) !important;
+                scale(.97);
 
             transition:
-                transform .3s ease !important;
+                transform .3s ease;
+
         }
 
 
-        #donationSuccessModal.show
-        .donation-success-box{
+        #denrinDonationSuccess.show
+        .denrin-donation-box{
 
             transform:
                 translateY(0)
-                scale(1) !important;
+                scale(1);
 
         }
 
@@ -598,50 +618,52 @@ function injectDonationSuccessStyle(){
            NÚT ĐÓNG
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-close{
+        .denrin-donation-close{
 
-            position:absolute !important;
+            position:absolute;
 
-            top:14px !important;
-            right:14px !important;
+            top:14px;
 
-            width:34px !important;
-            height:34px !important;
+            right:14px;
+
+            width:34px;
+
+            height:34px;
 
             border:
                 1px solid
-                rgba(0,144,144,.16) !important;
+                rgba(0,144,144,.18);
 
-            border-radius:10px !important;
+            border-radius:10px;
 
-            background:#ffffff !important;
+            background:#ffffff;
 
-            color:#008f8f !important;
+            color:#008f8f;
 
-            font-size:22px !important;
-            line-height:1 !important;
+            font-size:22px;
 
-            cursor:pointer !important;
+            line-height:1;
+
+            cursor:pointer;
 
             transition:
                 background .15s ease,
-                transform .15s ease !important;
-        }
-
-
-        #donationSuccessModal
-        .donation-success-close:hover{
-
-            background:#eefafa !important;
+                transform .15s ease;
 
         }
 
 
-        #donationSuccessModal
-        .donation-success-close:active{
+        .denrin-donation-close:hover{
 
-            transform:scale(.95) !important;
+            background:#eefafa;
+
+        }
+
+
+        .denrin-donation-close:active{
+
+            transform:
+                scale(.95);
 
         }
 
@@ -650,35 +672,41 @@ function injectDonationSuccessStyle(){
            ICON CHECK
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-icon{
+        .denrin-donation-icon{
 
-            width:60px !important;
-            height:60px !important;
+            width:60px;
 
-            margin:0 auto 17px !important;
+            height:60px;
 
-            display:flex !important;
-            align-items:center !important;
-            justify-content:center !important;
+            margin:
+                0 auto 17px;
 
-            border-radius:18px !important;
+            display:flex;
+
+            align-items:center;
+
+            justify-content:center;
+
+            border-radius:18px;
 
             background:
                 linear-gradient(
                     145deg,
-                    #00b8b8,
-                    #008f8f
-                ) !important;
+                    #00c2b8,
+                    #009b9b,
+                    #007f7f
+                );
 
-            color:#ffffff !important;
+            color:#ffffff;
 
-            font-size:30px !important;
-            font-weight:700 !important;
+            font-size:30px;
+
+            font-weight:700;
 
             box-shadow:
                 0 8px 24px
-                rgba(0,144,144,.28) !important;
+                rgba(0,144,144,.30);
+
         }
 
 
@@ -686,17 +714,18 @@ function injectDonationSuccessStyle(){
            LABEL
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-label{
+        .denrin-donation-label{
 
-            margin-bottom:7px !important;
+            margin-bottom:7px;
 
-            font-size:11px !important;
-            font-weight:800 !important;
+            font-size:11px;
 
-            letter-spacing:3px !important;
+            font-weight:800;
 
-            color:#008f8f !important;
+            letter-spacing:3px;
+
+            color:#008f8f;
+
         }
 
 
@@ -704,17 +733,18 @@ function injectDonationSuccessStyle(){
            TIÊU ĐỀ
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-title{
+        .denrin-donation-title{
 
-            margin-bottom:8px !important;
+            margin-bottom:8px;
 
-            font-size:28px !important;
-            line-height:1.15 !important;
+            font-size:28px;
 
-            font-weight:800 !important;
+            line-height:1.15;
 
-            color:#111818 !important;
+            font-weight:800;
+
+            color:#111818;
+
         }
 
 
@@ -722,17 +752,18 @@ function injectDonationSuccessStyle(){
            NỘI DUNG
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-text{
+        .denrin-donation-text{
 
-            max-width:350px !important;
+            max-width:350px;
 
-            margin:0 auto !important;
+            margin:0 auto;
 
-            font-size:13px !important;
-            line-height:1.55 !important;
+            font-size:13px;
 
-            color:#708080 !important;
+            line-height:1.55;
+
+            color:#708080;
+
         }
 
 
@@ -740,17 +771,19 @@ function injectDonationSuccessStyle(){
            SỐ TIỀN
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-amount{
+        .denrin-donation-amount{
 
-            margin:18px 0 20px !important;
+            margin:
+                18px 0 20px;
 
-            font-size:23px !important;
-            line-height:1 !important;
+            font-size:23px;
 
-            font-weight:800 !important;
+            line-height:1;
 
-            color:#008f8f !important;
+            font-weight:800;
+
+            color:#008f8f;
+
         }
 
 
@@ -758,56 +791,60 @@ function injectDonationSuccessStyle(){
            NÚT XEM TIẾN ĐỘ
         ================================= */
 
-        #donationSuccessModal
-        .donation-success-reload{
+        .denrin-donation-reload{
 
-            width:100% !important;
-            height:48px !important;
+            width:100%;
 
-            border:0 !important;
-            border-radius:13px !important;
+            height:48px;
+
+            border:0;
+
+            border-radius:13px;
 
             background:
                 linear-gradient(
                     135deg,
-                    #008f8f,
-                    #00a6a6,
+                    #007f7f,
+                    #009f9f,
                     #00b8b8
-                ) !important;
+                );
 
-            color:#ffffff !important;
+            color:#ffffff;
 
-            font-size:13px !important;
-            font-weight:800 !important;
+            font-size:13px;
 
-            cursor:pointer !important;
+            font-weight:800;
+
+            cursor:pointer;
 
             box-shadow:
                 0 8px 22px
-                rgba(0,144,144,.22) !important;
+                rgba(0,144,144,.25);
 
             transition:
                 transform .15s ease,
                 filter .15s ease,
-                box-shadow .15s ease !important;
+                box-shadow .15s ease;
+
         }
 
 
-        #donationSuccessModal
-        .donation-success-reload:hover{
+        .denrin-donation-reload:hover{
 
-            filter:brightness(1.03) !important;
+            filter:
+                brightness(1.05);
 
             box-shadow:
-                0 10px 26px
-                rgba(0,144,144,.28) !important;
+                0 10px 28px
+                rgba(0,144,144,.30);
+
         }
 
 
-        #donationSuccessModal
-        .donation-success-reload:active{
+        .denrin-donation-reload:active{
 
-            transform:scale(.98) !important;
+            transform:
+                scale(.98);
 
         }
 
@@ -818,31 +855,34 @@ function injectDonationSuccessStyle(){
 
         @media(max-width:480px){
 
-            #donationSuccessModal
-            .donation-success-box{
+            .denrin-donation-box{
 
-                max-width:100% !important;
+                max-width:100%;
 
                 padding:
                     30px
                     30px
-                    28px !important;
+                    28px;
 
-                border-radius:23px !important;
+                border-radius:23px;
 
             }
 
-            #donationSuccessModal
-            .donation-success-title{
+            .denrin-donation-title{
 
-                font-size:27px !important;
+                font-size:27px;
+
+            }
+
+            .denrin-donation-text{
+
+                max-width:300px;
 
             }
 
         }
 
     `;
-
 
     document.head.appendChild(
         style
