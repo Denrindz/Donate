@@ -11,12 +11,14 @@ const PROJECT_TARGET = 1000000;
 let received = 0;
 let currentContent = "";
 
+/* CHỈ THÊM BIẾN NÀY ĐỂ GHI NHẬN
+   KHOẢN VỪA THANH TOÁN TRONG LÚC
+   HISTORY CHƯA KỊP CẬP NHẬT */
 let pendingPaidDonations = {};
 
 let countdownInterval = null;
 let paymentCheckInterval = null;
 let countdownEndTime = null;
-
 
 /* =========================================
    API
@@ -31,7 +33,6 @@ const CHECK_API =
 const HISTORY_API =
     `${API_BASE}/history`;
 
-
 /* =========================================
    FORMAT TIỀN
 ========================================= */
@@ -42,7 +43,6 @@ function formatMoney(number){
         .format(Number(number) || 0) + " ₫";
 
 }
-
 
 /* =========================================
    ESCAPE HTML
@@ -58,271 +58,6 @@ function escapeHTML(value){
         .replace(/'/g, "&#039;");
 
 }
-
-
-/* =========================================
-   THÔNG BÁO ỦNG HỘ THÀNH CÔNG TRÊN QR
-========================================= */
-
-function showDonationSuccess(amount, name){
-
-    const qrResult =
-        document.getElementById(
-            "qrResult"
-        );
-
-    if(!qrResult){
-        return;
-    }
-
-
-    let overlay =
-        document.getElementById(
-            "donationSuccessOverlay"
-        );
-
-
-    if(!overlay){
-
-        overlay =
-            document.createElement("div");
-
-        overlay.id =
-            "donationSuccessOverlay";
-
-
-        overlay.innerHTML = `
-
-            <div class="donation-success-check">
-                ✓
-            </div>
-
-            <div class="donation-success-title">
-                Ủng hộ thành công
-            </div>
-
-            <div class="donation-success-amount">
-                ${formatMoney(amount)}
-            </div>
-
-            <div class="donation-success-name">
-                Cảm ơn ${escapeHTML(
-                    name ||
-                    "mầy"
-                )} đã ủng hộ
-            </div>
-
-        `;
-
-
-        qrResult.appendChild(
-            overlay
-        );
-
-
-    }else{
-
-        overlay.innerHTML = `
-
-            <div class="donation-success-check">
-                ✓
-            </div>
-
-            <div class="donation-success-title">
-                Ủng hộ thành công
-            </div>
-
-            <div class="donation-success-amount">
-                ${formatMoney(amount)}
-            </div>
-
-            <div class="donation-success-name">
-                Cảm ơn ${escapeHTML(
-                    name ||
-                    "mầy"
-                )} đã ủng hộ
-            </div>
-
-        `;
-
-    }
-
-
-    /* =====================================
-       CSS XÁC NHẬN
-    ===================================== */
-
-    if(
-        !document.getElementById(
-            "donationSuccessStyle"
-        )
-    ){
-
-        const style =
-            document.createElement("style");
-
-
-        style.id =
-            "donationSuccessStyle";
-
-
-        style.textContent = `
-
-            #donationSuccessOverlay{
-
-                position:absolute;
-
-                inset:0;
-
-                z-index:20;
-
-                display:flex;
-
-                flex-direction:column;
-
-                align-items:center;
-
-                justify-content:center;
-
-                text-align:center;
-
-                padding:24px;
-
-                box-sizing:border-box;
-
-                border-radius:inherit;
-
-                background:
-                    rgba(255,255,255,.97);
-
-                backdrop-filter:
-                    blur(18px);
-
-                -webkit-backdrop-filter:
-                    blur(18px);
-
-                animation:
-                    donationSuccessIn
-                    .35s ease both;
-
-            }
-
-
-            .donation-success-check{
-
-                width:64px;
-
-                height:64px;
-
-                display:flex;
-
-                align-items:center;
-
-                justify-content:center;
-
-                margin-bottom:16px;
-
-                border-radius:50%;
-
-                background:#111;
-
-                color:#fff;
-
-                font-size:34px;
-
-                font-weight:600;
-
-                line-height:1;
-
-            }
-
-
-            .donation-success-title{
-
-                font-size:22px;
-
-                font-weight:700;
-
-                color:#111;
-
-                letter-spacing:-.4px;
-
-            }
-
-
-            .donation-success-amount{
-
-                margin-top:8px;
-
-                font-size:26px;
-
-                font-weight:700;
-
-                color:#111;
-
-                letter-spacing:-.5px;
-
-            }
-
-
-            .donation-success-name{
-
-                margin-top:8px;
-
-                font-size:14px;
-
-                color:#777;
-
-            }
-
-
-            @keyframes donationSuccessIn{
-
-                from{
-
-                    opacity:0;
-
-                    transform:scale(.96);
-
-                }
-
-                to{
-
-                    opacity:1;
-
-                    transform:scale(1);
-
-                }
-
-            }
-
-        `;
-
-
-        document.head.appendChild(
-            style
-        );
-
-    }
-
-
-    /*
-       Đảm bảo lớp xác nhận
-       nằm đúng trên QR
-    */
-
-    if(
-        getComputedStyle(qrResult)
-            .position === "static"
-    ){
-
-        qrResult.style.position =
-            "relative";
-
-    }
-
-}
-
 
 /* =========================================
    LẤY GIÁ TRỊ TỪ HISTORY API
@@ -357,7 +92,6 @@ function getHistoryArray(data){
 
 }
 
-
 /* =========================================
    KIỂM TRA GIAO DỊCH HỢP LỆ
 ========================================= */
@@ -382,7 +116,6 @@ function isDonateTransaction(item){
 
 }
 
-
 /* =========================================
    LẤY SỐ TIỀN
 ========================================= */
@@ -397,7 +130,6 @@ function getItemAmount(item){
     ) || 0;
 
 }
-
 
 /* =========================================
    LẤY TÊN
@@ -415,7 +147,6 @@ function getItemName(item){
 
 }
 
-
 /* =========================================
    LẤY THỜI GIAN
 ========================================= */
@@ -428,12 +159,10 @@ function getItemTime(item){
         item.created_at ||
         item.date ||
         item.transactionDate ||
-        item.when ||
         ""
     );
 
 }
-
 
 /* =========================================
    FORMAT THỜI GIAN
@@ -466,7 +195,6 @@ function formatHistoryTime(value){
     return String(value);
 
 }
-
 
 /* =========================================
    RENDER LỊCH SỬ DONATE
@@ -509,13 +237,9 @@ function renderHistory(history){
 
         list.innerHTML = `
             <div class="supporter">
-
-                <div class="avatar">
-                    …
-                </div>
+                <div class="avatar">…</div>
 
                 <div class="supporter-info">
-
                     <div class="supporter-name">
                         Chưa có lượt ủng hộ
                     </div>
@@ -523,13 +247,11 @@ function renderHistory(history){
                     <div class="supporter-time">
                         Hãy là người đầu tiên ủng hộ dự án
                     </div>
-
                 </div>
 
                 <div class="amount">
                     —
                 </div>
-
             </div>
         `;
 
@@ -597,7 +319,6 @@ function renderHistory(history){
 
 }
 
-
 /* =========================================
    CẬP NHẬT TIẾN ĐỘ + LỊCH SỬ
 ========================================= */
@@ -613,8 +334,7 @@ async function updateProgress(){
                     method:"GET",
                     cache:"no-store",
                     headers:{
-                        "Accept":
-                            "application/json"
+                        "Accept":"application/json"
                     }
                 }
             );
@@ -633,44 +353,26 @@ async function updateProgress(){
         const history =
             getHistoryArray(data);
 
-
         /* =====================================
-           ƯU TIÊN TOTAL TỪ WORKER
-        ===================================== */
-
-        let historyTotal =
-            Number(data?.total);
-
-        if(
-            !Number.isFinite(
-                historyTotal
-            )
-        ){
-
-            const historyDonations =
-                history.filter(
-                    isDonateTransaction
-                );
-
-            historyTotal =
-                historyDonations.reduce(
-                    (sum,item) =>
-                        sum +
-                        getItemAmount(item),
-                    0
-                );
-
-        }
-
-
-        /* =====================================
-           KIỂM TRA CÁC MÃ ĐÃ CÓ TRONG HISTORY
+           TÍNH TỔNG TIỀN ĐÃ NHẬN
         ===================================== */
 
         const historyDonations =
             history.filter(
                 isDonateTransaction
             );
+
+        const historyTotal =
+            historyDonations.reduce(
+                (sum,item) =>
+                    sum +
+                    getItemAmount(item),
+                0
+            );
+
+        /* =====================================
+           KIỂM TRA CÁC MÃ ĐÃ CÓ TRONG HISTORY
+        ===================================== */
 
         const historyCodes =
             new Set(
@@ -686,9 +388,14 @@ async function updateProgress(){
                 )
             );
 
-
         /* =====================================
            CỘNG KHOẢN VỪA DONATE
+
+           Nếu giao dịch chưa xuất hiện trong
+           HISTORY thì cộng tạm vào.
+
+           Khi HISTORY có giao dịch rồi thì
+           xoá khoản tạm để không cộng trùng.
         ===================================== */
 
         let pendingTotal = 0;
@@ -716,7 +423,6 @@ async function updateProgress(){
 
         });
 
-
         /* =====================================
            ĐÃ NHẬN
         ===================================== */
@@ -728,13 +434,11 @@ async function updateProgress(){
                 0
             );
 
-
         /* =====================================
            RENDER LỊCH SỬ
         ===================================== */
 
         renderHistory(history);
-
 
         /* =====================================
            TÍNH %
@@ -742,13 +446,9 @@ async function updateProgress(){
 
         const percent =
             Math.min(
-                (
-                    received /
-                    PROJECT_TARGET
-                ) * 100,
+                (received / PROJECT_TARGET) * 100,
                 100
             );
-
 
         /* =====================================
            DOM
@@ -774,7 +474,6 @@ async function updateProgress(){
                 "progressBar"
             );
 
-
         /* =====================================
            ĐÃ NHẬN
         ===================================== */
@@ -785,7 +484,6 @@ async function updateProgress(){
                 formatMoney(received);
 
         }
-
 
         /* =====================================
            CÒN LẠI
@@ -804,7 +502,6 @@ async function updateProgress(){
 
         }
 
-
         /* =====================================
            PHẦN TRĂM
         ===================================== */
@@ -818,7 +515,6 @@ async function updateProgress(){
                 "%";
 
         }
-
 
         /* =====================================
            PROGRESS BAR
@@ -842,7 +538,6 @@ async function updateProgress(){
 
 }
 
-
 /* =========================================
    TỰ ĐỘNG CẬP NHẬT LỊCH SỬ
    MỖI 5 GIÂY
@@ -854,7 +549,6 @@ setInterval(
     updateProgress,
     5000
 );
-
 
 /* =========================================
    MỞ MODAL
@@ -877,7 +571,6 @@ function openModal(){
 
 }
 
-
 /* =========================================
    ĐÓNG MODAL
 ========================================= */
@@ -899,7 +592,6 @@ function closeModal(){
 
 }
 
-
 /* =========================================
    CLICK RA NGOÀI MODAL
 ========================================= */
@@ -916,7 +608,6 @@ function outsideClose(event){
     }
 
 }
-
 
 /* =========================================
    CHỌN NHANH SỐ TIỀN
@@ -938,7 +629,6 @@ function setAmount(amount){
             .toLocaleString("vi-VN");
 
 }
-
 
 /* =========================================
    FORMAT INPUT
@@ -980,7 +670,6 @@ if(donationInput){
 
 }
 
-
 /* =========================================
    TẠO QR
 ========================================= */
@@ -1006,10 +695,8 @@ function generateQR(){
 
     }
 
-
     const name =
         nameElement.value.trim();
-
 
     const amount =
         Number(
@@ -1018,6 +705,9 @@ function generateQR(){
                 .replace(/,/g,"")
         );
 
+    /* =====================================
+       KIỂM TRA TÊN
+    ===================================== */
 
     if(!name){
 
@@ -1029,6 +719,9 @@ function generateQR(){
 
     }
 
+    /* =====================================
+       KIỂM TRA TIỀN
+    ===================================== */
 
     if(
         !amount ||
@@ -1043,6 +736,9 @@ function generateQR(){
 
     }
 
+    /* =====================================
+       DỪNG TIMER CŨ
+    ===================================== */
 
     clearInterval(
         countdownInterval
@@ -1056,6 +752,9 @@ function generateQR(){
     paymentCheckInterval = null;
     countdownEndTime = null;
 
+    /* =====================================
+       TẠO CODE
+    ===================================== */
 
     const randomCode =
         Math.floor(
@@ -1063,10 +762,12 @@ function generateQR(){
             Math.random() * 900000
         );
 
-
     currentContent =
         "DXM-" + randomCode;
 
+    /* =====================================
+       HIỂN THỊ THÔNG TIN
+    ===================================== */
 
     const qrAmount =
         document.getElementById(
@@ -1093,14 +794,12 @@ function generateQR(){
             "qrTime"
         );
 
-
     if(qrAmount){
 
         qrAmount.textContent =
             formatMoney(amount);
 
     }
-
 
     if(qrName){
 
@@ -1109,7 +808,6 @@ function generateQR(){
 
     }
 
-
     if(qrContent){
 
         qrContent.textContent =
@@ -1117,14 +815,12 @@ function generateQR(){
 
     }
 
-
     if(qrStk){
 
         qrStk.textContent =
             ACCOUNT_NO;
 
     }
-
 
     if(qrTime){
 
@@ -1136,6 +832,9 @@ function generateQR(){
 
     }
 
+    /* =====================================
+       VIETQR
+    ===================================== */
 
     const qrURL =
         "https://img.vietqr.io/image/" +
@@ -1150,12 +849,10 @@ function generateQR(){
             currentContent
         );
 
-
     const qrImage =
         document.getElementById(
             "qrImage"
         );
-
 
     if(qrImage){
 
@@ -1164,12 +861,14 @@ function generateQR(){
 
     }
 
+    /* =====================================
+       STATUS
+    ===================================== */
 
     const status =
         document.getElementById(
             "paymentStatus"
         );
-
 
     if(status){
 
@@ -1183,34 +882,19 @@ function generateQR(){
 
     }
 
-
     /* =====================================
-       XÓA XÁC NHẬN CŨ
+       CHUYỂN SANG QR
     ===================================== */
-
-    const successOverlay =
-        document.getElementById(
-            "donationSuccessOverlay"
-        );
-
-    if(successOverlay){
-
-        successOverlay.remove();
-
-    }
-
 
     const formArea =
         document.getElementById(
             "formArea"
         );
 
-
     const qrResult =
         document.getElementById(
             "qrResult"
         );
-
 
     if(formArea){
 
@@ -1218,7 +902,6 @@ function generateQR(){
             "none";
 
     }
-
 
     if(qrResult){
 
@@ -1228,9 +911,15 @@ function generateQR(){
 
     }
 
+    /* =====================================
+       TIMER
+    ===================================== */
 
     startTimer();
 
+    /* =====================================
+       CHECK PAYMENT
+    ===================================== */
 
     checkPayment(
         amount,
@@ -1239,7 +928,6 @@ function generateQR(){
     );
 
 }
-
 
 /* =========================================
    COPY STK
@@ -1254,7 +942,6 @@ function copyStk(){
         return;
 
     }
-
 
     navigator.clipboard
         .writeText(
@@ -1271,14 +958,11 @@ function copyStk(){
                 return;
             }
 
-
             const oldText =
                 button.textContent;
 
-
             button.textContent =
                 "Đã sao chép";
-
 
             setTimeout(() => {
 
@@ -1290,7 +974,6 @@ function copyStk(){
         });
 
 }
-
 
 /* =========================================
    KIỂM TRA THANH TOÁN
@@ -1305,7 +988,6 @@ function checkPayment(
     clearInterval(
         paymentCheckInterval
     );
-
 
     const check =
         async () => {
@@ -1333,17 +1015,14 @@ function checkPayment(
                         }
                     );
 
-
                 if(!response.ok){
 
                     return;
 
                 }
 
-
                 const data =
                     await response.json();
-
 
                 /* =================================
                    ĐÃ THANH TOÁN
@@ -1355,11 +1034,19 @@ function checkPayment(
                     data.paid === true
                 ){
 
+                    /* =================================
+                       GHI NHẬN KHOẢN VỪA DONATE
+
+                       Ví dụ:
+                       Đang có 50.000
+                       Donate 10.000
+                       => ngay lập tức thành 60.000
+                    ================================= */
+
                     const paidCode =
                         String(code)
                             .trim()
                             .toUpperCase();
-
 
                     if(
                         !pendingPaidDonations[
@@ -1374,14 +1061,12 @@ function checkPayment(
 
                     }
 
-
                     clearInterval(
                         paymentCheckInterval
                     );
 
                     paymentCheckInterval =
                         null;
-
 
                     clearInterval(
                         countdownInterval
@@ -1393,16 +1078,14 @@ function checkPayment(
                     countdownEndTime =
                         null;
 
-
                     /* =================================
-                       HIỂN THỊ TRẠNG THÁI
+                       HIỂN THỊ ĐÃ THANH TOÁN
                     ================================= */
 
                     const status =
                         document.getElementById(
                             "paymentStatus"
                         );
-
 
                     if(status){
 
@@ -1418,21 +1101,6 @@ function checkPayment(
                         );
 
                     }
-
-
-                    /* =================================
-                       HIỂN THỊ XÁC NHẬN NGAY TRÊN QR
-                    ================================= */
-
-                    showDonationSuccess(
-                        Number(
-                            data?.donor?.amount ||
-                            amount
-                        ),
-                        data?.donor?.name ||
-                        name
-                    );
-
 
                     /* =================================
                        CẬP NHẬT TIẾN ĐỘ NGAY
@@ -1453,11 +1121,9 @@ function checkPayment(
 
         };
 
-
     /* Check ngay */
 
     check();
-
 
     /* Check mỗi 3 giây */
 
@@ -1468,7 +1134,6 @@ function checkPayment(
         );
 
 }
-
 
 /* =========================================
    TIMER
@@ -1482,27 +1147,22 @@ function startTimer(){
 
     countdownInterval = null;
 
-
     const TEN_MINUTES =
         10 * 60 * 1000;
-
 
     countdownEndTime =
         Date.now() +
         TEN_MINUTES;
-
 
     const timer =
         document.getElementById(
             "timer"
         );
 
-
     const status =
         document.getElementById(
             "paymentStatus"
         );
-
 
     function updateCountdown(){
 
@@ -1510,10 +1170,8 @@ function startTimer(){
             return;
         }
 
-
         const now =
             Date.now();
-
 
         const remaining =
             Math.max(
@@ -1522,22 +1180,18 @@ function startTimer(){
                 now
             );
 
-
         const totalSeconds =
             Math.ceil(
                 remaining / 1000
             );
-
 
         const minutes =
             Math.floor(
                 totalSeconds / 60
             );
 
-
         const seconds =
             totalSeconds % 60;
-
 
         if(timer){
 
@@ -1545,7 +1199,6 @@ function startTimer(){
                 `${String(minutes).padStart(2,"0")}:${String(seconds).padStart(2,"0")}`;
 
         }
-
 
         if(remaining <= 0){
 
@@ -1559,7 +1212,6 @@ function startTimer(){
             countdownEndTime =
                 null;
 
-
             clearInterval(
                 paymentCheckInterval
             );
@@ -1567,14 +1219,12 @@ function startTimer(){
             paymentCheckInterval =
                 null;
 
-
             if(timer){
 
                 timer.textContent =
                     "Hết hạn";
 
             }
-
 
             if(status){
 
@@ -1595,9 +1245,7 @@ function startTimer(){
 
     }
 
-
     updateCountdown();
-
 
     countdownInterval =
         setInterval(
@@ -1606,7 +1254,6 @@ function startTimer(){
         );
 
 }
-
 
 /* =========================================
    TẠO MÃ MỚI
@@ -1622,33 +1269,14 @@ function newCode(){
         paymentCheckInterval
     );
 
-
     countdownInterval = null;
     paymentCheckInterval = null;
     countdownEndTime = null;
-
-
-    /* =====================================
-       XÓA MÀN HÌNH XÁC NHẬN CŨ
-    ===================================== */
-
-    const successOverlay =
-        document.getElementById(
-            "donationSuccessOverlay"
-        );
-
-    if(successOverlay){
-
-        successOverlay.remove();
-
-    }
-
 
     const qrResult =
         document.getElementById(
             "qrResult"
         );
-
 
     if(qrResult){
 
@@ -1658,12 +1286,10 @@ function newCode(){
 
     }
 
-
     const formArea =
         document.getElementById(
             "formArea"
         );
-
 
     if(formArea){
 
@@ -1672,12 +1298,10 @@ function newCode(){
 
     }
 
-
     const status =
         document.getElementById(
             "paymentStatus"
         );
-
 
     if(status){
 
@@ -1691,12 +1315,10 @@ function newCode(){
 
     }
 
-
     const timer =
         document.getElementById(
             "timer"
         );
-
 
     if(timer){
 
