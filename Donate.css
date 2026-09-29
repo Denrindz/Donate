@@ -763,7 +763,7 @@ h1{
 
 
 /* =========================================================
-   THANH TIẾN ĐỘ - ĐÃ SỬA MƯỢT
+   THANH TIẾN ĐỘ
 ========================================================= */
 
 .progress{
@@ -787,9 +787,6 @@ h1{
   box-shadow:
     inset 0 1px 3px rgba(0,0,0,.05);
 }
-
-
-/* PHẦN MÀU TEAL */
 
 .progress-bar{
   width:0%;
@@ -815,13 +812,11 @@ h1{
 
   transition:
     width .7s cubic-bezier(.22,.61,.36,1);
-
-  /* KHÔNG animation background nữa */
 }
 
 
 /* =========================================================
-   VỆT ÁNH SÁNG MƯỢT
+   VỆT ÁNH SÁNG
 ========================================================= */
 
 .progress-bar::after{
@@ -900,7 +895,6 @@ h1{
     opacity:0;
   }
 }
-
 
 .progress-bottom{
   display:flex;
@@ -1942,6 +1936,170 @@ footer:hover{
 
 
 /* =========================================================
+   THÔNG BÁO ĐÃ NHẬN ỦNG HỘ
+   GIAO DIỆN GIỐNG MẪU MẦY GỬI
+========================================================= */
+
+#donationNotification{
+  width:100%;
+
+  margin:10px 0 12px;
+
+  padding:12px 14px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:10px;
+
+  position:relative;
+
+  overflow:hidden;
+
+  background:
+    linear-gradient(
+      135deg,
+      #f0faf5,
+      #eaf7f1
+    );
+
+  border:
+    1px dashed rgba(57,169,107,.38);
+
+  border-radius:12px;
+
+  color:#3b9b65;
+
+  box-shadow:
+    0 5px 18px rgba(57,169,107,.06);
+
+  opacity:0;
+
+  transform:
+    translateY(8px)
+    scale(.98);
+
+  pointer-events:none;
+
+  transition:
+    opacity .35s ease,
+    transform .35s cubic-bezier(.2,.8,.2,1);
+}
+
+#donationNotification.show{
+  opacity:1;
+
+  transform:
+    translateY(0)
+    scale(1);
+}
+
+
+/* =========================================================
+   CHECK
+========================================================= */
+
+#donationNotification::before{
+  content:"✓";
+
+  width:28px;
+  height:28px;
+
+  flex:0 0 28px;
+
+  display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  color:#fff;
+
+  background:#55b878;
+
+  border-radius:50%;
+
+  font-size:18px;
+
+  line-height:1;
+
+  font-weight:900;
+
+  box-shadow:
+    0 4px 12px rgba(57,169,107,.18);
+
+  animation:
+    donationCheckPop .45s
+    cubic-bezier(.2,.8,.2,1)
+    both;
+}
+
+
+/* =========================================================
+   NỘI DUNG THÔNG BÁO
+========================================================= */
+
+#donationNotification > div{
+  min-width:0;
+}
+
+#donationNotification
+.donation-notification-title{
+  margin:0;
+
+  color:#3b9b65;
+
+  font-size:11px;
+
+  line-height:1.25;
+
+  font-weight:800;
+
+  text-align:left;
+}
+
+#donationNotification
+.donation-notification-amount{
+  margin-top:2px;
+
+  color:#248b55;
+
+  font-size:16px;
+
+  line-height:1.25;
+
+  font-weight:850;
+
+  letter-spacing:-.2px;
+
+  text-align:left;
+}
+
+#donationNotification
+.donation-notification-name{
+  margin-top:2px;
+
+  max-width:100%;
+
+  overflow:hidden;
+
+  color:#72a486;
+
+  font-size:9px;
+
+  line-height:1.25;
+
+  font-weight:600;
+
+  text-align:left;
+
+  white-space:nowrap;
+
+  text-overflow:ellipsis;
+}
+
+
+/* =========================================================
    PAYMENT INFO
 ========================================================= */
 
@@ -2166,6 +2324,7 @@ footer:hover{
   .deadline strong{
     font-size:12px !important;
   }
+
 }
 
 
@@ -2293,6 +2452,41 @@ footer:hover{
   .qr-box:hover{
     transform:none;
   }
+
+  #donationNotification{
+    margin:10px 0 12px;
+
+    padding:12px 13px;
+
+    gap:9px;
+
+    border-radius:11px;
+  }
+
+  #donationNotification::before{
+    width:27px;
+    height:27px;
+
+    flex:0 0 27px;
+
+    font-size:17px;
+  }
+
+  #donationNotification
+  .donation-notification-title{
+    font-size:10px;
+  }
+
+  #donationNotification
+  .donation-notification-amount{
+    font-size:15px;
+  }
+
+  #donationNotification
+  .donation-notification-name{
+    font-size:8px;
+  }
+
 }
 
 
@@ -2313,6 +2507,7 @@ footer:hover{
       translate(45px,35px)
       scale(1.1);
   }
+
 }
 
 @keyframes backgroundFloatReverse{
@@ -2328,6 +2523,7 @@ footer:hover{
       translate(-40px,-30px)
       scale(1.08);
   }
+
 }
 
 @keyframes headerIn{
@@ -2345,6 +2541,7 @@ footer:hover{
     transform:
       translateY(0);
   }
+
 }
 
 @keyframes cardIn{
@@ -2364,6 +2561,7 @@ footer:hover{
       translateY(0)
       scale(1);
   }
+
 }
 
 @keyframes heroIn{
@@ -2381,6 +2579,7 @@ footer:hover{
     transform:
       translateY(0);
   }
+
 }
 
 @keyframes fadeUp{
@@ -2398,6 +2597,7 @@ footer:hover{
     transform:
       translateY(0);
   }
+
 }
 
 @keyframes logoPulse{
@@ -2413,6 +2613,7 @@ footer:hover{
       0 0 0 7px rgba(0,144,144,.06),
       0 0 25px rgba(0,144,144,.40);
   }
+
 }
 
 @keyframes topGlow{
@@ -2424,6 +2625,7 @@ footer:hover{
   100%{
     background-position:200% 50%;
   }
+
 }
 
 @keyframes eyebrowShine{
@@ -2435,6 +2637,7 @@ footer:hover{
   70%,100%{
     left:140%;
   }
+
 }
 
 @keyframes titleIn{
@@ -2454,6 +2657,7 @@ footer:hover{
       translateY(0)
       scale(1);
   }
+
 }
 
 @keyframes titleGradient{
@@ -2465,12 +2669,45 @@ footer:hover{
   50%{
     background-position:100% 50%;
   }
+
 }
 
 
 /* =========================================================
-   KHÔNG CÒN progressGradient / progressShine CŨ
-   Vì ánh sáng đã dùng progressLightSmooth ở trên
+   CHECK THÔNG BÁO
+========================================================= */
+
+@keyframes donationCheckPop{
+
+  0%{
+    opacity:0;
+
+    transform:
+      scale(.55)
+      rotate(-12deg);
+  }
+
+  65%{
+    opacity:1;
+
+    transform:
+      scale(1.12)
+      rotate(3deg);
+  }
+
+  100%{
+    opacity:1;
+
+    transform:
+      scale(1)
+      rotate(0);
+  }
+
+}
+
+
+/* =========================================================
+   LIVE
 ========================================================= */
 
 @keyframes livePulse{
@@ -2489,6 +2726,7 @@ footer:hover{
     box-shadow:
       0 0 0 0 rgba(57,169,107,0);
   }
+
 }
 
 @keyframes modalFade{
@@ -2500,6 +2738,7 @@ footer:hover{
   to{
     opacity:1;
   }
+
 }
 
 @keyframes modalPop{
@@ -2519,6 +2758,7 @@ footer:hover{
       translateY(0)
       scale(1);
   }
+
 }
 
 @keyframes waitingPulse{
@@ -2530,6 +2770,7 @@ footer:hover{
   50%{
     opacity:.55;
   }
+
 }
 
 @keyframes successPop{
@@ -2552,6 +2793,7 @@ footer:hover{
     transform:
       scale(1);
   }
+
 }
 
 @keyframes shake{
@@ -2567,6 +2809,7 @@ footer:hover{
   75%{
     transform:translateX(3px);
   }
+
 }
 
 @keyframes timerPulse{
@@ -2578,6 +2821,7 @@ footer:hover{
   50%{
     transform:scale(1.06);
   }
+
 }
 
 
@@ -2598,4 +2842,5 @@ footer:hover{
 
     scroll-behavior:auto !important;
   }
+
 }
